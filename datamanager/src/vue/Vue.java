@@ -17,6 +17,7 @@ import controleur.Controler;
  */
 @SuppressWarnings("serial")
 public class Vue extends JPanel implements Observer{
+	@SuppressWarnings("unused")
 	private Model model;
 	public JButton assembler, excel, chargerIntoDB;
 	private JLabel textInfo;
