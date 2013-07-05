@@ -4,6 +4,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import model.Model;
@@ -16,13 +17,15 @@ import controleur.Controler;
  */
 @SuppressWarnings("serial")
 public class Vue extends JPanel implements Observer{
-	@SuppressWarnings("unused")
 	private Model model;
 	public JButton assembler, excel, chargerIntoDB;
+	private JLabel textInfo;
 	
 	public Vue(Model model){
 		this.model = model;
 		
+		textInfo = new JLabel("Clickez sur Assembler les fichiers");
+        
 		//Création des boutons
 		assembler = new JButton("Assembler les fichiers du terminal");
 		excel = new JButton("Générer le fichier Excel global");
@@ -34,6 +37,7 @@ public class Vue extends JPanel implements Observer{
 		model.addObserver(this);
 		
 		//Ajout au panel
+		this.add(textInfo);
 		this.add(assembler);
 		this.add(excel);
 		this.add(chargerIntoDB);
@@ -54,7 +58,8 @@ public class Vue extends JPanel implements Observer{
 	 * @param arg0
 	 * @param arg1
 	 */
-	public void update(Observable arg0, Object arg1) {}
+	public void update(Observable arg0, Object arg1) {
+	}
 }
 
 

@@ -28,14 +28,14 @@ import vue.Vue;
  */
 public class Controler implements ActionListener {
 	
-	@SuppressWarnings("unused")
-	private final FileManager filemanager = new FileManager();
 	private Model model;
+	private FileManager filemanager;
 	private Vue vue;
 	
 	public Controler(Model model, Vue vue){
 		this.model = model;
 		this.vue = vue;
+		this.filemanager = new FileManager(model);
 	}
 	/**
 	 * Action sur leq bouton assembleur, charger les variables, charger dans la base de données, génération excel
@@ -50,9 +50,9 @@ public class Controler implements ActionListener {
 			
 			if (dir != null){
 				//Nom valide : projects, cible1, log, data
-				if (isDirValide(dir.getName())){
+				if (isDirValide(dir.getName())){			        
 					//On va ouvrir le dossier et ses sous dossiers
-					DiskFileExplorer diskFileExplorer = new DiskFileExplorer(dir.getAbsolutePath(), true);
+					DiskFileExplorer diskFileExplorer = new DiskFileExplorer(filemanager, dir.getAbsolutePath(), true);
 					diskFileExplorer.list();
 					
 					//Récupération du datamanager
@@ -74,7 +74,7 @@ public class Controler implements ActionListener {
 			for (DataDir datadir:model.getDatamanager().getGloballist()){
 				for (DataFile datafile:datadir.getListeFile()){
 					for (Data data:datafile.getListeData()){
-						model.getDb_donnees().insertDonnee(data, listVariables.get(data.getLabel()));
+						model.getDb_donnees().insertDonnee(data);
 					}
 				}
 			}

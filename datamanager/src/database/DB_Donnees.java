@@ -29,13 +29,14 @@ public class DB_Donnees {
 	     this.cnx=cnx;
 	  }
 	  
-	  public void insertDonnee(Data data, int id_variable){
+	  public void insertDonnee(Data data){
 			try{
 				ps_insert = cnx.prepareStatement("INSERT INTO data_" +data.getLabel()+ "(datetime,value,state) values(?,?,?)");
 				ps_insert.setTimestamp(1, toDBDateFormat(data.getDate() + " " + data.getTime()));
 				ps_insert.setString(2, data.getValue());
 				ps_insert.setInt(3, data.getEtat());
 				ps_insert.executeUpdate();
+				System.out.println("Insertion de [" + data + "] effectué.");
 			} catch(SQLException ex){
 				System.out.println("DB_Donnees.java (insertDonnee) : SQLException = " + ex);  
 			} catch (ParseException e) {
