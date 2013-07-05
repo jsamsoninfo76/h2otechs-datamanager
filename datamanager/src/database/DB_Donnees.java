@@ -3,6 +3,10 @@ package database;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import model.data.Data;
 
@@ -10,32 +14,40 @@ import model.data.Data;
  * Classe gérant la table donnees
  * @author Jérémie Samson
  * @version 1
- * 
+ * @links
+ * http://thunderguy.com/semicolon/2003/08/14/java-sql-date-is-not-a-real-date/
+ * http://www.siteduzero.com/forum/sujet/convertir-une-chaine-en-date-72853
  */
 public class DB_Donnees {
 	
 	  Connection cnx;
 	  PreparedStatement ps_select;
 	  PreparedStatement ps_insert;
+	  private static SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
 	  
 	  public DB_Donnees(Connection cnx) {
 	     this.cnx=cnx;
-	     try{
-	        ps_insert = cnx.prepareStatement("INSERT INTO data_?(id_variable,datetime,valeur,etat) values(?,?,?,?)");
-	     } catch(SQLException ex){System.out.println("DB_Donnees.java (DB_Donnees) : SQLException = " +ex);}
 	  }
 	  
 	  public void insertDonnee(Data data, int id_variable){
 			try{
-				//datetime: 2013-07-02 00:00:00
-				ps_insert.setString(1, data.getLabel());
-				ps_insert.setInt(2, id_variable);
-				ps_insert.setString(3, data.getDate().toString() + " " + data.getTime().toString());
-				ps_insert.setString(4, data.getValue());
-				ps_insert.setString(5, data.getEtat());
+				ps_insert = cnx.prepareStatement("INSERT INTO data_" +data.getLabel()+ "(datetime,value,state) values(?,?,?)");
+				ps_insert.setTimestamp(1, toDBDateFormat(data.getDate() + " " + data.getTime()));
+				ps_insert.setString(2, data.getValue());
+				ps_insert.setInt(3, data.getEtat());
 				ps_insert.executeUpdate();
 			} catch(SQLException ex){
 				System.out.println("DB_Donnees.java (insertDonnee) : SQLException = " + ex);  
+			} catch (ParseException e) {
+				System.out.println("DB_Donnees.java (insertDonnee) : ParseException = " + e);
 			}
+	  }
+	  
+	  public static Date stringToDate(String sDate) throws ParseException {
+	        return formatter.parse(sDate);
+	  }
+	     
+	  public static Timestamp toDBDateFormat(String sDate) throws ParseException {
+	      return new Timestamp(stringToDate(sDate).getTime());
 	  }
 }

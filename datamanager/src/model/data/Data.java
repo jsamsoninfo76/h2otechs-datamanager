@@ -9,7 +9,7 @@ public class Data {
 	private Date date;
 	private Time time;
 	private String value;
-	private String etat;
+	private int etat;
 	private String label;
 	
 	public Data(String ligne, String label){
@@ -18,24 +18,27 @@ public class Data {
 	}
 
 	private void parser(String ligne) {
+		//Suppression des caractères non-ascii
+		ligne = ligne.replaceAll("[^\\x20-\\x7e]", "");
 		String tableau[] = null;
 		
 		//Premiere partie du parse (MM/JJ/AA hh:mm:ss,value,etat)
 		tableau = ligne.split(" ");
+		
 		this.date = new Date(tableau[0]);
 		
 		//Deuxieme partie du parse (hh:mm:ss,value,etat)
 		tableau = tableau[1].split(",");
 		this.time = new Time(tableau[0]);
 		this.value = tableau[1];
-		this.etat  = tableau[2];
+		this.etat  = Integer.parseInt(tableau[2]);
 	}
 	
 	//Getters
 	public Date getDate() { return date; }
 	public Time getTime() { return time; }
 	public String getValue() { return value; }
-	public String getEtat() { return etat; }
+	public int getEtat() { return etat; }
 	public String getLabel() { return label; }
 	
 	public String toString() {

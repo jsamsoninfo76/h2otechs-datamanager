@@ -15,12 +15,9 @@ public class Date {
 		String tabDate[] = date.split("/");
 		
 		// Retour chariot empechait bon fonctionnement trim puis récupération des bon caractères
-		tabDate[0] = tabDate[0].trim();
-		tabDate[1] = tabDate[1].trim();
-		tabDate[2] = tabDate[2].trim();
-		this.year = "20" + tabDate[2].charAt(0) + "" + tabDate[2].charAt(2) ; 
-		this.month = tabDate[0].charAt(0) + "" + tabDate[0].charAt(2) ;
-		this.day = tabDate[1].charAt(0) + "" + tabDate[1].charAt(2) ;
+		this.year = "20" + tabDate[2]; 
+		this.month = tabDate[0];
+		this.day = tabDate[1];
 	}
 
 	//Getters
@@ -28,8 +25,8 @@ public class Date {
 	public String getMonth() { return month; }
 	public String getDay() { return day; }
 	
-	//retourne le datetime au format SQL : 2013-07-02
+	//retourne le datetime au format SQL : 01-14-2013
 	public String toString() {
-		return year + "-" + month + "-" + day;
+		return month + "-" + day + "-" + year;
 	}	
 }
