@@ -8,28 +8,35 @@ import java.util.HashMap;
 
 import model.databasePojo.Variable;
 
+/**
+ * Classe gérant la table variables
+ * @author Jérémie Samson
+ * @version 1
+ * 
+ */
 public class DB_Variables {
 
 	Connection cnx;
 	PreparedStatement ps_select;
 	PreparedStatement ps_select_all;
 	PreparedStatement ps_insert;
-	PreparedStatement ps_update;
-	PreparedStatement ps_delete;
 
 	public DB_Variables(Connection cnx) {
 		this.cnx = cnx;
 		try {
-			ps_select = cnx
-					.prepareStatement("SELECT id_variable,label,description FROM variables WHERE label = ?");
+			ps_select = cnx.prepareStatement("SELECT id_variable,label,description FROM variables WHERE label = ?");
 			ps_select_all = cnx.prepareStatement("SELECT * FROM variables");
-			ps_insert = cnx
-					.prepareStatement("INSERT INTO variables(label) VALUES(?)");
+			ps_insert = cnx.prepareStatement("INSERT INTO variables(label) VALUES(?)");
 		} catch (SQLException ex) {
 			System.out.println(ex);
 		}
 	}
 
+	/**
+	 * Récupère une variable via son label
+	 * @param label
+	 * @return variable
+	 */
 	public Variable getVariable(String label) {
 		Variable variable = null;
 
@@ -49,6 +56,10 @@ public class DB_Variables {
 		return variable;
 	}
 
+	/**
+	 * Récupère un tableau des variables avec label, id_variable
+	 * @return variables
+	 */
 	public HashMap<String,Integer> getVariables() {
 		@SuppressWarnings("unused")
 		Variable variable = null;
@@ -77,7 +88,7 @@ public class DB_Variables {
 			ps_insert.setString(1, dirname);
 			ps_insert.executeUpdate();
 		} catch (SQLException ex) {
-			// System.out.println(ex);
+			System.out.println("DB_Variables.java : " + ex);
 		}
 	}
 }

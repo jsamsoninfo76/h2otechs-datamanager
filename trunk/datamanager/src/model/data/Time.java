@@ -1,5 +1,10 @@
 package model.data;
 
+/**
+ * POJO Time correspondant a l'heure, minute et seconde
+ * @author Jérémie Samson
+ * @version 1 
+ */
 public class Time {
 	private String hour;
 	private String minute;
@@ -14,18 +19,13 @@ public class Time {
 		this.seconde = tabTime[2];
 	}
 	
-	public String getHour() {
-		return hour;
-	}
-	public String getMinute() {
-		return minute;
-	}
-	public String getSeconde() {
-		return seconde;
-	}
+	//Getters
+	public String getHour() { return hour;}
+	public String getMinute() { return minute; }
+	public String getSeconde() { return seconde; }
 	
+	//retourne le datetime au format SQL 
 	public String toString() {
-		//datetime: 2013-07-02 00:00:00
 		return hour + ":" + minute + ":" + seconde;
 	}
 }

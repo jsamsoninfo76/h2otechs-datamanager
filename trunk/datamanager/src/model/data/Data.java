@@ -1,9 +1,9 @@
 package model.data;
 
 /**
- * Simple donnée
- * @author Spider
- *
+ * PJO Data récupéré dans les fichiers excel (correspond a une ligne)
+ * @author Jérémie Samson
+ * @version 1
  */
 public class Data {
 	private Date date;
@@ -12,14 +12,6 @@ public class Data {
 	private String etat;
 	private String label;
 	
-	public Data(Date date, Time time, int idVariable, String value, String etat, String label) {
-		this.date = date;
-		this.time = time;
-		this.value = value;
-		this.etat = etat;
-		this.label = label;
-	}
-
 	public Data(String ligne, String label){
 		this.label = label;
 		parser(ligne);
@@ -39,25 +31,12 @@ public class Data {
 		this.etat  = tableau[2];
 	}
 	
-	public Date getDate() {
-		return date;
-	}
-
-	public Time getTime() {
-		return time;
-	}
-
-	public String getValue() {
-		return value;
-	}
-
-	public String getEtat() {
-		return etat;
-	}
-
-	public String getLabel() {
-		return label;
-	}
+	//Getters
+	public Date getDate() { return date; }
+	public Time getTime() { return time; }
+	public String getValue() { return value; }
+	public String getEtat() { return etat; }
+	public String getLabel() { return label; }
 	
 	public String toString() {
 		return date + " " + time + " " + value + " " + etat + " " + label;
