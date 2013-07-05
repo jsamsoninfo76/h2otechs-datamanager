@@ -3,6 +3,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * Classe de connexion MYSQL
+ * @author Jérémie Samson
+ * @version 1
+ */
 public class DB {
 	private static DB instance;
 	Connection conn;
@@ -19,7 +24,6 @@ public class DB {
 	public DB(){
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			//System.out.println("Driver OK");
 		}catch (ClassNotFoundException e) {e.printStackTrace();}
 		
 		try {
@@ -29,15 +33,11 @@ public class DB {
 			
 			conn = DriverManager.getConnection(url, user, passwd);
 			
-			//Initialisation after connexion
 			db_donnees = new DB_Donnees(conn);
 			db_variables = new DB_Variables(conn);
-			
-			//System.out.println("Connection OK");
 		}catch (SQLException e) {e.printStackTrace();} 
 	}
 	
-	//Getters
 	public DB_Donnees getDB_Donnees(){return db_donnees;}
 	public DB_Variables getDB_Variables(){return db_variables;}
 }

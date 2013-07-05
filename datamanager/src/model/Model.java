@@ -8,31 +8,23 @@ import database.DB;
 import database.DB_Donnees;
 import database.DB_Variables;
 
+/**
+ * Model du logiciel
+ * @author Jrmie Samson
+ * @version 1
+ */
 public class Model extends Observable{
 	private DataManager datamanager;
 	private DB db = DB.getInstance();
 	private DB_Variables db_variables = db.getDB_Variables();
 	private DB_Donnees db_donnees = db.getDB_Donnees();
 
-	public Model() {}
+	//Datamanager
+	public DataManager getDatamanager() { return datamanager; }
+	public void setDatamanager(DataManager datamanager) { this.datamanager = datamanager; }
 	
-	public DataManager getDatamanager() {
-		return datamanager;
-	}
-
-	public void setDatamanager(DataManager datamanager) {
-		this.datamanager = datamanager;
-	}
-	
-	public DB getDb() {
-		return db;
-	}
-
-	public DB_Variables getDb_variables() {
-		return db_variables;
-	}
-	
-	public DB_Donnees getDb_donnees() {
-		return db_donnees;
-	}
+	//Database
+	public DB getDb() { return db; }
+	public DB_Variables getDb_variables() { return db_variables; }
+	public DB_Donnees getDb_donnees() { return db_donnees; }
 }

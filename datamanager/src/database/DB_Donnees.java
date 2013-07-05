@@ -6,6 +6,12 @@ import java.sql.SQLException;
 
 import model.data.Data;
 
+/**
+ * Classe gérant la table donnees
+ * @author Jérémie Samson
+ * @version 1
+ * 
+ */
 public class DB_Donnees {
 	
 	  Connection cnx;
@@ -17,10 +23,7 @@ public class DB_Donnees {
 	  public DB_Donnees(Connection cnx) {
 	     this.cnx=cnx;
 	     try{
-	        //ps_select = cnx.prepareStatement("SELECT id_donnee,id_variable,valeur,etat,date_ajout FROM donnees WHERE id_donnee = ?");
-	  	    ps_insert = cnx.prepareStatement("INSERT INTO donnees(id_variable,datetime,valeur,etat) values(?,?,?,?)");
-	        //ps_update = cnx.prepareStatement("UPDATE donnees SET id_variable=?, datetime=?, valeur=?, etat=?  WHERE id_donnee=?");
-	        //ps_delete = cnx.prepareStatement("DELETE FROM donnees WHERE id_donnee=?"); 
+	        ps_insert = cnx.prepareStatement("INSERT INTO donnees(id_variable,datetime,valeur,etat) values(?,?,?,?)");
 	     } catch(SQLException ex){System.out.println(ex);}
 	  }
 	  

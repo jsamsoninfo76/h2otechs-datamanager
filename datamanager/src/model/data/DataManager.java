@@ -4,6 +4,11 @@ import java.util.ArrayList;
 
 import model.sheet.YearSheet;
 
+/**
+ * DataManager regroupe les listes importante pour la génération excel et l'ajout dans la DB
+ * @author Jérémie Samson
+ * @version 1
+ */
 public class DataManager {
 	private ArrayList<YearSheet> yearssheets;
 	private ArrayList<DataDir> globallist;
@@ -13,19 +18,11 @@ public class DataManager {
 		yearssheets = new ArrayList<YearSheet>();
 	}
 
-	//GlobalList
-	public void addDataDir(DataDir datadir){
-		this.globallist.add(datadir);
-	}
-	public ArrayList<DataDir> getGloballist() {
-		return globallist;
-	}
-
-	//Yearssheets
-	public ArrayList<YearSheet> getYearsheets() {
-		return yearssheets;
-	}
-	public void addYearSheet(YearSheet yearsheet){
-		this.yearssheets.add(yearsheet);
-	}
+	//Getters
+	public ArrayList<DataDir> getGloballist() { return globallist; }
+	public ArrayList<YearSheet> getYearsheets() { return yearssheets; }
+	
+	//Ajouts
+	public void addDataDir(DataDir datadir){ this.globallist.add(datadir); }
+	public void addYearSheet(YearSheet yearsheet){ this.yearssheets.add(yearsheet); }
 }
