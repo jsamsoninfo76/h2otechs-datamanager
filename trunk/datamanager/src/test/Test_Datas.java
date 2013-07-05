@@ -5,6 +5,11 @@ import model.data.DataDir;
 import model.data.DataFile;
 import model.data.DataManager;
 
+/**
+ * Test_datas test le nombre de donnée
+ * @author Jérémie Samson
+ * @version 1
+ */
 public class Test_Datas extends Test{
 
 	public Test_Datas(DataManager datamanager, Model model) {
@@ -24,6 +29,5 @@ public class Test_Datas extends Test{
 	
 	public void test(){
 		testDatas();
-		
 	}
 }

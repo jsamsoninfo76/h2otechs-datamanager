@@ -5,6 +5,11 @@ import model.data.DataManager;
 import model.sheet.MonthSheet;
 import model.sheet.YearSheet;
 
+/**
+ * Test_sheets pour les tests sur les fichiers / feuilles
+ * @author Jérémie Samson
+ * @version 1
+ */
 public class Test_Sheets extends Test{
 	
 	public Test_Sheets(DataManager datamanager, Model model) {

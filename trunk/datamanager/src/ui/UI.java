@@ -7,14 +7,13 @@ import vue.Vue;
 import controleur.Controler;
 
 /**
+ * User Interface est la frame principal
  * @author Jeremie Samson
  * @version 1
- * 
  * @Links 
  * http://www.clubnix.fr/book/biblioth%C3%A8que-de-code/java/lire-et-%C3%A9crire-dans-un-fichier-en-java
- * http://www.vogella.com/articles/JavaExcel/
- * 
  */
+@SuppressWarnings("serial")
 public class UI extends JFrame {
 	
 	/**
@@ -31,7 +30,7 @@ public class UI extends JFrame {
 	}
 	
 	/**
-	 * Initialise l'interface graphique avec les modèoles, vues et controleurs
+	 * Initialise l'interface graphique avec les modèles, vues et controleurs
 	 */
 	private void initUI() {
 		Model model = new Model();
