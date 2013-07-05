@@ -46,7 +46,7 @@ public class Controler implements ActionListener {
 		if (event == vue.assembler){
 			//Récupération du dossier a assembler 
 			//File dir = filemanager.getDir();
-			File dir = new File("/Users/Spider/PROJECTS");
+			File dir = new File("/Users/Spider/Desktop/LOG");
 			
 			if (dir != null){
 				//Nom valide : projects, cible1, log, data
@@ -57,7 +57,7 @@ public class Controler implements ActionListener {
 					
 					//Récupération du datamanager
 					model.setDatamanager(diskFileExplorer.getDataManager());
-					JOptionPane.showMessageDialog(null, "Chargement terminé", "Message Informatif", JOptionPane.INFORMATION_MESSAGE);
+					//JOptionPane.showMessageDialog(null, "Chargement terminé", "Message Informatif", JOptionPane.INFORMATION_MESSAGE);
 				}
 				else
 					JOptionPane.showMessageDialog(null, "Le répertoire selectionné doit être un répertoire converti issu du terminal (PROJECTS,CIBLE1,DATA ou LOGS)", "Message Informatif", JOptionPane.INFORMATION_MESSAGE);

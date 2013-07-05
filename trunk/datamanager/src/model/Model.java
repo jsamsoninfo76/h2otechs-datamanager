@@ -15,10 +15,16 @@ import database.DB_Variables;
  */
 public class Model extends Observable{
 	private DataManager datamanager;
-	private DB db = DB.getInstance();
-	private DB_Variables db_variables = db.getDB_Variables();
-	private DB_Donnees db_donnees = db.getDB_Donnees();
+	private DB db;
+	private DB_Variables db_variables;
+	private DB_Donnees db_donnees;
 
+	public Model(){
+		db = DB.getInstance();
+		db_variables = db.getDB_Variables();
+		db_donnees 	 = db.getDB_Donnees();
+	}
+	
 	//Datamanager
 	public DataManager getDatamanager() { return datamanager; }
 	public void setDatamanager(DataManager datamanager) { this.datamanager = datamanager; }
