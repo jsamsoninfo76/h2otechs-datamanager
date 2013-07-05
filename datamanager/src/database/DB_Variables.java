@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 
-import model.databasePojo.Variable;
+import model.database.Variable;
 
 /**
  * Classe gérant la table variables
@@ -24,9 +24,8 @@ public class DB_Variables {
 	public DB_Variables(Connection cnx) {
 		this.cnx = cnx;
 		try {
-			ps_select = cnx.prepareStatement("SELECT id_variable,label,description FROM variables WHERE label = ?");
+			ps_select = cnx.prepareStatement("SELECT id_variable,label,unite,description FROM variables WHERE label=?");
 			ps_select_all = cnx.prepareStatement("SELECT * FROM variables");
-			ps_insert = cnx.prepareStatement("INSERT INTO variables(label) VALUES(?)");
 		} catch (SQLException ex) {
 			System.out.println(ex);
 		}
@@ -45,9 +44,10 @@ public class DB_Variables {
 			ResultSet rs = ps_select.executeQuery();
 
 			if (rs.next()) {
-				int id_variable = rs.getInt("id_variable");
-				String description = rs.getString("description");
-				variable = new Variable(id_variable, label, description);
+				int id_variable 	= rs.getInt("id_variable");
+				String unite    	= rs.getString("unite");
+				String description  = rs.getString("description");
+				variable = new Variable(id_variable, label, unite, description);
 			}
 		} catch (SQLException ex) {
 			System.out.println("DB_Variables SQLException : " + ex);
@@ -70,10 +70,11 @@ public class DB_Variables {
 			ResultSet rs = ps_select_all.executeQuery();
 
 			while (rs.next()) {
-				int id_variable = rs.getInt("id_variable");
-				String label = rs.getString("label");
-				String description = rs.getString("description");
-				variable = new Variable(id_variable, label, description);
+				int id_variable 	= rs.getInt("id_variable");
+				String label 		= rs.getString("label");
+				String unite    	= rs.getString("unite");
+				String description 	= rs.getString("description");
+				variable = new Variable(id_variable, label, unite, description);
 				variables.put(label,id_variable);
 			}
 		} catch (SQLException ex) {
@@ -81,14 +82,5 @@ public class DB_Variables {
 		}
 
 		return variables;
-	}
-
-	public void insertVariable(String dirname) {
-		try {
-			ps_insert.setString(1, dirname);
-			ps_insert.executeUpdate();
-		} catch (SQLException ex) {
-			System.out.println("DB_Variables.java : " + ex);
-		}
 	}
 }

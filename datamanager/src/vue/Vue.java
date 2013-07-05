@@ -18,7 +18,7 @@ import controleur.Controler;
 public class Vue extends JPanel implements Observer{
 	@SuppressWarnings("unused")
 	private Model model;
-	public JButton assembler, excel, chargerVariable, chargerIntoDB;
+	public JButton assembler, excel, chargerIntoDB;
 	
 	public Vue(Model model){
 		this.model = model;
@@ -27,8 +27,6 @@ public class Vue extends JPanel implements Observer{
 		assembler = new JButton("Assembler les fichiers du terminal");
 		excel = new JButton("Générer le fichier Excel global");
 		excel.setEnabled(false);
-		chargerVariable = new JButton("Charger les variables");
-		chargerVariable.setEnabled(false);
 		chargerIntoDB = new JButton("Charger dans la base de donnée");
 		chargerIntoDB.setEnabled(false);
 		
@@ -37,7 +35,6 @@ public class Vue extends JPanel implements Observer{
 		
 		//Ajout au panel
 		this.add(assembler);
-		this.add(chargerVariable);
 		this.add(excel);
 		this.add(chargerIntoDB);
 	}
@@ -49,7 +46,6 @@ public class Vue extends JPanel implements Observer{
 	public void addControler(Controler controler){
 		assembler.addActionListener(controler);
 		excel.addActionListener(controler);
-		chargerVariable.addActionListener(controler);
 		chargerIntoDB.addActionListener(controler);
 	}
 	
