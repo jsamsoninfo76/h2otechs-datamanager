@@ -66,24 +66,17 @@ public class Controler implements ActionListener {
 			//Changement d'Žtat des autres boutons
 			vue.excel.setEnabled(true);
 			vue.chargerIntoDB.setEnabled(true);
-			if (!chargerVariableAJour()) vue.chargerVariable.setEnabled(true);
 		}
 		else if (event == vue.chargerIntoDB){
 			//On charge toutes les donners dans la base
 			HashMap<String, Integer> listVariables = model.getDb_variables().getVariables();
+			
 			for (DataDir datadir:model.getDatamanager().getGloballist()){
 				for (DataFile datafile:datadir.getListeFile()){
 					for (Data data:datafile.getListeData()){
 						model.getDb_donnees().insertDonnee(data, listVariables.get(data.getLabel()));
 					}
 				}
-			}
-		}
-		else if (event == vue.chargerVariable){
-			//On va charger les label des variables si il y en a des nouvelles
-			for (DataDir datadir:model.getDatamanager().getGloballist()){
-				if (model.getDb_variables().getVariable(datadir.getDirname()) == null)
-					model.getDb_variables().insertVariable(datadir.getDirname());
 			}
 		}
 		else if (event == vue.excel){
@@ -102,22 +95,6 @@ public class Controler implements ActionListener {
 				e.printStackTrace();
 			}
 		}
-	}
-	
-	/**
-	 * Test sur les variables savoir si la DB est a jours par rapport au dossier choisit
-	 * @return boolean
-	 */
-	private boolean chargerVariableAJour() {
-		int nombreVariables = model.getDatamanager().getGloballist().size()+1;
-		int nombreVariablesInDB = model.getDb_variables().getVariables().size();
-		
-		if (nombreVariables == nombreVariablesInDB){
-			vue.chargerVariable.setText("Les variables sont ˆ jours");
-			return true;
-		}
-		
-		return false;
 	}
 	
 	/**
