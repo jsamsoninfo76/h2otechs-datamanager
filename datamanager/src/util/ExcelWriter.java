@@ -10,7 +10,6 @@ import jxl.Workbook;
 import jxl.WorkbookSettings;
 import jxl.format.UnderlineStyle;
 import jxl.write.Label;
-import jxl.write.Number;
 import jxl.write.WritableCellFormat;
 import jxl.write.WritableFont;
 import jxl.write.WritableSheet;
@@ -26,9 +25,11 @@ import model.sheet.YearSheet;
 
 /**
  * Ecrire un fichier excel
- * 
  * @author Jérémie Samson
- * @links http://jexcelapi.sourceforge.net/
+ * @version 1
+ * @links 
+ * http://www.vogella.com/articles/JavaExcel/
+ * http://jexcelapi.sourceforge.net/
  */
 public class ExcelWriter {
 
@@ -37,9 +38,7 @@ public class ExcelWriter {
 	private WritableWorkbook[] workbooks;
 	private WritableSheet excelSheet;
 	private final String path = "/Users/Spider/Desktop/";
-	private final String outputFile = path + "sortiExcelWriter.xls";
 	private ArrayList<String> monthes;
-	private ArrayList<String> variables;
 	private DataManager datamanager;
 	
 	public ExcelWriter(DataManager datamanager) {
@@ -62,7 +61,7 @@ public class ExcelWriter {
 		// Récupération des années en parcourant le datamanager
 		for (DataDir datadir : datamanager.getGloballist()) {
 			for (DataFile datafile : datadir.getListeFile()) {
-				for (Data data : datafile.getListeData()) {
+				for (@SuppressWarnings("unused") Data data : datafile.getListeData()) {
 					String year = "20" + datafile.getFilename().substring(1, 3);
 					if (!years.contains(year))
 						years.add(year);
@@ -170,35 +169,6 @@ public class ExcelWriter {
 		}
 	}
 
-	/**
-	 * Ajoute les data en fonction du mois et de l'année
-	 * addLabel(sheet, colonne, ligne, valeur) 
-	 * @param sheet
-	 * @param month 
-	 * @param year 
-	 * @throws WriteException
-	 * @throws RowsExceededException
-	 */
-	private void createContent(WritableSheet sheet) throws WriteException,
-			RowsExceededException {
-		for (YearSheet yearsheet:datamanager.getYearsheets()){
-			for (MonthSheet monthsheet:yearsheet.getListeMonthSheet()){
-				for (int indexData=0 ; indexData<monthsheet.getListeDataInMonth().size() ; indexData++){
-					Data data = monthsheet.getListeDataInMonth().get(indexData);
-					//addLabel(sheet, data.getIdVariable(), indexData+1, data.getValue());
-				}
-			}
-		}
-		
-		// Lets calculate the sum of it
-		/*
-		 * StringBuffer buf = new StringBuffer(); buf.append("SUM(A2:A10)");
-		 * Formula f = new Formula(0, 10, buf.toString()); sheet.addCell(f); buf
-		 * = new StringBuffer(); buf.append("SUM(B2:B10)"); f = new Formula(1,
-		 * 10, buf.toString()); sheet.addCell(f);
-		 */
-	}
-	
 	public void createContents() throws RowsExceededException, WriteException{
 		for (int indexworkbook=0 ; indexworkbook<workbooks.length ; indexworkbook++){
 			WritableWorkbook workbook = workbooks[indexworkbook];
@@ -211,6 +181,7 @@ public class ExcelWriter {
 				System.out.println(yearsheet.getYear() + "/" + monthsheet.getMonth() + " -> "+ sheet.getName());
 				
 				for (int indexData=0 ; indexData<monthsheet.getListeDataInMonth().size() ; indexData++){
+					@SuppressWarnings("unused")
 					Data data = monthsheet.getListeDataInMonth().get(indexData);
 					//System.out.println("Ajout dans " + sheet.getName() + " col:" + data.getIdVariable() + ", ligne:" + indexData+1 +", value:"+data.getValue());
 				//	addLabel(sheet, data.getIdVariable(), indexData+1, data.getValue());
@@ -233,20 +204,6 @@ public class ExcelWriter {
 			throws RowsExceededException, WriteException {
 		Label label;
 		label = new Label(column, row, s, timesBoldUnderline);
-		sheet.addCell(label);
-	}
-
-	private void addNumber(WritableSheet sheet, int column, int row,
-			Integer integer) throws WriteException, RowsExceededException {
-		Number number;
-		number = new Number(column, row, integer, times);
-		sheet.addCell(number);
-	}
-
-	private void addLabel(WritableSheet sheet, int column, int row, String s)
-			throws WriteException, RowsExceededException {
-		Label label;
-		label = new Label(column, row, s, times);
 		sheet.addCell(label);
 	}
 

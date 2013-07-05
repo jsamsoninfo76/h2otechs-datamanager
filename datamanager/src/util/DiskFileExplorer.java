@@ -20,7 +20,8 @@ public class DiskFileExplorer {
     public int dircount = 0;
     public boolean isTest = false;
     private DataManager datamanager;
-    private DataDir datadir = null;
+    private DataDir datadir;
+    private FileManager filemanager;
     
 	/**
 	 * Constructeur
@@ -32,37 +33,48 @@ public class DiskFileExplorer {
         this.initialpath = path;
         this.recursivePath = subFolder;
         this.datamanager = new DataManager();
+        filemanager = new FileManager();
     }
+    
+    /**
+     * Fait appelle a la méthode récursive avec le path initial
+     */
+    public void list() { this.listDirectories(this.initialpath); }
 
-    public void list() {
-        this.listDirectories(this.initialpath);
-    }
-
+    /**
+     * Méthode récursive qui va :
+     * 1) lire le dossier
+     * 2) lire les sous-dossiers si c'est récursif
+     * 3) lire les fichiers des sous-dossiers puis enclencher le filemanager
+     * 4) peupler le datamanager
+     * @param dir dossier a lire
+     */
     private void listDirectories(String dir) {
+    	//Récupération du dossier / fichier
         File file = new File(dir);
         File[] files = file.listFiles();
         
         if (files != null) {
+        	//Boucle sur les fichiers / dossiers si il y en a plusieurs
             for (int i = 0; i < files.length; i++) {
                 if (files[i].isDirectory() == true) {
-                    //System.out.println("Dossier " + files[i].getAbsolutePath());
                     this.dircount++;
                 } else {
+                	//Si ce n'est pas un fichier cacher (pour éviter les .DS_ sous mac
                 	if (files[i].getName().charAt(0) != '.'){
-	                    //System.out.println("Fichier " + files[i].getName() + " index : " + i);
-	                    //FileManager filemanager = new FileManager();
-		                //datadir.addFile(filemanager.readFile(files[i].getAbsolutePath(), files[i].getName(), datadir.getDirname()));
+                		//Ajout du fichier dans l'objet DataDir correspondant avec (path, nom fichier, nom dossier)  
+		                datadir.addFile(filemanager.readFile(files[i].getAbsolutePath(), files[i].getName(), datadir.getDirname()));
 		                
-		                //Ajout du datadir peuplé
-		                if (i == files.length-1){
-		                	//System.out.println("AJOUT DU DATADIR : " + datadir.getDirname() + " DE TAILLE : " + datadir.getListeFile().size());
+		                //Ajout du datadir terminé
+		                if (i == files.length-1)
 		                	datamanager.addDataDir(datadir);
-		                }
+		                
 		                this.filecount++;
                 	}
                 }
+                
+                //Récursivité sur les sous dossiers
                 if (files[i].isDirectory() == true && this.recursivePath == true) {
-                	//System.out.println("Chgmt to : " + files[i].getName() + " with index : " + i);
                 	datadir = new DataDir(files[i].getName());
                     this.listDirectories(files[i].getAbsolutePath());
                 }
@@ -70,7 +82,9 @@ public class DiskFileExplorer {
         }
     }
     
-    public DataManager getDataManager(){
-    	return this.datamanager;
-    }
+    /**
+     * Récupération du datamanager
+     * @return datamanager
+     */
+    public DataManager getDataManager(){ return this.datamanager; }
 }

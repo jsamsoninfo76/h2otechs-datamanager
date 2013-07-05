@@ -3,6 +3,11 @@ package test;
 import model.Model;
 import model.data.DataManager;
 
+/**
+ * Classe Test permettant les tests pour le bon fonctionnement global
+ * @author Jérémie Samson
+ * @version 1
+ */
 public class Test {
 	protected DataManager datamanager;
 	protected Model model;

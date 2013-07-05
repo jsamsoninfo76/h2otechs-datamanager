@@ -4,6 +4,11 @@ import model.Model;
 import model.data.DataDir;
 import model.data.DataManager;
 
+/**
+ * Test_files test le nombre de dossiers et de fichiers a charger
+ * @author Jérémie Samson
+ * @version 1
+ */
 public class Test_Files extends Test{
 	
 	public Test_Files(DataManager datamanager, Model model) {
