@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -69,8 +68,6 @@ public class Controler implements ActionListener {
 		}
 		else if (event == vue.chargerIntoDB){
 			//On charge toutes les donners dans la base
-			HashMap<String, Integer> listVariables = model.getDb_variables().getVariables();
-			
 			for (DataDir datadir:model.getDatamanager().getGloballist()){
 				for (DataFile datafile:datadir.getListeFile()){
 					for (Data data:datafile.getListeData()){
