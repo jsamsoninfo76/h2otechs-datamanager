@@ -3,6 +3,7 @@ package util;
 import java.io.File;
 
 import model.data.DataDir;
+import model.data.DataFile;
 import model.data.DataManager;
 
 /**
@@ -13,25 +14,23 @@ import model.data.DataManager;
  * http://www.fobec.com/CMS/java/sources/lister-les-fichiers-les-dossiers-partir-repertoire_964.html
  */
 public class DiskFileExplorer{
-    private String initialpath = "";
-    private Boolean recursivePath = false;
+    private String initialpath;
+    private Boolean recursivePath;
     public int filecount = 0;
     public int dircount = 0;
     public boolean isTest = false;
     private DataManager datamanager;
     private DataDir datadir;
-    private FileManager filemanager;
-    
+
 	/**
 	 * Constructeur
 	 * @param path chemin du répertoire
 	 * @param subFolder analyse des sous dossiers
 	 */
-    public DiskFileExplorer(FileManager filemanager, String path, Boolean subFolder) {
+    public DiskFileExplorer(String path, Boolean subFolder) {
         this.initialpath = path;
         this.recursivePath = subFolder;
         this.datamanager = new DataManager();
-        this.filemanager = filemanager;
     }
     
     /**
@@ -63,11 +62,12 @@ public class DiskFileExplorer{
                 	//Si ce n'est pas un fichier cacher (pour éviter les .DS_ sous mac
                 	if (files[i].getName().charAt(0) != '.'){
                 		//Ajout du fichier dans l'objet DataDir correspondant avec (path, nom fichier, nom dossier)  
-		                //datadir.addFile(filemanager.readFile(files[i].getAbsolutePath(), files[i].getName(), datadir.getDirname()));
-                		filemanager.readFile(files[i].getAbsolutePath(), files[i].getName(), datadir.getDirname());
+                		DataFile datafile = new DataFile(files[i].getName());
+                		datadir.addFile(datafile);
+                		
 		                //Ajout du datadir terminé
-		               // if (i == files.length-1)
-		               // 	datamanager.addDataDir(datadir);
+		                if (i == files.length-1)
+		                	datamanager.addDataDir(datadir);
 		                
 		                this.filecount++;
                 	}
