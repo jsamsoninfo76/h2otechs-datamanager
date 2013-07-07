@@ -1,13 +1,22 @@
 package vue;
 
+import java.awt.Cursor;
+import java.awt.Toolkit;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.SwingWorker;
 
 import model.Model;
+import model.data.DataDir;
+import model.data.DataFile;
+import util.FileManager;
 import controleur.Controler;
 
 /**
@@ -16,21 +25,29 @@ import controleur.Controler;
  * @version 1
  */
 @SuppressWarnings("serial")
-public class Vue extends JPanel implements Observer{
-	@SuppressWarnings("unused")
+public class Vue extends JPanel implements Observer, PropertyChangeListener{
 	private Model model;
 	public JButton assembler, excel, chargerIntoDB;
 	private JLabel textInfo;
+	private JProgressBar progressBar;
+	private Task task;
+	private FileManager filemanager;
 	
 	public Vue(Model model){
 		this.model = model;
 		
-		textInfo = new JLabel("Clickez sur Assembler les fichiers");
+		//Ajout du text Info
+		textInfo = new JLabel("Clickez sur -> Préparer l'insertion");
         
+		//Ajout de la progressBar
+		progressBar = new JProgressBar(0, 100);
+        progressBar.setValue(0);
+        progressBar.setStringPainted(true);
+		
 		//Création des boutons
-		assembler = new JButton("Assembler les fichiers du terminal");
+		assembler = new JButton("Préparer l'insertion");
 		excel = new JButton("Générer le fichier Excel global");
-		excel.setEnabled(false);
+		//excel.setEnabled(false);
 		chargerIntoDB = new JButton("Charger dans la base de donnée");
 		chargerIntoDB.setEnabled(false);
 		
@@ -39,8 +56,9 @@ public class Vue extends JPanel implements Observer{
 		
 		//Ajout au panel
 		this.add(textInfo);
+		this.add(progressBar);
 		this.add(assembler);
-		this.add(excel);
+		//this.add(excel);
 		this.add(chargerIntoDB);
 	}
 
@@ -50,7 +68,7 @@ public class Vue extends JPanel implements Observer{
 	 */
 	public void addControler(Controler controler){
 		assembler.addActionListener(controler);
-		excel.addActionListener(controler);
+		//excel.addActionListener(controler);
 		chargerIntoDB.addActionListener(controler);
 	}
 	
@@ -61,7 +79,70 @@ public class Vue extends JPanel implements Observer{
 	 */
 	public void update(Observable arg0, Object arg1) {
 	}
+
+	class Task extends SwingWorker<Void, Void> {
+        public Void doInBackground() {
+            int progress = 0;
+            setProgress(0);
+           
+            int nbFiles = 0;
+            for (DataDir datadir:model.getDatamanager().getGloballist()){
+				for (DataFile datafile:datadir.getListeFile()){
+					for (int i=0 ; i<datafile.getListeData().size() ; i++){
+						nbFiles++;
+					}
+				}
+			} 
+            progressBar.setMaximum(nbFiles);
+            
+            
+            while (progress < nbFiles) {
+            	for (DataDir datadir:model.getDatamanager().getGloballist()){
+    				for (DataFile datafile:datadir.getListeFile()){
+    					progress ++;
+    		            setProgress(progress);
+    					filemanager.readFile(datafile.getFilename(), datadir.getDirname());
+    				}
+    			} 
+            }
+            return null;
+        }
+ 
+        /*
+         //On charge toutes les donners dans la base
+			for (DataDir datadir:model.getDatamanager().getGloballist()){
+				for (DataFile datafile:datadir.getListeFile()){
+					for (Data data:datafile.getListeData()){
+						model.getDb_donnees().insertDonnee(data);
+					}
+				}
+			} 
+         
+         */
+        public void done() {
+            Toolkit.getDefaultToolkit().beep();
+            assembler.setEnabled(true);
+            setCursor(null); //turn off the wait cursor
+            textInfo.setText("Done");
+        }
+    }
+
+	public void createTask(){
+		 assembler.setEnabled(false);
+	     setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+	     //Instances of javax.swing.SwingWorker are not reusuable, so
+	     //we create new instances as needed.
+	     task = new Task();
+	     task.addPropertyChangeListener(this);
+	     task.execute();
+	}
+	
+	public void propertyChange(PropertyChangeEvent evt) {
+		if ("progress" == evt.getPropertyName()) {
+            int progress = (Integer) evt.getNewValue();
+            progressBar.setValue(progress);
+            textInfo.setText(String.format(
+                    "Completed %d%% of task.\n", task.getProgress()));
+        } 
+	}
 }
-
-
-

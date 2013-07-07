@@ -18,6 +18,7 @@ public class Model extends Observable{
 	private DB_Variables db_variables;
 	private DB_Donnees db_donnees;
 	private String textInfo;
+	private String path;
 	
 	public Model(){
 		db = DB.getInstance();
@@ -41,4 +42,8 @@ public class Model extends Observable{
 	public DB getDb() { return db; }
 	public DB_Variables getDb_variables() { return db_variables; }
 	public DB_Donnees getDb_donnees() { return db_donnees; }
+	
+	//Autre 
+	public String getPath(){ return this.path; }
+	public void setPath(String path){ this.path = path;}
 }

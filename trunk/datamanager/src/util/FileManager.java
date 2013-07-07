@@ -18,6 +18,7 @@ import model.data.DataFile;
  * @links
  * http://www.developpez.net/forums/d868887/java/interfaces-graphiques-java/awt-swing/composants/jfilechooser-selection-dossier-uniquement-affichage-fichier-grise/
  * http://javarevisited.blogspot.fr/2011/09/javalangoutofmemoryerror-permgen-space.html
+ * http://kohlerm.blogspot.fr/2008/05/analyzing-memory-consumption-of-eclipse.html
  */
 public class FileManager {
 	private Model model;
@@ -39,7 +40,7 @@ public class FileManager {
 	 * @param datadirname 
 	 */
 	@SuppressWarnings("resource")
-	public DataFile readFile(String path, String filename, String datadirname){
+	public DataFile readFile(String filename, String datadirname){
 		//Création du datafile
 		DataFile datafile = new DataFile(filename);
 		BufferedReader lect ;
@@ -48,7 +49,7 @@ public class FileManager {
 		//Lecture du fichier
 		try
 		{
-			lect = new BufferedReader(new FileReader(path)) ;
+			lect = new BufferedReader(new FileReader(model.getPath())) ;
 			int numLigne = 0;
 			
 			//Parcours du fichier

@@ -11,9 +11,6 @@ import javax.swing.JOptionPane;
 import jxl.write.WriteException;
 import jxl.write.biff.RowsExceededException;
 import model.Model;
-import model.data.Data;
-import model.data.DataDir;
-import model.data.DataFile;
 import util.DiskFileExplorer;
 import util.ExcelWriter;
 import util.FileManager;
@@ -44,19 +41,20 @@ public class Controler implements ActionListener {
 		JButton event = (JButton) arg0.getSource();
 		if (event == vue.assembler){
 			//Récupération du dossier a assembler 
-			//File dir = filemanager.getDir();
-			File dir = new File("/Users/Spider/Desktop/LOG");
+			//File dir = new File("/Users/Spider/Desktop/LOG");
+			model.setPath(filemanager.getDir().getAbsolutePath());
+			File dir = new File(model.getPath());
 			
 			if (dir != null){
 				//Nom valide : projects, cible1, log, data
 				if (isDirValide(dir.getName())){			        
 					//On va ouvrir le dossier et ses sous dossiers
-					DiskFileExplorer diskFileExplorer = new DiskFileExplorer(filemanager, dir.getAbsolutePath(), true);
+					DiskFileExplorer diskFileExplorer = new DiskFileExplorer(dir.getAbsolutePath(), true);
 					diskFileExplorer.list();
 					
 					//Récupération du datamanager
 					model.setDatamanager(diskFileExplorer.getDataManager());
-					//JOptionPane.showMessageDialog(null, "Chargement terminé", "Message Informatif", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Chargement terminé", "Message Informatif", JOptionPane.INFORMATION_MESSAGE);
 				}
 				else
 					JOptionPane.showMessageDialog(null, "Le répertoire selectionné doit être un répertoire converti issu du terminal (PROJECTS,CIBLE1,DATA ou LOGS)", "Message Informatif", JOptionPane.INFORMATION_MESSAGE);
@@ -67,14 +65,7 @@ public class Controler implements ActionListener {
 			vue.chargerIntoDB.setEnabled(true);
 		}
 		else if (event == vue.chargerIntoDB){
-			//On charge toutes les donners dans la base
-			for (DataDir datadir:model.getDatamanager().getGloballist()){
-				for (DataFile datafile:datadir.getListeFile()){
-					for (Data data:datafile.getListeData()){
-						model.getDb_donnees().insertDonnee(data);
-					}
-				}
-			}
+			vue.createTask();
 		}
 		else if (event == vue.excel){
 			//On va venir créer un fichier excel sous la forme Fichier (année) avec feuilles (une par mois) et données 
