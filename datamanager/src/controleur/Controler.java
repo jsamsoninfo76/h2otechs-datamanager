@@ -35,7 +35,6 @@ public class Controler implements ActionListener, PropertyChangeListener{
 	private Vue vue;
 	private Task task;
 	private FileManager filemanager;
-	private String dateEnCour;
 	
 	public Controler(Model model, Vue vue){
 		this.model = model;
@@ -65,8 +64,8 @@ public class Controler implements ActionListener, PropertyChangeListener{
 					
 					//Récupération du datamanager
 					model.setDatamanager(diskFileExplorer.getDataManager());
-					model.setTextInfo("Insertion prête." +
-									  "Clickez sur -> Charger dans la base de donnée");
+					model.setTextInfoTitre("Insertion prête");
+					model.setTextInfo("Clickez sur Charger dans la base de donnée");
 					//JOptionPane.showMessageDialog(null, "Chargement terminé", "Message Informatif", JOptionPane.INFORMATION_MESSAGE);
 				}
 				else
@@ -78,6 +77,7 @@ public class Controler implements ActionListener, PropertyChangeListener{
 			vue.chargerIntoDB.setEnabled(true);
 		}
 		else if (event == vue.chargerIntoDB){
+			vue.chargerIntoDB.setEnabled(false);
 			createTask();
 		}
 		else if (event == vue.excel){
@@ -135,11 +135,13 @@ public class Controler implements ActionListener, PropertyChangeListener{
             	for (DataDir datadir:model.getDatamanager().getGloballist()){
     				for (DataFile datafile:datadir.getListeFile()){
     					progress++;
-    		            setProgress(progress);
+    		            if (progress != nbFiles) setProgress(progress);
     					filemanager.readFile(datafile.getFilename(), datadir.getDirname());
     				}
     			} 
             }
+            vue.chargerIntoDB.setEnabled(true);
+            setProgress(nbFiles);
             return null;
         }
  
@@ -150,6 +152,7 @@ public class Controler implements ActionListener, PropertyChangeListener{
             Toolkit.getDefaultToolkit().beep();
             vue.assembler.setEnabled(true);
             vue.setCursor(null); //turn off the wait cursor
+            model.setTextInfoTitre("");
             model.setTextInfo("Insertion dans la base de donnée terminé.");
         }
     }

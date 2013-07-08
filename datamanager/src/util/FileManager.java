@@ -52,7 +52,7 @@ public class FileManager {
 		{
 			lect = new BufferedReader(new FileReader(model.getPath() + "/" + datadirname + "/" + filename)) ;
 			int numLigne = 0;
-			
+			model.setTextInfoTitre("Fichier en cours : " + datadirname+"/"+filename);
 			//Parcours du fichier
 			while (lect.ready()==true) 
 			{
@@ -69,7 +69,7 @@ public class FileManager {
 					//Mise à jours du textInfo
 					if (!data.getDate().toString().equalsIgnoreCase(dateEnCours)){
 						dateEnCours = data.getDate().toString();
-						model.setTextInfo("Date en cours de traitement : " + dateEnCours +" de " + data.getLabel());
+						model.setTextInfo("Date en cours : " + dateEnCours);
 					}
 					
 					//Insertion dans la base de donnée
