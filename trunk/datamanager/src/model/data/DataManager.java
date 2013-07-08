@@ -6,7 +6,8 @@ import model.sheet.YearSheet;
 
 /**
  * DataManager regroupe les listes importante pour la génération excel et l'ajout dans la DB
- * @author Jérémie Samson
+ * 
+ * @author Jeremie Samson
  * @version 1
  */
 public class DataManager {

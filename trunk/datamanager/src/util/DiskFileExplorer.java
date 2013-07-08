@@ -8,10 +8,12 @@ import model.data.DataManager;
 
 /**
  * Lister le contenu d'un répertoire
- * @author Jérémie Samson
+ * 
+ * @author Jeremie Samson
  * @version 1
- * @links
- * http://www.fobec.com/CMS/java/sources/lister-les-fichiers-les-dossiers-partir-repertoire_964.html
+ * 
+ * Sites : 
+ * http://www.fobec.com/CMS/java/sources/lister-les-fichiers-les-dossiers-partir-repertoire_964.html (lecture dossier)
  */
 public class DiskFileExplorer{
     private String initialpath;

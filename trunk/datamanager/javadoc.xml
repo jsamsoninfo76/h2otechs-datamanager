@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="javadoc">
+    <target name="javadoc">
+        <javadoc access="private" author="true" classpath="lib/jexcelapi/jxl.jar:lib/mysql-connector-java-5.1.25/mysql-connector-java-5.1.25-bin.jar" destdir="doc" nodeprecated="true" nodeprecatedlist="true" noindex="false" nonavbar="false" notree="false" packagenames="controleur,ui,model.database,util,model.sheet,database,model,test,vue,model.data" source="1.6" sourcepath="src" splitindex="true" use="true" version="true"/>
+    </target>
+</project>

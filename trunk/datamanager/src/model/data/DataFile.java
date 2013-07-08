@@ -4,7 +4,8 @@ import java.util.ArrayList;
 
 /**
  * POJO DataFile correspondant aux fichier contenu dans les dossiers (D1306250.csv -> DAAMMJJ0 avec D et 0 fixe) _OLD si plus vieux de 2 mois
- * @author Jérémie Samson
+ * 
+ * @author Jeremie Samson
  * @version 1
  */
 public class DataFile {

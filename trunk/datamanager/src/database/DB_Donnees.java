@@ -12,11 +12,13 @@ import model.data.Data;
 
 /**
  * Classe gérant la table donnees
- * @author Jérémie Samson
+ * 
+ * @author Jeremie Samson
  * @version 1
- * @links
- * http://thunderguy.com/semicolon/2003/08/14/java-sql-date-is-not-a-real-date/
- * http://www.siteduzero.com/forum/sujet/convertir-une-chaine-en-date-72853
+ * 
+ * Sites :
+ * http://thunderguy.com/semicolon/2003/08/14/java-sql-date-is-not-a-real-date/ (String to SQL)
+ * http://www.siteduzero.com/forum/sujet/convertir-une-chaine-en-date-72853 (String to SQL)
  */
 public class DB_Donnees {
 	

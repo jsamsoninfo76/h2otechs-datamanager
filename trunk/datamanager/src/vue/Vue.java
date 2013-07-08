@@ -21,7 +21,8 @@ import controleur.Controler;
 
 /**
  * Vue respectant le patron de conception MVC
- * @author Jérémie Samson
+ * 
+ * @author Jeremie Samson
  * @version 1
  */
 @SuppressWarnings("serial")

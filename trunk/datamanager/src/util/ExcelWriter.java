@@ -25,11 +25,13 @@ import model.sheet.YearSheet;
 
 /**
  * Ecrire un fichier excel
- * @author Jérémie Samson
+ * 
+ * @author Jeremie Samson
  * @version 1
- * @links 
- * http://www.vogella.com/articles/JavaExcel/
- * http://jexcelapi.sourceforge.net/
+ * 
+ * Sites :
+ * http://www.vogella.com/articles/JavaExcel/ (Aide excel)
+ * http://jexcelapi.sourceforge.net/ (library)
  */
 public class ExcelWriter {
 

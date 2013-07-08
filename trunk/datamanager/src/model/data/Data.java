@@ -1,8 +1,9 @@
 package model.data;
 
 /**
- * PJO Data récupéré dans les fichiers excel (correspond a une ligne)
- * @author Jérémie Samson
+ * PJO Data recupere dans les fichiers excel (correspond a une ligne)
+ * 
+ * @author Jeremie Samson
  * @version 1
  */
 public class Data {

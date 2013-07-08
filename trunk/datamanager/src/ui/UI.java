@@ -10,8 +10,9 @@ import controleur.Controler;
  * User Interface est la frame principal
  * @author Jeremie Samson
  * @version 1
- * @Links 
- * http://www.clubnix.fr/book/biblioth%C3%A8que-de-code/java/lire-et-%C3%A9crire-dans-un-fichier-en-java
+ * 
+ * Sites :
+ * http://www.clubnix.fr/book/biblioth%C3%A8que-de-code/java/lire-et-%C3%A9crire-dans-un-fichier-en-java (lire et ecrire en Java)
  */
 @SuppressWarnings("serial")
 public class UI extends JFrame {

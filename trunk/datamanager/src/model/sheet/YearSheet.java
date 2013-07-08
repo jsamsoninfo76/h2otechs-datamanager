@@ -4,7 +4,8 @@ import java.util.ArrayList;
 
 /**
  * Récupération des donnée trié pour les feuilles excel
- * @author Jérémie Samson
+ * 
+ * @author Jeremie Samson
  * @version 1
  */
 public class YearSheet {
