@@ -2,7 +2,8 @@ package model.data;
 
 /**
  * POJO Time correspondant a l'heure, minute et seconde
- * @author Jérémie Samson
+ * 
+ * @author Jeremie Samson
  * @version 1 
  */
 public class Time {

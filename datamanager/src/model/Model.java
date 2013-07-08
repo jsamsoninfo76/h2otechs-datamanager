@@ -9,7 +9,8 @@ import database.DB_Variables;
 
 /**
  * Model du logiciel
- * @author Jérémie Samson
+ * 
+ * @author Jeremie Samson
  * @version 1
  */
 public class Model extends Observable{

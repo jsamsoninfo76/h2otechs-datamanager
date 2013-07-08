@@ -18,7 +18,7 @@ import vue.Vue;
 /**
  * Controleur de l'UI
  * 
- * @author Jérémie Samson
+ * @author Jeremie Samson
  * @version 1
  */
 public class Controler implements ActionListener {

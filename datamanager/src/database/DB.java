@@ -5,7 +5,8 @@ import java.sql.SQLException;
 
 /**
  * Classe de connexion MYSQL
- * @author Jérémie Samson
+ * 
+ * @author Jeremie Samson
  * @version 1
  */
 public class DB {

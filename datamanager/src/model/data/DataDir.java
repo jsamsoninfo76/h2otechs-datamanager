@@ -4,7 +4,8 @@ import java.util.ArrayList;
 
 /**
  * POJO DataDir regroupant les noms de répertoire (correspondant aux variables) et les fichiers contenant les données)
- * @author Jérémie Samson
+ * 
+ * @author Jeremie Samson
  * @version 1
  */
 public class DataDir {

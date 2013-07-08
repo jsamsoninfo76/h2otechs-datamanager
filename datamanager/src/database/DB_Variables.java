@@ -10,9 +10,9 @@ import model.database.Variable;
 
 /**
  * Classe gérant la table variables
- * @author Jérémie Samson
- * @version 1
  * 
+ * @author Jeremie Samson
+ * @version 1
  */
 public class DB_Variables {
 

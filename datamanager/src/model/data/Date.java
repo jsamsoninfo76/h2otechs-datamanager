@@ -2,7 +2,8 @@ package model.data;
 
 /**
  * POJO Date avec l'année, le mois et le jours
- * @author Jérémie Samson
+ * 
+ * @author Jeremie Samson
  * @version 1
  */
 public class Date {

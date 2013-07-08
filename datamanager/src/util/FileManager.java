@@ -12,14 +12,16 @@ import model.data.Data;
 import model.data.DataFile;
 
 /**
- * FileManager permet de récupérer le chemin du répertoire a prendre et lie les fichiers ligne par ligne 
- * @author Jérémie Samson
+ * FileManager permet de récupérer le chemin du répertoire a prendre et lie les fichiers ligne par ligne
+ *  
+ * @author Jeremie Samson
  * @version 1
- * @links
- * http://www.developpez.net/forums/d868887/java/interfaces-graphiques-java/awt-swing/composants/jfilechooser-selection-dossier-uniquement-affichage-fichier-grise/
- * http://javarevisited.blogspot.fr/2011/09/javalangoutofmemoryerror-permgen-space.html
- * http://kohlerm.blogspot.fr/2008/05/analyzing-memory-consumption-of-eclipse.html
- * Argument a ajouter : -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/Users/Spider/Desktop -Xmx1g
+ * 
+ * Sites : 
+ * http://www.developpez.net/forums/d868887/java/interfaces-graphiques-java/awt-swing/composants/jfilechooser-selection-dossier-uniquement-affichage-fichier-grise/ (jfilechooser)
+ * http://javarevisited.blogspot.fr/2011/09/javalangoutofmemoryerror-permgen-space.html (memoire)
+ * http://kohlerm.blogspot.fr/2008/05/analyzing-memory-consumption-of-eclipse.html (memoire)
+ * -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/Users/Spider/Desktop -Xmx1g (ligne a rajouter aux arguments jvm)
  */
 public class FileManager {
 	private Model model;

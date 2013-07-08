@@ -5,8 +5,9 @@ import java.util.ArrayList;
 import model.data.Data;
 
 /**
- * Récupération des donnée trié pour les feuilles excel
- * @author Jérémie Samson
+ * Recuperation des donnee trie pour les feuilles excel
+ * 
+ * @author Jeremie Samson
  * @version 1
  */
 public class MonthSheet {
