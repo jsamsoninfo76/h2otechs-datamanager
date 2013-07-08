@@ -18,9 +18,8 @@ public class Model extends Observable{
 	private DB db;
 	private DB_Variables db_variables;
 	private DB_Donnees db_donnees;
-	private String textInfo;
+	private String path, textInfo, textInfoTitre;
 	private int progressBarValue;
-	private String path;
 	
 	public Model(){
 		db = DB.getInstance();
@@ -28,13 +27,21 @@ public class Model extends Observable{
 		db_donnees 	 = db.getDB_Donnees();
 		progressBarValue = 0;
 		textInfo = "";
+		textInfoTitre = "";
 		path = "";
 	}
 	
-	//Text info
+	
+	//Text infos
 	public String getTextInfo() { return textInfo; }
 	public void setTextInfo(String textInfo) {
 		this.textInfo = textInfo;
+		setChanged();
+		notifyObservers();
+	}
+	public String getTextInfoTitre() { return textInfoTitre; }
+	public void setTextInfoTitre(String textInfoTitre) {
+		this.textInfoTitre = textInfoTitre;
 		setChanged();
 		notifyObservers();
 	}
