@@ -13,7 +13,6 @@ import jxl.write.biff.RowsExceededException;
 import model.Model;
 import util.DiskFileExplorer;
 import util.ExcelWriter;
-import util.FileManager;
 import vue.Vue;
 
 /**
@@ -25,13 +24,11 @@ import vue.Vue;
 public class Controler implements ActionListener {
 	
 	private Model model;
-	private FileManager filemanager;
 	private Vue vue;
 	
 	public Controler(Model model, Vue vue){
 		this.model = model;
 		this.vue = vue;
-		this.filemanager = new FileManager(model);
 	}
 	/**
 	 * Action sur leq bouton assembleur, charger les variables, charger dans la base de données, génération excel
@@ -41,9 +38,11 @@ public class Controler implements ActionListener {
 		JButton event = (JButton) arg0.getSource();
 		if (event == vue.assembler){
 			//Récupération du dossier a assembler 
-			//File dir = new File("/Users/Spider/Desktop/LOG");
-			model.setPath(filemanager.getDir().getAbsolutePath());
-			File dir = new File(model.getPath());
+			File dir = new File("/Users/Spider/Desktop/LOG/");
+			model.setPath(dir.getPath());
+			
+			//File dir = new File(model.getPath());
+			//model.setPath(dir.getAbsolutePath());
 			
 			if (dir != null){
 				//Nom valide : projects, cible1, log, data
@@ -54,7 +53,7 @@ public class Controler implements ActionListener {
 					
 					//Récupération du datamanager
 					model.setDatamanager(diskFileExplorer.getDataManager());
-					JOptionPane.showMessageDialog(null, "Chargement terminé", "Message Informatif", JOptionPane.INFORMATION_MESSAGE);
+					//JOptionPane.showMessageDialog(null, "Chargement terminé", "Message Informatif", JOptionPane.INFORMATION_MESSAGE);
 				}
 				else
 					JOptionPane.showMessageDialog(null, "Le répertoire selectionné doit être un répertoire converti issu du terminal (PROJECTS,CIBLE1,DATA ou LOGS)", "Message Informatif", JOptionPane.INFORMATION_MESSAGE);
