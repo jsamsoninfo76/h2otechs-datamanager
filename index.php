@@ -28,9 +28,10 @@ http://tarruda.github.io/bootstrap-datetimepicker/
 	</head>
 	
 	<body>
+		<center>
 		<h1>H2oTechs DataManager V1.0</h1>
 		Bienvenue dans votre espace d'administration de base de donn&eacute;e.<br><br>
-		
+		</center>
 		<?php
 			$connexion = new PDO('mysql:host='.$config['host'].';dbname='.$config['db'], $config['user'], $config['pass']);
 			$sql_select_variables = "SELECT * FROM variables";
@@ -38,39 +39,41 @@ http://tarruda.github.io/bootstrap-datetimepicker/
 			$query_select_variables->execute();
 		?>
 		
-		<h5>Quelle donn&eacute;es voulez vous ?</h5>
+		<!-- Récupération des variables à sortir -->
+		<h5>Quelle donn&eacute;es voulez vous r&eacute;cup&eacute;rer ?</h5>
 		<form action="list_data.php" method="POST">
 			<input type="checkbox" onClick="selectAll(this)">Tout selectionner<br>
 			<input type="checkbox" onClick="selectPref(this)">Selectionner CFP<br><br>
 			
 			<?php
 				while($data=$query_select_variables->fetch(PDO::FETCH_ASSOC)){
-					echo '<input type="checkbox" name="variables" value="data_' .$data['label']. '">' .$data['label'];
+					echo '<input type="checkbox" name="variables[]" value="data_' .$data['label']. '">' .$data['label'];
 				}
 			?>
+			
+		<!-- Récupération de date et d'heure -->
 		<h5>Date et heure de d&eacute;but et de fin ?</h5>
 		Date de d&eacute;but :
 		<div id="datetimepickerDebut" class="input-append date">
-		<input type="text"></input>
+		<input type="text" name="dateDebut"></input>
 	      <span class="add-on">
 	        <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
 	      </span>
 	    </div>
 	    Date de fin :
 	    <div id="datetimepickerFin" class="input-append date">
-	      <input type="text"></input>
+	      <input type="text" name="dateFin"></input>
 	      <span class="add-on">
 	        <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
 	      </span>
 	    </div>
 	    <script type="text/javascript">
-	    	$('#datetimepickerDebut').datetimepicker({
-	        	format: 'yyyy/MM/dd hh:mm:ss'
-	        });
-	        $('#datetimepickerFin').datetimepicker({
-	        	format: 'yyyy/MM/dd hh:mm:ss'
-	        });
+	    	$('#datetimepickerDebut').datetimepicker({ format: 'yyyy/MM/dd hh:mm:ss' });
+	        $('#datetimepickerFin').datetimepicker({ format: 'yyyy/MM/dd hh:mm:ss' });
 	    </script>
+	    
+	    <br><br><input type="submit" value="Envoyer">
 		</form>
+		
 	</body>
 </html>
