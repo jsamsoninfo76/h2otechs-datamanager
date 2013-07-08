@@ -25,7 +25,6 @@ public class DB_Donnees {
 	  Connection cnx;
 	  PreparedStatement ps_select;
 	  PreparedStatement ps_insert;
-	  private static SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
 	  
 	  public DB_Donnees(Connection cnx) {
 	     this.cnx=cnx;
@@ -47,6 +46,7 @@ public class DB_Donnees {
 	  }
 	  
 	  public static Date stringToDate(String sDate) throws ParseException {
+		  	SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
 	        return formatter.parse(sDate);
 	  }
 	     
