@@ -35,6 +35,7 @@ public class Vue extends JPanel implements Observer, PropertyChangeListener{
 	
 	public Vue(Model model){
 		this.model = model;
+		filemanager = new FileManager(model);
 		
 		//Ajout du text Info
 		textInfo = new JLabel("Clickez sur -> Préparer l'insertion");
@@ -84,22 +85,19 @@ public class Vue extends JPanel implements Observer, PropertyChangeListener{
         public Void doInBackground() {
             int progress = 0;
             setProgress(0);
-           
+            
             int nbFiles = 0;
             for (DataDir datadir:model.getDatamanager().getGloballist()){
-				for (DataFile datafile:datadir.getListeFile()){
-					for (int i=0 ; i<datafile.getListeData().size() ; i++){
-						nbFiles++;
-					}
+				for (int i=0 ; i<datadir.getListeFile().size() ; i++){
+					nbFiles++;
 				}
 			} 
             progressBar.setMaximum(nbFiles);
             
-            
             while (progress < nbFiles) {
             	for (DataDir datadir:model.getDatamanager().getGloballist()){
     				for (DataFile datafile:datadir.getListeFile()){
-    					progress ++;
+    					progress++;
     		            setProgress(progress);
     					filemanager.readFile(datafile.getFilename(), datadir.getDirname());
     				}
@@ -108,17 +106,6 @@ public class Vue extends JPanel implements Observer, PropertyChangeListener{
             return null;
         }
  
-        /*
-         //On charge toutes les donners dans la base
-			for (DataDir datadir:model.getDatamanager().getGloballist()){
-				for (DataFile datafile:datadir.getListeFile()){
-					for (Data data:datafile.getListeData()){
-						model.getDb_donnees().insertDonnee(data);
-					}
-				}
-			} 
-         
-         */
         public void done() {
             Toolkit.getDefaultToolkit().beep();
             assembler.setEnabled(true);
@@ -130,8 +117,6 @@ public class Vue extends JPanel implements Observer, PropertyChangeListener{
 	public void createTask(){
 		 assembler.setEnabled(false);
 	     setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-	     //Instances of javax.swing.SwingWorker are not reusuable, so
-	     //we create new instances as needed.
 	     task = new Task();
 	     task.addPropertyChangeListener(this);
 	     task.execute();
