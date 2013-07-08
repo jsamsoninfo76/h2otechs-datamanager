@@ -9,7 +9,6 @@ import javax.swing.JFileChooser;
 
 import model.Model;
 import model.data.Data;
-import model.data.DataFile;
 
 /**
  * FileManager permet de récupérer le chemin du répertoire a prendre et lie les fichiers ligne par ligne
@@ -26,7 +25,7 @@ import model.data.DataFile;
 public class FileManager {
 	private Model model;
 	private Data data;
-	
+
 	public FileManager(Model model){
 		this.model = model;
 	}
@@ -42,13 +41,11 @@ public class FileManager {
 	 * Lecture d'un fichier XLS et création des données
 	 * @param datadirname 
 	 */
-	@SuppressWarnings("resource")
-	public DataFile readFile(String filename, String datadirname){
-		System.out.println("readfile");
+	public void readFile(String filename, String datadirname){
 		//Création du datafile
-		DataFile datafile = new DataFile(filename);
+		//DataFile datafile = new DataFile(filename);
 		BufferedReader lect ;
-		System.out.println("Traitement de " +filename);
+		String dateEnCours = "";
 		
 		//Lecture du fichier
 		try
@@ -68,19 +65,24 @@ public class FileManager {
 				{
 					//Ajout de la donnée
 					data = new Data(ligne, datadirname);
+					
+					//Mise à jours du textInfo
+					if (!data.getDate().toString().equalsIgnoreCase(dateEnCours)){
+						dateEnCours = data.getDate().toString();
+						model.setTextInfo("Date en cours de traitement : " + dateEnCours +" de " + data.getLabel());
+					}
+					
+					//Insertion dans la base de donnée
 					model.getDb().getDB_Donnees().insertDonnee(data);
 					data = null;
+					
 					numLigne++;
 				}
 			}
 		}
-		catch (NullPointerException a){
-			System.out.println("FileManager.java : NullPointerException " + a);
-		}
-		catch (IOException a) {
-			System.out.println("FileManager.java : IOException " + a);
-		}
+		catch (NullPointerException a){ System.out.println("FileManager.java : NullPointerException " + a); }
+		catch (IOException a) { System.out.println("FileManager.java : IOException " + a); }
 		
-		return datafile;
+		//return datafile;
 	}
 }
