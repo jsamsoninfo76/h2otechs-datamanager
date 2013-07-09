@@ -16,6 +16,7 @@ function generateSQL($variables, $dateDebut, $dateFin){
 			
 	$sql_select .= " WHERE " .$variables[0]. ".datetime >= '" .$dateDebut. "'";
 	$sql_select .= " AND " .$variables[0]. ".datetime <= '" .$dateFin. "'";
+	//$sql_select .= " LIMIT 0,1";
 	return $sql_select;
 }
 
@@ -41,15 +42,17 @@ function getDescriptionOfLabel($label, $connexion){
 	return $data['description'];
 }
 
-function getLastValue($variable, $dateDebut){
-	/*
-	SELECT datetime,data_cfp.value AS data_cfp_value
-	FROM data_cfp
-	WHERE data_cfp.datetime <  '2013/06/30 17:24:24'
-	AND data_cfp.value IS NOT NULL
-	ORDER BY timestamp DESC
-	LIMIT 0 , 1
-	*/
+function getLastValue($variable, $dateDebut, $connexion){
+	$sql_select_last =  " SELECT value" 						.
+						" FROM " .$variable				   	.
+					 	" WHERE datetime < '" .$dateDebut. "'" 	.
+					 	" AND value IS NOT NULL"				.
+					 	" ORDER BY timestamp DESC"				.
+					 	" LIMIT 0,1";
+	$query_select_last = $connexion->prepare($sql_select_last);
+	$query_select_last->execute();
+	$data = $query_select_last->fetch(PDO::FETCH_ASSOC);
+	return $data['value'];
 }
 
 function verifExposant($unite){

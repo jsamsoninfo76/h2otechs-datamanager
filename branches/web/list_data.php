@@ -54,8 +54,22 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 								echo "<tr>";
 									echo "<td>" .$data->datetime. "</td>";
 									foreach($variables as $variable){ 
+										//Mise en lower du data_label_value
 										$value = strtolower($variable . "_value");
-										echo "<td>" .$data->$value. "</td>";
+										
+										//Si la value est vide
+										if ($data->$value == "") {
+										
+											//Si la dernière valeur est aussi vide
+											if ($lastValue[$variable] == "")
+												$lastValue[$variable] = getLastValue($variable, $dateDebut, $connexion);
+												
+											echo "<td>" .$lastValue[$variable]. "</td>";
+										}
+										else {
+											$lastValue[$variable] = $data->$value;
+											echo "<td>" .$lastValue[$variable]. "</td>";
+										}
 									}
 								echo "</tr>";
 							}
