@@ -80,6 +80,43 @@ function valider(form){
 	  dateFin.style.backgroundColor = '#FF6469';
   }
 
-  if (res == 3) return true;
+  if (debutSupFin(dateDebut.value, dateFin.value)){
+	  document.getElementById("datetime_debut_error").innerHTML = "La date de d&eacute;but doit &ecirc;tre inf&eacute;rieur &agrave; la date de fin.";
+	  dateDebut.style.backgroundColor = '#FF6469';
+  }
+  else{
+	res++;
+	document.getElementById("datetime_debut_error").innerHTML = "";
+	dateDebut.style.backgroundColor = '#FFFFFF';  
+  }
+  
+  if (res == 4) return true;
   else return false;
+}
+
+function debutSupFin(dateDebut, dateFin)
+{
+	var date1 = new Date();
+	date1.setYear(dateDebut.substring(0, 4));
+	date1.setMonth(dateDebut.substr(5,2));
+	date1.setDate(dateDebut.substr(8,2));
+	date1.setHours(dateDebut.substr(11,2));
+	date1.setMinutes(dateDebut.substr(14,2));
+	date1.setSeconds(dateDebut.substr(17,2));
+	date1.setMilliseconds(0);
+	var debut=date1.getTime();
+
+	 
+	var date2 = new Date();
+	date2.setYear(dateFin.substring(0, 4));
+	date2.setMonth(dateFin.substr(5,2));
+	date2.setDate(dateFin.substr(8,2));
+	date2.setHours(dateFin.substr(11,2));
+	date2.setMinutes(dateFin.substr(14,2));
+	date2.setSeconds(dateFin.substr(17,2));
+	date2.setMilliseconds(0);
+	var fin=date2.getTime();
+
+	if (debut > fin) return true;
+	else return false;
 }

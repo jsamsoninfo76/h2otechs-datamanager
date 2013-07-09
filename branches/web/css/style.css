@@ -1,7 +1,24 @@
-font
-{
-	color: #FF6469;	
+/*
+ *@autor Jérémie samson
+ *@version 1
+ *
+ */
+
+/* Couleur des messages d'erreur*/
+font{ color: #FF6469; }
+
+
+/* Tableau de variable */
+#tabVariablesHeader { 
+	font-weight : bold;
+	width: 50px; 
 }
-.tabVariablesHeader{
-	width: 50px;
+#ligne_impair { background-color: #c9dfff; }
+#ligne_pair { background-color: #7db9ff; }
+#tabVariables {}
+
+
+/* DateTime Picker */
+#bouttonDate {
+	height: 30px;
 }
