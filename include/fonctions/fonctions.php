@@ -50,7 +50,11 @@ function getLastValue($variable, $dateDebut){
 	ORDER BY timestamp DESC
 	LIMIT 0 , 1
 	*/
-	
-	
+}
+
+function verifExposant($unite){
+	if (is_numeric(substr($unite, strlen($unite)-1, strlen($unite))))
+		$unite = substr($unite, 0, strlen($unite)-1) . "<sup>" .substr($unite, strlen($unite)-1, strlen($unite)). "</sup>";
+	return $unite;
 }
 ?>
