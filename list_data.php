@@ -34,7 +34,7 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 		
 		<?php
 		foreach($variables as $variable)
-			echo "<th>" .$variable. "</th>";
+			echo "<th>" .getHeader($variable). "</th>";
 		?>
 	</tr>
 	

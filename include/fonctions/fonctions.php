@@ -19,6 +19,20 @@ function generateSQL($variables, $dateDebut, $dateFin){
 	return $sql_select;
 }
 
+function getHeader($string){
+	$strings = explode("_", $string);
+	$res = "";
+	
+	for($i=1 ; $i<count($strings) ; $i++){
+		if ($i == count($strings)-1)
+			$res .= $strings[$i];
+		else
+			$res .= $strings[$i] . "_";
+	}
+	
+	return $res;
+}
+
 function getLastValue($variable, $dateDebut){
 	/*
 	SELECT datetime,data_cfp.value AS data_cfp_value
