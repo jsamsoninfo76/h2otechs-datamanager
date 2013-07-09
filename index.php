@@ -45,8 +45,8 @@ http://openweb.eu.org/articles/validation_formulaire (validation form)
 		<div id="variables">
 			<h5 title="Au moins une">*Quelle donn&eacute;es voulez vous r&eacute;cup&eacute;rer ?</h5> 
 			<div id="variables_tools">
-				<input type="radio" name="tools" onClick="selectAll(this)">Tout selectionner<br>
-				<input type="radio" name="tools" onClick="selectPref(this)">Selectionner CFP<br><br>
+				<input type="radio" name="tools" onClick="selectAll(this)"> Tout selectionner<br>
+				<input type="radio" name="tools" onClick="selectPref(this)"> Selectionner CFP<br><br>
 			</div>
 			<font id="variables_checked_error"></font>
 			<div id="variables_header">
@@ -54,17 +54,20 @@ http://openweb.eu.org/articles/validation_formulaire (validation form)
 					<?php
 						//Creation du tableau de variables
 						$unite = "";
+						$pair = 1;
 						while($data=$query_select_variables->fetch(PDO::FETCH_ASSOC)){
+							$trColor = ($pair%2) ?  "id='ligne_impair'" : "id='ligne_pair'";
 							if ($data['unite'] != $unite) {
-								if ($unite == "") echo "<tr>";
-								else echo "</tr><tr>";
+								$pair++;
+								if ($unite == "") echo "<tr $trColor>";
+								else echo "</tr><tr $trColor>";
 
 								$unite = verifExposant($data['unite']);
 								echo '<td id="tabVariablesHeader"><center>'.$unite.'</center></td>';
 								echo '<td><input type="checkbox" name="variables[]" value="data_' .$data['label']. '">' .$data['label'] .'</td>';
 							}
 							else
-								echo '<td><input type="checkbox" name="variables[]" value="data_' .$data['label']. '">' .$data['label'] .'</td>';
+								echo '<td><input type="checkbox" name="variables[]" value="data_' .$data['label']. '">' .$data['label'] .'</td>';	
 						}
 					?>
 				</tr>
@@ -77,14 +80,14 @@ http://openweb.eu.org/articles/validation_formulaire (validation form)
 			<h5>Date et heure de d&eacute;but et de fin ?</h5>
 			<div id="datetime_title">*Date de d&eacute;but : <font id="datetime_debut_error"></font></div>
 			<div id="datetimepickerDebut" class="input-append date">
-			<input type="text" name="dateDebut"></input>
+			<input type="text" id="bouttonDate" name="dateDebut"></input>
 		      <span class="add-on">
 		        <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
 		      </span>
 		    </div>
 		    <div id="datetime_title">*Date de fin : <font id="datetime_fin_error"></font></div>
 		    <div id="datetimepickerFin" class="input-append date">
-		      <input type="text" name="dateFin"></input>
+		      <input type="text" id="bouttonDate" name="dateFin"></input>
 		      <span class="add-on">
 		        <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
 		      </span>
