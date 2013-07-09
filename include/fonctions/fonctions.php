@@ -33,6 +33,14 @@ function getHeader($string){
 	return $res;
 }
 
+function getDescriptionOfLabel($label, $connexion){
+	$sql_select_description = "SELECT description FROM variables WHERE label='$label'";
+	$query_select_description = $connexion->prepare($sql_select_description);
+	$query_select_description->execute();
+	$data = $query_select_description->fetch(PDO::FETCH_ASSOC);
+	return $data['description'];
+}
+
 function getLastValue($variable, $dateDebut){
 	/*
 	SELECT datetime,data_cfp.value AS data_cfp_value
