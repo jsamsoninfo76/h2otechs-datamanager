@@ -16,6 +16,8 @@ function selectAll(source){
 function selectPref(source){
 	//CFP
 	checkboxes = document.getElementsByName('variables[]');
+	for(var i=0, n=checkboxes.length;i<n;i++) checkboxes[i].checked = false;
+	
     for(var i=0, n=checkboxes.length;i<n;i++) {
     	if(checkboxes[i].value == "data_CFP" || checkboxes[i].value == "data_PC")
 			checkboxes[i].checked = source.checked;
@@ -36,10 +38,10 @@ function valider(form){
   }
   if (nbChecked > 0 ){
   	  res++;
-  	  document.getElementById("data_checked_error").innerHTML = "";
+  	  document.getElementById("variables_checked_error").innerHTML = "";
   }
   else{
-  	  document.getElementById("data_checked_error").innerHTML = "Il doit au moins y avoir une variable de coch&eacute;e.";
+  	  document.getElementById("variables_checked_error").innerHTML = "Il doit au moins y avoir une variable de coch&eacute;e.";
   }
    
   //Verification sur la date de début
@@ -56,7 +58,7 @@ function valider(form){
 		  dateDebut.style.backgroundColor = '#FF6469';
 	  }
   }else{
-  	  document.getElementById("datetime_debut_error").innerHTML = "La date doit &ecirc;tre remplit au format : 'AAAA/MM/JJ HH:MM:SS'.";
+  	  document.getElementById("datetime_debut_error").innerHTML = "La date de d&eacute;but doit &ecirc;tre remplit au format : 'AAAA/MM/JJ HH:MM:SS'.";
 	  dateDebut.style.backgroundColor = '#FF6469';
   }
   
@@ -74,7 +76,7 @@ function valider(form){
 		  dateFin.style.backgroundColor = '#FF6469';
 	  }
   }else{
-  	  document.getElementById("datetime_fin_error").innerHTML = "La date doit &ecirc;tre remplit au format : 'AAAA/MM/JJ HH:MM:SS'.";
+  	  document.getElementById("datetime_fin_error").innerHTML = "La date de fin doit &ecirc;tre remplit au format : 'AAAA/MM/JJ HH:MM:SS'.";
 	  dateFin.style.backgroundColor = '#FF6469';
   }
 

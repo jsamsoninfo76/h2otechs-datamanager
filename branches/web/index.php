@@ -19,10 +19,10 @@ http://openweb.eu.org/articles/validation_formulaire (validation form)
 				
 		<link rel="stylesheet" href="css/bootstrap-combined.min.css">
 		<link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap-datetimepicker.min.css">
+		<link rel="stylesheet" href="css/style.css">
 
   		<script type="text/javascript" src="js/jquery.min.js"></script> 
   		<script type="text/javascript"  src="js/bootstrap.min.js"></script>
-
   		<script type="text/javascript" src="js/bootstrap-datetimepicker.min.js"></script>
   		<script type="text/javascript" src="js/functions.js"></script>
 
@@ -42,33 +42,47 @@ http://openweb.eu.org/articles/validation_formulaire (validation form)
 		
 		<!-- Récupération des variables à sortir -->
 		<form action="list_data.php" name="form" method="POST" onsubmit="return valider(this)">
-		<div id="datas">
+		<div id="variables">
 			<h5 title="Au moins une">*Quelle donn&eacute;es voulez vous r&eacute;cup&eacute;rer ?</h5> 
-			<div id="datas_tools">
-				<input type="checkbox" onClick="selectAll(this)">Tout selectionner<br>
-				<input type="checkbox" onClick="selectPref(this)">Selectionner CFP<br><br>
+			<div id="variables_tools">
+				<input type="radio" name="tools" onClick="selectAll(this)">Tout selectionner<br>
+				<input type="radio" name="tools" onClick="selectPref(this)">Selectionner CFP<br><br>
 			</div>
-			<font id="data_checked_error" color="#FF6469"></font>
-			<div id="datas_variables">
-				<?php
-					while($data=$query_select_variables->fetch(PDO::FETCH_ASSOC)){
-						echo '<input type="checkbox" name="variables[]" value="data_' .$data['label']. '">' .$data['label'];
-					}
-				?>
+			<font id="variables_checked_error"></font>
+			<div id="variables_header">
+				<table id="tabVariables" cellpadding="5">
+					<?php
+						//Creation du tableau de variables
+						$unite = "";
+						while($data=$query_select_variables->fetch(PDO::FETCH_ASSOC)){
+							if ($data['unite'] != $unite) {
+								if ($unite == "") echo "<tr>";
+								else echo "</tr><tr>";
+
+								$unite = verifExposant($data['unite']);
+								echo '<td id="tabVariablesHeader"><center>'.$unite.'</center></td>';
+								echo '<td><input type="checkbox" name="variables[]" value="data_' .$data['label']. '">' .$data['label'] .'</td>';
+							}
+							else
+								echo '<td><input type="checkbox" name="variables[]" value="data_' .$data['label']. '">' .$data['label'] .'</td>';
+						}
+					?>
+				</tr>
+				</table>
 			</div>
 		</div>
 			
 		<!-- Récupération de date et d'heure -->
 		<div id="datetimes">
 			<h5>Date et heure de d&eacute;but et de fin ?</h5>
-			<div id="datetime_title">*Date de d&eacute;but : <font id="datetime_debut_error" color="#FF6469"></font></div>
+			<div id="datetime_title">*Date de d&eacute;but : <font id="datetime_debut_error"></font></div>
 			<div id="datetimepickerDebut" class="input-append date">
 			<input type="text" name="dateDebut"></input>
 		      <span class="add-on">
 		        <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
 		      </span>
 		    </div>
-		    <div id="datetime_title">*Date de fin : <font id="datetime_fin_error" color="#FF6469"></font></div>
+		    <div id="datetime_title">*Date de fin : <font id="datetime_fin_error"></font></div>
 		    <div id="datetimepickerFin" class="input-append date">
 		      <input type="text" name="dateFin"></input>
 		      <span class="add-on">
