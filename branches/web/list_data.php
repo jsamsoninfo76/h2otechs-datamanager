@@ -45,30 +45,36 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 				$sql_select = generateSQL($variables, $dateDebut, $dateFin);
 				$query_select = $connexion->prepare($sql_select);
 				$query_select->execute();
-							
+				$heurePrec = "";
+				
 				echo "<br>".$sql_select."<br><br>";
 				while($data=$query_select->fetch(PDO::FETCH_OBJ)){
-					echo '<tr id="tabListDataCells">';
-						echo "<td>" .$data->datetime. "</td>";
-						foreach($variables as $variable){ 
-							//Mise en lower du data_label_value
-							$value = strtolower($variable . "_value");
-							
-							//Si la value est vide
-							if ($data->$value == "") {
-							
-								//Si la dernière valeur est aussi vide
-								if ($lastValue[$variable] == "")
-									$lastValue[$variable] = getLastValue($variable, $dateDebut, $connexion);
-									
-								echo "<td>" .$lastValue[$variable]. "</td>";
+					$datetime = $data->datetime;
+					$heureEnCours = getHourFromDatetime($datetime);
+					
+					if ($heurePrec != $heureEnCours){
+						echo '<tr id="tabListDataCells">';
+							echo "<td>" .$datetime. "</td>";
+							foreach($variables as $variable){ 
+								//Mise en lower du data_label_value
+								$value = strtolower($variable . "_value");
+								
+								//Si la value est vide
+								if ($data->$value == "") {
+									//Si la dernière valeur est aussi vide
+									if ($lastValue[$variable] == "")
+										$lastValue[$variable] = getLastValue($variable, $dateDebut, $connexion);
+										
+									echo "<td>" .$lastValue[$variable]. "</td>";
+								}
+								else {
+									$lastValue[$variable] = $data->$value;
+									echo "<td>" .$lastValue[$variable]. "</td>";
+								}
 							}
-							else {
-								$lastValue[$variable] = $data->$value;
-								echo "<td>" .$lastValue[$variable]. "</td>";
-							}
-						}
-					echo "</tr>";
+						echo "</tr>";
+						$heurePrec = $heureEnCours;
+					}
 				}
 			echo "</table>";
 		echo "</div>";

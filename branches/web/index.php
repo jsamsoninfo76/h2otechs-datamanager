@@ -99,7 +99,7 @@ http://openweb.eu.org/articles/validation_formulaire (validation form)
 			      </span>
 			    </div>
 		    </div>
-		    
+		    		    
 		    <!-- Ajout du javascript jquery-->
 		    <script type="text/javascript">
 		    	$('#datetimepickerDebut').datetimepicker({ format: 'yyyy/MM/dd hh:mm:ss' });
