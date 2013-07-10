@@ -60,4 +60,15 @@ function verifExposant($unite){
 		$unite = substr($unite, 0, strlen($unite)-1) . "<sup>" .substr($unite, strlen($unite)-1, strlen($unite)). "</sup>";
 	return $unite;
 }
+
+function isOneHourDiff($heure, $datetime){
+	$hourFromDateTime = getHourFromDatetime($datetime);	
+	return ($hourFromDateTime > $heure);
+}
+
+function getHourFromDatetime($datetime){
+	$tmp = explode(" ", $datetime);
+	$time = explode(":", $tmp[1]);
+	return $time[0];
+}
 ?>
