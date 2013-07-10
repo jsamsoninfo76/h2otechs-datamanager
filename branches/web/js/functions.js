@@ -6,13 +6,21 @@
  *http://www.siteduzero.com/forum/sujet/verifier-une-date-au-format-jjmmaaaa-93090 (regex)
  */
 
+/**
+ * Sélectionne tous les boutons radios
+ * @param source bouton radio du selectAll
+ */
 function selectAll(source){
 	checkboxes = document.getElementsByName('variables[]');
 	for(var i=0, n=checkboxes.length;i<n;i++) {
 		checkboxes[i].checked = source.checked;
 	}
 }
-			
+
+/**
+ * Sélectionne les boutons radios passé en préférence
+ * @param source bouton radio du selectPref
+ */			
 function selectPref(source){
 	//CFP
 	checkboxes = document.getElementsByName('variables[]');
@@ -24,6 +32,10 @@ function selectPref(source){
 	}
 }
 
+/**
+ * Vérification du formulaire
+ * @param source le formulaire
+ */	
 function valider(form){
   var res = 0;
   var regexDateTime = /^[2-9][0-9][0-9][0-9]\/[0-1][0-9]\/[0-3][0-9]\s[0-2][0-9]:[0-5][0-9]:[0-5][0-9]$/;
@@ -54,7 +66,10 @@ function valider(form){
 		  document.getElementById("datetime_debut_error").innerHTML = "";
 		  dateDebut.style.backgroundColor = '#FFFFFF';  
 		  
+		  //Verification si la date de fin est completé
 	  	  if (dateFin.value != ""){
+	  	  
+	  	  	  //Comparaison date de début et date de fin
 		  	  if (debutSupFin(dateDebut.value, dateFin.value)){
 				  document.getElementById("datetime_debut_error").innerHTML = "La date de d&eacute;but doit &ecirc;tre inf&eacute;rieur &agrave; la date de fin.";
 				  dateDebut.style.backgroundColor = '#FF6469';
@@ -64,6 +79,7 @@ function valider(form){
 				document.getElementById("datetime_debut_error").innerHTML = "";
 				dateDebut.style.backgroundColor = '#FFFFFF';  
 			  }
+			  
 		  }
 	  }
 	  else{
@@ -96,6 +112,9 @@ function valider(form){
   else return false;
 }
 
+/**
+ * Comparaison entre les deux dates après convertion en objet Date
+ */
 function debutSupFin(dateDebut, dateFin)
 {
 	var date1 = new Date();
