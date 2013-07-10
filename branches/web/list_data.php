@@ -30,8 +30,8 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 			?>
 								 	
 			<!-- Création du tableau et de son header-->
-			<table border="1">
-				<tr>
+			<table id="tabListData" border="1">
+				<tr id="tabListDataHeader">
 					<th title="Temps au format AAAA/MM/JJ HH:MM:SS de la prise de donn&eacute;e">Datetime</th>
 								
 					<?php
@@ -48,7 +48,7 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 							
 				echo "<br>".$sql_select."<br><br>";
 				while($data=$query_select->fetch(PDO::FETCH_OBJ)){
-					echo "<tr>";
+					echo '<tr id="tabListDataCells">';
 						echo "<td>" .$data->datetime. "</td>";
 						foreach($variables as $variable){ 
 							//Mise en lower du data_label_value
