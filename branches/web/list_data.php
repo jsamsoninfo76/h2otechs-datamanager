@@ -30,55 +30,57 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 			?>
 								 	
 			<!-- Création du tableau et de son header-->
-			<table id="tabListData" border="1">
-				<tr id="tabListDataHeader">
-					<th title="Temps au format AAAA/MM/JJ HH:MM:SS de la prise de donn&eacute;e">Datetime</th>
-								
-					<?php
-						foreach($variables as $variable){
-							$variable = getHeader($variable);
-							echo "<th title='" .getDescriptionOfLabel($variable, $connexion). "'>" .$variable. "</th>";
-						}
-				echo "</tr>";
-						 
-				//Création de la requête et génération du tableau
-				$sql_select = generateSQL($variables, $dateDebut, $dateFin);
-				$query_select = $connexion->prepare($sql_select);
-				$query_select->execute();
-				$heurePrec = "";
-				
-				echo "<br>".$sql_select."<br><br>";
-				while($data=$query_select->fetch(PDO::FETCH_OBJ)){
-					$datetime = $data->datetime;
-					$heureEnCours = getHourFromDatetime($datetime);
-					
-					if ($heurePrec != $heureEnCours){
-						echo '<tr id="tabListDataCells">';
-							echo "<td>" .$datetime. "</td>";
-							foreach($variables as $variable){ 
-								//Mise en lower du data_label_value
-								$value = strtolower($variable . "_value");
-								
-								//Si la value est vide
-								if ($data->$value == "") {
-									//Si la dernière valeur est aussi vide
-									if ($lastValue[$variable] == "")
-										$lastValue[$variable] = getLastValue($variable, $dateDebut, $connexion);
-										
-									echo "<td>" .$lastValue[$variable]. "</td>";
-								}
-								else {
-									$lastValue[$variable] = $data->$value;
-									echo "<td>" .$lastValue[$variable]. "</td>";
-								}
+			<div id="list">
+				<table id="tabListData" border="1">
+					<tr id="tabListDataHeader">
+						<th title="Temps au format AAAA/MM/JJ HH:MM:SS de la prise de donn&eacute;e">Datetime</th>
+									
+						<?php
+							foreach($variables as $variable){
+								$variable = getHeader($variable);
+								echo "<th title='" .getDescriptionOfLabel($variable, $connexion). "'>" .getLabe($variable). "</th>";
 							}
-						echo "</tr>";
-						$heurePrec = $heureEnCours;
-					}
-				}
-			echo "</table>";
-		echo "</div>";
-		include("footer.html");
+					echo "</tr>";
+							 
+					//Création de la requête et génération du tableau
+					$sql_select = generateSQL($variables, $dateDebut, $dateFin);
+					$query_select = $connexion->prepare($sql_select);
+					$query_select->execute();
+					$heurePrec = "";
+					
+					//echo "<br>".$sql_select."<br><br>";
+					while($data=$query_select->fetch(PDO::FETCH_OBJ)){
+						$datetime = $data->datetime;
+						$heureEnCours = getHourFromDatetime($datetime);
+						
+						if ($heurePrec != $heureEnCours){
+							echo '<tr id="tabListDataCells">';
+								echo "<td>" .$datetime. "</td>";
+								foreach($variables as $variable){ 
+									//Mise en lower du data_label_value
+									$value = strtolower($variable . "_value");
+									
+									//Si la value est vide
+									if ($data->$value == "") {
+										//Si la dernière valeur est aussi vide
+										if ($lastValue[$variable] == "")
+											$lastValue[$variable] = getLastValue($variable, $dateDebut, $connexion);
+											
+										echo "<td>" .$lastValue[$variable]. "</td>";
+									}
+									else {
+										$lastValue[$variable] = $data->$value;
+										echo "<td>" .$lastValue[$variable]. "</td>";
+									}
+								}
+							echo "</tr>";
+							$heurePrec = $heureEnCours;
+						}
+					} ?>
+				</table>
+			</div>
+		</div>
+		<?php include("footer.html");
 		}
 	}
 	else
