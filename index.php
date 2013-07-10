@@ -11,22 +11,8 @@ http://openweb.eu.org/articles/validation_formulaire (validation form)
 
 <?php
 	include("include/include.php");
-?>
-
-<html>
-	<head>
-		<title>H2otechs DataManager</title>
-		<link rel="stylesheet" href="css/bootstrap-combined.min.css">
-		<link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap-datetimepicker.min.css">
-		<link rel="stylesheet" href="css/style.css">
-  		<script type="text/javascript"  src="js/bootstrap.min.js"></script>
-  		<script type="text/javascript" src="js/bootstrap-datetimepicker.min.js"></script>
-  		<script type="text/javascript" src="js/functions.js"></script>
-	</head>
-	
-	<body>	
-		<?php include("header.html"); ?>
-		
+	include("header.html");
+?>		
 		<!-- Récupération des variables à sortir -->
 		<div id="corp">
 			<form action="list_data.php" name="form" method="POST" onsubmit="return valider(this)">
@@ -124,6 +110,4 @@ http://openweb.eu.org/articles/validation_formulaire (validation form)
 		    <br><br><input type="submit" value="Envoyer">
 			</form>
 		</div>
-		<?php include("footer.html"); ?>
-	</body>
-</html>
+	<?php include("footer.html"); ?>
