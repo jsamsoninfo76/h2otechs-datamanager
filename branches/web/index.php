@@ -63,10 +63,10 @@ http://openweb.eu.org/articles/validation_formulaire (validation form)
 	
 									$unite = verifExposant($data['unite']);
 									echo '<td id="tabVariablesHeader"><center>'.$unite.'</center></td>';
-									echo '<td title="' .$data['description']. '"><input type="checkbox" name="variables[]" value="data_' .$data['label']. '">' .$data['label'] .'</td>';
+									echo '<td title="' .$data['description']. '"><input type="checkbox" name="variables[]" value="data_' .$data['label']. '">&nbsp;&nbsp;' .$data['label'] .'</td>';
 								}
 								else
-									echo '<td title="' .$data['description']. '"><input type="checkbox" name="variables[]" value="data_' .$data['label']. '">' .$data['label'] .'</td>';	
+									echo '<td title="' .$data['description']. '"><input type="checkbox" name="variables[]" value="data_' .$data['label']. '">&nbsp;&nbsp;' .$data['label'] .'</td>';	
 							}
 						?>
 					</tr>
