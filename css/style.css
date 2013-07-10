@@ -37,6 +37,7 @@ font{ color: #FF6469; }
 
 
 /* Tableau list_data */
+#list{}
 #tabListData {}
 #tabListDataCells {
 	text-align: center;

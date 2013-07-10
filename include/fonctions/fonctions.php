@@ -71,4 +71,10 @@ function getHourFromDatetime($datetime){
 	$time = explode(":", $tmp[1]);
 	return $time[0];
 }
+
+function getLabe($variable){
+	if (strpos($variable,'RENDT_ETAGES') !== false) return "ETAGES";
+	else if (strpos($variable,'RENDT_ETAGE') !== false) return "ETAGE " . $variable[strlen($variable)-1];
+	else return str_replace('_', ' ', $variable);
+}
 ?>
