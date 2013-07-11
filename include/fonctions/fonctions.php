@@ -72,6 +72,12 @@ function getHourFromDatetime($datetime){
 	return $time[0];
 }
 
+function getMinFromDatetime($datetime){
+	$tmp = explode(" ", $datetime);
+	$time = explode(":", $tmp[1]);
+	return $time[1];
+}
+
 function getLabel($variable){
 	if (strpos($variable,'RENDT_ETAGES') !== false) return "ETAGES";
 	else if (strpos($variable,'RENDT_ETAGE') !== false) return "ETAGE " . $variable[strlen($variable)-1];

@@ -31,14 +31,14 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 								 	
 			<!-- Création du tableau et de son header-->
 			<div id="list">
-				<table id="tabListData" border="1">
+				<table id="tabListData" border="1" rules="rows">
 					<tr id="tabListDataHeader">
 						<th title="Temps au format AAAA/MM/JJ HH:MM:SS de la prise de donn&eacute;e">Date</th>
 									
 						<?php
 							foreach($variables as $variable){
 								$variable = getHeader($variable);
-								echo "<th title='" .getDescriptionOfLabel($variable, $connexion). "'>" .getLabel($variable). "</th>";
+								echo "<th title='" .getDescriptionOfLabel($variable, $connexion). "'>&nbsp;" .getLabel($variable). "&nbsp;</th>";
 							}
 					echo "</tr>";
 							 
@@ -47,14 +47,19 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 					$query_select = $connexion->prepare($sql_select);
 					$query_select->execute();
 					$heurePrec = "";
+					$minPrec = getMinFromDatetime($dateDebut);
+					$compteurPair = 0;
 					
 					//echo "<br>".$sql_select."<br><br>";
 					while($data=$query_select->fetch(PDO::FETCH_OBJ)){
 						$datetime = $data->datetime;
 						$heureEnCours = getHourFromDatetime($datetime);
+						$minEnCours = getMinFromDatetime($datetime);
+						$trColor = ($compteurPair%2) ?  "id='ligne_impair'" : "id='ligne_pair'";
 						
-						if ($heurePrec != $heureEnCours){
-							echo '<tr id="tabListDataCells">';
+						if ($heurePrec != $heureEnCours && $minPrec == $minEnCours){
+							$compteurPair++;
+							echo "<tr $trColor>";
 								echo "<td>" .$datetime. "</td>";
 								foreach($variables as $variable){ 
 									//Mise en lower du data_label_value
