@@ -33,12 +33,12 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 			<div id="list">
 				<table id="tabListData" border="1">
 					<tr id="tabListDataHeader">
-						<th title="Temps au format AAAA/MM/JJ HH:MM:SS de la prise de donn&eacute;e">Datetime</th>
+						<th title="Temps au format AAAA/MM/JJ HH:MM:SS de la prise de donn&eacute;e">Date</th>
 									
 						<?php
 							foreach($variables as $variable){
 								$variable = getHeader($variable);
-								echo "<th title='" .getDescriptionOfLabel($variable, $connexion). "'>" .getLabe($variable). "</th>";
+								echo "<th title='" .getDescriptionOfLabel($variable, $connexion). "'>" .getLabel($variable). "</th>";
 							}
 					echo "</tr>";
 							 

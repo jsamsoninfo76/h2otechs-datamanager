@@ -62,8 +62,8 @@ function verifExposant($unite){
 }
 
 function isOneHourDiff($heure, $datetime){
-	$hourFromDateTime = getHourFromDatetime($datetime);	
-	return ($hourFromDateTime > $heure);
+	$hourFromDateTime = getHourFromDatetime($datetime);
+	return ($hourFromDateTime > $heure);	
 }
 
 function getHourFromDatetime($datetime){
@@ -72,7 +72,7 @@ function getHourFromDatetime($datetime){
 	return $time[0];
 }
 
-function getLabe($variable){
+function getLabel($variable){
 	if (strpos($variable,'RENDT_ETAGES') !== false) return "ETAGES";
 	else if (strpos($variable,'RENDT_ETAGE') !== false) return "ETAGE " . $variable[strlen($variable)-1];
 	else return str_replace('_', ' ', $variable);
