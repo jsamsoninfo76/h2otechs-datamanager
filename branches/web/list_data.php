@@ -33,7 +33,8 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 			<div id="list">
 				<table id="tabListData" border="1" rules="rows">
 					<tr id="tabListDataHeader">
-						<th title="Temps au format AAAA/MM/JJ HH:MM:SS de la prise de donn&eacute;e">Date</th>
+						<th title="Date au format AAAA/MM/JJ de la prise de donn&eacute;e">Date</th>
+						<th title="Heure de la prise de donn&eacute;e">Heure</th>
 									
 						<?php
 							foreach($variables as $variable){
@@ -50,36 +51,38 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 					$minPrec = getMinFromDatetime($dateDebut);
 					$compteurPair = 0;
 					
-					//echo "<br>".$sql_select."<br><br>";
+					echo "<br>".$sql_select."<br><br>";
 					while($data=$query_select->fetch(PDO::FETCH_OBJ)){
 						$datetime = $data->datetime;
 						$heureEnCours = getHourFromDatetime($datetime);
 						$minEnCours = getMinFromDatetime($datetime);
 						$trColor = ($compteurPair%2) ?  "id='ligne_impair'" : "id='ligne_pair'";
 						
-						if ($heurePrec != $heureEnCours && $minPrec == $minEnCours){
-							$compteurPair++;
-							echo "<tr $trColor>";
-								echo "<td>" .$datetime. "</td>";
-								foreach($variables as $variable){ 
-									//Mise en lower du data_label_value
-									$value = strtolower($variable . "_value");
-									
-									//Si la value est vide
-									if ($data->$value == "") {
-										//Si la dernière valeur est aussi vide
-										if ($lastValue[$variable] == "")
-											$lastValue[$variable] = getLastValue($variable, $dateDebut, $connexion);
-											
-										echo "<td>" .$lastValue[$variable]. "</td>";
+						if ($heurePrec != $heureEnCours){
+							if ($minPrec == $minEnCours){
+								$compteurPair++;
+								echo '<tr id="tabListDataCells">';
+									echo "<td>" .$datetime. "</td>";
+									foreach($variables as $variable){ 
+										//Mise en lower du data_label_value
+										$value = strtolower($variable . "_value");
+										
+										//Si la value est vide
+										if ($data->$value == "") {
+											//Si la dernière valeur est aussi vide
+											if ($lastValue[$variable] == "")
+												$lastValue[$variable] = getLastValue($variable, $dateDebut, $connexion);
+												
+											echo "<td>" .$lastValue[$variable]. "</td>";
+										}
+										else {
+											$lastValue[$variable] = $data->$value;
+											echo "<td>" .$lastValue[$variable]. "</td>";
+										}
 									}
-									else {
-										$lastValue[$variable] = $data->$value;
-										echo "<td>" .$lastValue[$variable]. "</td>";
-									}
-								}
-							echo "</tr>";
-							$heurePrec = $heureEnCours;
+								echo "</tr>";
+								$heurePrec = $heureEnCours;
+							}
 						}
 					} ?>
 				</table>
