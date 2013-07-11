@@ -50,20 +50,30 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 					$heurePrec = "";
 					$minPrec = getMinFromDatetime($dateDebut);
 					$compteurPair = 0;
+					$compteurRowSpan = 0;
+					$nbRowSpan = 0;
 					
 					echo "<br>".$sql_select."<br><br>";
 					while($data=$query_select->fetch(PDO::FETCH_OBJ)){
 						$datetime = $data->datetime;
+
 						$heureEnCours = getHourFromDatetime($datetime);
 						$minEnCours = getMinFromDatetime($datetime);
 						$trColor = ($compteurPair%2) ?  "id='ligne_impair'" : "id='ligne_pair'";
 						
 						if ($heurePrec != $heureEnCours){
-							echo ($heurePrec == ($heureEnCours-1))
+//							echo ($heurePrec == ($heureEnCours-1));
 							if ($minPrec == $minEnCours){
-								$compteurPair++;
+								$compteurPair++;								
 								echo '<tr id="tabListDataCells">';
-									echo "<td>" .$datetime. "</td>";
+									if ($compteurRowSpan == $nbRowSpan){
+										$nbRowSpan = getNombreRowSpan($variables[0], $datetime, $connexion);
+										echo "<td rowspan=" .(($nbRowSpan>1) ? $nbRowSpan : 1). ">" .$data->Annee. "</td>";	
+										$compteurRowSpan = 1;
+									}
+									else $compteurRowSpan++;
+									
+									echo "<td>" .$data->Heure. "</td>";									
 									foreach($variables as $variable){ 
 										//Mise en lower du data_label_value
 										$value = strtolower($variable . "_value");

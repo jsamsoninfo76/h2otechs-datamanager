@@ -1,7 +1,13 @@
 <?php
 function generateSQL($variables, $dateDebut, $dateFin){
+	/* 
+	SELECT DATE_FORMAT(data_cfp.datetime, '%d/%m/%Y') AS Annee, HOUR(data_cfp.datetime) AS Heure
+	FROM data_cfp 
+	WHERE data_cfp.datetime BETWEEN '2013/06/30 16:29:46' AND ('2013/06/30 16:29:46' + INTERVAL 1 HOUR) 
+	*/
+	
 	$variables[0] = strtolower($variables[0]);
-	$sql_select = "SELECT " .$variables[0]. ".datetime,";
+	$sql_select = "SELECT DATE_FORMAT(" .$variables[0]. ".datetime, '%d/%m/%Y') AS Annee, HOUR(" .$variables[0]. ".datetime) AS Heure, " .$variables[0]. ".datetime,";
 	
 	for($i=0 ; $i < count($variables) ; $i++){
 		$variables[$i] = strtolower($variables[$i]);
@@ -82,5 +88,16 @@ function getLabel($variable){
 	if (strpos($variable,'RENDT_ETAGES') !== false) return "ETAGES";
 	else if (strpos($variable,'RENDT_ETAGE') !== false) return "ETAGE " . $variable[strlen($variable)-1];
 	else return str_replace('_', ' ', $variable);
+}
+
+function getNombreRowSpan($table, $datetime, $connexion){
+	$sql_select  = "SELECT COUNT(DISTINCT(HOUR(" .$table. ".datetime))) AS Nombre 
+					FROM " .$table. " 
+					WHERE " .$table. ".datetime BETWEEN '" .$datetime. "' AND DATE('" .$datetime. "' + INTERVAL 1 DAY)";
+	echo $sql_select;
+	$query_select = $connexion->prepare($sql_select);
+	$query_select->execute();
+	$data = $query_select->fetch(PDO::FETCH_ASSOC);
+	return $data['Nombre']-1;					
 }
 ?>
