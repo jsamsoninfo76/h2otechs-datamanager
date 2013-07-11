@@ -59,6 +59,7 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 						$trColor = ($compteurPair%2) ?  "id='ligne_impair'" : "id='ligne_pair'";
 						
 						if ($heurePrec != $heureEnCours){
+							echo ($heurePrec == ($heureEnCours-1))
 							if ($minPrec == $minEnCours){
 								$compteurPair++;
 								echo '<tr id="tabListDataCells">';
