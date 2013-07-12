@@ -59,15 +59,15 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 						$trColor = ($compteurPair%2) ?  "id='ligne_impair'" : "id='ligne_pair'";
 						
 						$compteurPair++;								
-						echo '<tr id="tabListDataCells">';
+						echo '<tr id=tabListDataCells>';
 							if ($compteurRowSpan == $nbRowSpan){
 								$nbRowSpan = getNombreRowSpan($variables[0], $datetime, $dateFin, $connexion);
-								echo "<td rowspan=" .(($nbRowSpan>1) ? $nbRowSpan : 1). ">" .$data->Annee. "</td>";	
+								echo "<td class='tabListDataCellsAnnee' rowspan=" .(($nbRowSpan>1) ? $nbRowSpan : 1). ">" .$data->Annee. "</td>";	
 								$compteurRowSpan = 1;
 							}else $compteurRowSpan++;
 														
 							$heure = ($data->Heure >= 10) ? $data->Heure : "0".$data->Heure;
-							echo "<td>" .$heure. "</td>";									
+							echo "<td>$heure</td>";									
 							foreach($variables as $variable){ 
 								//Mise en lower du data_label_value
 								$value = strtolower($variable . "_value");
