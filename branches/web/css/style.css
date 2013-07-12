@@ -25,8 +25,8 @@ font{ color: #FF6469; }
 	font-weight : bold;
 	width: 50px; 
 }
-#ligne_impair { background-color: #c9dfff; }
-#ligne_pair { background-color: #7db9ff; }
+.ligne_impair { background-color: #c9dfff; }
+.ligne_pair { background-color: #7db9ff; }
 #tabVariables {}
 
 
@@ -46,16 +46,16 @@ body{}
 .tabListDataCellsAnnee{
 	background-color: #588cfc;
 }
-#tabListData {}
-#tabListDataCells {
+.tabListData {}
+.tabListDataCells {
 	text-align: center;
 	background-color: rgba(121,191,255,0.66);
 }
-#tabListDataMoy {
+.tabListDataMoy {
 	text-align: center;
 	background-color: #ffac42;
 }
-#tabListDataCells:hover { background-color: #588cfc; }
+.tabListDataCells:hover { background-color: #588cfc; }
 
 #tabListDataHeader{ background-image: url("../img/gradhead.png"); }
 

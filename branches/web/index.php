@@ -45,7 +45,7 @@ http://openweb.eu.org/articles/validation_formulaire (validation form)
 							//Tant qu'il y a des données
 							while($data=$query_select_variables->fetch(PDO::FETCH_ASSOC)){
 								//Pair ou impaire Pour background sur la ligne
-								$trColor = ($compteurPair%2) ?  "id='ligne_impair'" : "id='ligne_pair'";
+								$trColor = ($compteurPair%2) ?  "class'ligne_impair'" : "class='ligne_pair'";
 								
 								//La donnée est une unité
 								if ($data['unite'] != $unite) {
