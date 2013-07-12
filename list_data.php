@@ -56,10 +56,10 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 					while($data=$query_select->fetch(PDO::FETCH_OBJ)){
 						$datetime = $data->datetime;
 						
-						$trColor = ($compteurPair%2) ?  "id='ligne_impair'" : "id='ligne_pair'";
+						$trColor = ($compteurPair%2) ?  "class='ligne_impair'" : "class='ligne_pair'";
 						
 						$compteurPair++;								
-						echo '<tr id=tabListDataCells>';
+						echo '<tr class=tabListDataCells>';
 							if ($compteurRowSpan == $nbRowSpan){
 								$nbRowSpan = getNombreRowSpan($variables[0], $datetime, $dateFin, $connexion);
 								echo "<td class='tabListDataCellsAnnee' rowspan=" .(($nbRowSpan>1) ? $nbRowSpan : 1). ">" .$data->Annee. "</td>";	
@@ -91,7 +91,7 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 						echo "</tr>";
 						
 						if ($compteurRowSpan == $nbRowSpan){
-							echo "<tr id='tabListDataMoy'><td colspan=2>Moyenne du $data->Annee</td>";
+							echo "<tr class='tabListDataMoy'><td colspan=2>Moyenne du $data->Annee</td>";
 							foreach($variables as $variable)
 								echo "<td>" . round($moyenne[$variable] / $nbRowSpan). "</td>";
 							echo "</tr>";
