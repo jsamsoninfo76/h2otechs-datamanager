@@ -91,13 +91,15 @@ function getLabel($variable){
 	else return str_replace('_', ' ', $variable);
 }
 
-function getNombreRowSpan($table, $datetime, $connexion){
-	$sql_select  = "SELECT COUNT(DISTINCT(HOUR(" .$table. ".datetime))) AS Nombre 
-					FROM " .$table. " 
-					WHERE " .$table. ".datetime BETWEEN '" .$datetime. "' AND DATE('" .$datetime. "' + INTERVAL 1 DAY)";
+function getNombreRowSpan($table, $datetime, $dateFin, $connexion){
+	$sql_select  = "SELECT COUNT(DISTINCT(HOUR($table.datetime))) AS Nombre 
+					FROM $table 
+					WHERE $table.datetime >= '" .$datetime. "' AND $table.datetime < DATE('" .$datetime. "' + INTERVAL 1 DAY) 
+					AND $table.datetime < '$dateFin'";
+	//echo $sql_select;
 	$query_select = $connexion->prepare($sql_select);
 	$query_select->execute();
 	$data = $query_select->fetch(PDO::FETCH_ASSOC);
-	return $data['Nombre']-1;					
+	return $data['Nombre'];					
 }
 ?>

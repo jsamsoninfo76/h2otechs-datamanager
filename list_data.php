@@ -61,21 +61,14 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 						$compteurPair++;								
 						echo '<tr id="tabListDataCells">';
 							if ($compteurRowSpan == $nbRowSpan){
-								$nbRowSpan = getNombreRowSpan($variables[0], $datetime, $connexion);
+								$nbRowSpan = getNombreRowSpan($variables[0], $datetime, $dateFin, $connexion);
 								echo "<td rowspan=" .(($nbRowSpan>1) ? $nbRowSpan : 1). ">" .$data->Annee. "</td>";	
 								$compteurRowSpan = 1;
 							}else $compteurRowSpan++;
-							
-							if ($compteurRowSpan == ($nbRowSpan-1)){
-//								echo "<tr >";	
-							} 
 														
 							$heure = ($data->Heure >= 10) ? $data->Heure : "0".$data->Heure;
 							echo "<td>" .$heure. "</td>";									
 							foreach($variables as $variable){ 
-								//Moyenne
-								$moyenne[$variable] .= $moyenne[$variable];
-							
 								//Mise en lower du data_label_value
 								$value = strtolower($variable . "_value");
 								
@@ -91,8 +84,18 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 									$lastValue[$variable] = $data->$value;
 									echo "<td>" .$lastValue[$variable]. "</td>";
 								}
+								
+								//Moyenne
+								$moyenne[$variable] = $moyenne[$variable] + $lastValue[$variable];
 							}
 						echo "</tr>";
+						
+						if ($compteurRowSpan == $nbRowSpan){
+							echo "<tr id='tabListDataMoy'><td colspan=2>Moyenne du $data->Annee</td>";
+							foreach($variables as $variable)
+								echo "<td>" . round($moyenne[$variable] / $nbRowSpan). "</td>";
+							echo "</tr>";
+						} 
 					} ?>
 				</table>
 			</div>
