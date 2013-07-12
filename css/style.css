@@ -13,11 +13,9 @@ header{ text-align: center; }
 
 
 
-
 /**********************************************************************************************************************
  ******************************************************** BODY ********************************************************
  **********************************************************************************************************************/
- 
 /* Couleur des messages d'erreur*/
 font{ color: #FF6469; }
 
@@ -37,13 +35,20 @@ font{ color: #FF6469; }
 
 
 /* Tableau list_data */
+body{}
+#corp{
+	margin-top: 50px;
+	margin-left: 25px;
+	margin-right: 25px;
+	margin-bottom: 50px;
+}
 #list{}
 #tabListData {}
 #tabListDataCells {
 	text-align: center;
-	background-image: url("../img/gradback.png");
+	background-color: rgba(121,191,255,0.66);
 }
-#tabListDataCells:hover { background-image: url("../img/gradhover.png"); }
+#tabListDataCells:hover { background-color: #588cfc; }
 
 #tabListDataHeader{ background-image: url("../img/gradhead.png"); }
 
@@ -53,4 +58,6 @@ font{ color: #FF6469; }
 /**********************************************************************************************************************
  ******************************************************* FOOTER *******************************************************
  **********************************************************************************************************************/
- footer { text-align: center; }
+ footer { 
+ 	text-align: center; 
+ }

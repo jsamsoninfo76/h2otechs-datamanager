@@ -47,54 +47,52 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 					$sql_select = generateSQL($variables, $dateDebut, $dateFin);
 					$query_select = $connexion->prepare($sql_select);
 					$query_select->execute();
-					$heurePrec = "";
-					$minPrec = getMinFromDatetime($dateDebut);
+					
 					$compteurPair = 0;
 					$compteurRowSpan = 0;
 					$nbRowSpan = 0;
-					
-					echo "<br>".$sql_select."<br><br>";
+			
+					//echo "<br>".$sql_select."<br><br>";
 					while($data=$query_select->fetch(PDO::FETCH_OBJ)){
 						$datetime = $data->datetime;
-
-						$heureEnCours = getHourFromDatetime($datetime);
-						$minEnCours = getMinFromDatetime($datetime);
+						
 						$trColor = ($compteurPair%2) ?  "id='ligne_impair'" : "id='ligne_pair'";
 						
-						if ($heurePrec != $heureEnCours){
-//							echo ($heurePrec == ($heureEnCours-1));
-							if ($minPrec == $minEnCours){
-								$compteurPair++;								
-								echo '<tr id="tabListDataCells">';
-									if ($compteurRowSpan == $nbRowSpan){
-										$nbRowSpan = getNombreRowSpan($variables[0], $datetime, $connexion);
-										echo "<td rowspan=" .(($nbRowSpan>1) ? $nbRowSpan : 1). ">" .$data->Annee. "</td>";	
-										$compteurRowSpan = 1;
-									}
-									else $compteurRowSpan++;
-									
-									echo "<td>" .$data->Heure. "</td>";									
-									foreach($variables as $variable){ 
-										//Mise en lower du data_label_value
-										$value = strtolower($variable . "_value");
+						$compteurPair++;								
+						echo '<tr id="tabListDataCells">';
+							if ($compteurRowSpan == $nbRowSpan){
+								$nbRowSpan = getNombreRowSpan($variables[0], $datetime, $connexion);
+								echo "<td rowspan=" .(($nbRowSpan>1) ? $nbRowSpan : 1). ">" .$data->Annee. "</td>";	
+								$compteurRowSpan = 1;
+							}else $compteurRowSpan++;
+							
+							if ($compteurRowSpan == ($nbRowSpan-1)){
+//								echo "<tr >";	
+							} 
+														
+							$heure = ($data->Heure >= 10) ? $data->Heure : "0".$data->Heure;
+							echo "<td>" .$heure. "</td>";									
+							foreach($variables as $variable){ 
+								//Moyenne
+								$moyenne[$variable] .= $moyenne[$variable];
+							
+								//Mise en lower du data_label_value
+								$value = strtolower($variable . "_value");
+								
+								//Si la value est vide
+								if ($data->$value == "") {
+									//Si la dernière valeur est aussi vide
+									if ($lastValue[$variable] == "")
+										$lastValue[$variable] = getLastValue($variable, $dateDebut, $connexion);
 										
-										//Si la value est vide
-										if ($data->$value == "") {
-											//Si la dernière valeur est aussi vide
-											if ($lastValue[$variable] == "")
-												$lastValue[$variable] = getLastValue($variable, $dateDebut, $connexion);
-												
-											echo "<td>" .$lastValue[$variable]. "</td>";
-										}
-										else {
-											$lastValue[$variable] = $data->$value;
-											echo "<td>" .$lastValue[$variable]. "</td>";
-										}
-									}
-								echo "</tr>";
-								$heurePrec = $heureEnCours;
+									echo "<td>" .$lastValue[$variable]. "</td>";
+								}
+								else {
+									$lastValue[$variable] = $data->$value;
+									echo "<td>" .$lastValue[$variable]. "</td>";
+								}
 							}
-						}
+						echo "</tr>";
 					} ?>
 				</table>
 			</div>
