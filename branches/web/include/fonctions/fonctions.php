@@ -20,8 +20,9 @@ function generateSQL($variables, $dateDebut, $dateFin){
 		$sql_select .= "LEFT JOIN " .$variables[$i]. " ON " .$variables[$i].".datetime = " .$variables[0]. ".datetime ";
 	}
 			
-	$sql_select .= " WHERE " .$variables[0]. ".datetime >= '" .$dateDebut. "'";
-	$sql_select .= " AND " .$variables[0]. ".datetime <= '" .$dateFin. "'";
+	$sql_select .= " WHERE " .$variables[0]. ".datetime BETWEEN '" .$dateDebut. "'";
+	$sql_select .= " AND '" .$dateFin. "'";
+	$sql_select .= " GROUP BY DATE(" .$variables[0]. ".datetime), HOUR(" .$variables[0]. ".datetime)";
 	//$sql_select .= " LIMIT 0,1";
 	return $sql_select;
 }
@@ -94,7 +95,6 @@ function getNombreRowSpan($table, $datetime, $connexion){
 	$sql_select  = "SELECT COUNT(DISTINCT(HOUR(" .$table. ".datetime))) AS Nombre 
 					FROM " .$table. " 
 					WHERE " .$table. ".datetime BETWEEN '" .$datetime. "' AND DATE('" .$datetime. "' + INTERVAL 1 DAY)";
-	echo $sql_select;
 	$query_select = $connexion->prepare($sql_select);
 	$query_select->execute();
 	$data = $query_select->fetch(PDO::FETCH_ASSOC);
