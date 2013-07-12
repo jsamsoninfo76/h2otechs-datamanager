@@ -15,6 +15,7 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 	$variables = $_POST['variables'];
 	$dateDebut = $_POST['dateDebut'];
 	$dateFin   = $_POST['dateFin'];
+	$select    = $_POST['selecteurMoy'];
 	
 	//Test sur les différentes variables récupérées
 	if (isset($variables) && isset($dateDebut) && isset($dateFin)){

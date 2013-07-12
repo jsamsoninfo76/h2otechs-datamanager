@@ -106,6 +106,14 @@ http://openweb.eu.org/articles/validation_formulaire (validation form)
 		        $('#datetimepickerFin').datetimepicker({ format: 'yyyy/MM/dd hh:mm:ss' });
 		    </script>
 		    
+		    <div id='selecteur'>
+		    	<h5>*Voulez-vous juste les moyennes ou les donn&eacute;es et les moyennes ?</h5>
+		    	<select name='selecteurMoy'>
+		    		<option value='datas'>Donn&eacute;es et Moyennes</option>
+		    		<option value='moyennes'>Moyennes</option>
+		    	</select>
+		    </div>
+		    
 		    <!-- Envoie du formulaire -->
 		    <br><br><input type="submit" value="Envoyer">
 			</form>
