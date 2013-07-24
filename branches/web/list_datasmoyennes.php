@@ -37,7 +37,7 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 							$nbRowSpan = getNombreRowSpan($variables[0], $datetime, $dateFin, $connexion);
 							echo "<td class='tabListDataCellsAnnee' rowspan=" .(($nbRowSpan>1) ? $nbRowSpan : 1). ">";
 								if (hasIntervention($data->Annee, $connexion)){
-									echo "<a href='index.php?id_page=4&datetime=" .$data->Annee. "'>" .$data->Annee. "</a>";			
+									echo $data->Annee . '<a href="index.php?id_page=4&datetime=' .$data->Annee. '"><img class="icon" title="Voir l\'intervention" src="img/intervention.png"></a>';			
 								}else {
 									echo $data->Annee;
 								}

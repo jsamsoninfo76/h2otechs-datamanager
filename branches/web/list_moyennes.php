@@ -13,6 +13,7 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 			<th title="Date de la moyenne">Date</th>
 		<?php
 			session_start();
+			session_unset();  
 			$_SESSION['subtitles'] = null;
 			$_SESSION['categories'] = null;
 			$_SESSION['yAxis_title'] = "Moyennes";
