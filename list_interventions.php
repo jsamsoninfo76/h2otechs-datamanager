@@ -74,7 +74,7 @@
 				}
 
 				//$option .= "value='" .$data->datetime. "'>Le " .$data->Date. " par " .$data->intervenant. "</option>";
-				$option .= "value='" .$data->datetime. "'>Le " .$jourFR." " .$jour. "</option>";
+				$option .= "value='" .$data->datetime. "'>Le " .$jourFR." " .$jour. " " .$moisFR. " par " . $data->intervenant . "</option>";
 				echo $option;
 			}
 		?>
