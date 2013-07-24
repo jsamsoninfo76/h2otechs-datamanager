@@ -71,12 +71,12 @@ body{
 }
 #intervenant{ margin-top: 15px; }
 #datetime_title{ margin-top: 15px; }
-#observationBlock{ 
+.observationBlock{ 
 	margin-top: 15px; 
 	margin-bottom: 25px;
 }
 
-.observation{
+#observation{
 	border:solid 1px black; 
 	font-family:tahoma; 
 	text-align:left;
