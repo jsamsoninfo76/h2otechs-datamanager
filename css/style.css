@@ -40,8 +40,14 @@ body{
 	font-weight : bold;
 	width: 50px; 
 }
-#selecteur { margin-top: 25px; }
-#datetimes { margin-top: 25px; }
+
+/* Formulaire */
+#variables { margin-top: 25px; }
+#selecteur { margin-top: 15px; }
+#datetimes { 
+	margin-top: 15px; 
+	margin-bottom: 25px;
+}
 
 /* Tableau list_data */
 .tabListData {}
@@ -63,6 +69,13 @@ body{
 #formInterventions{
 	text-align: center;
 }
+#intervenant{ margin-top: 15px; }
+#datetime_title{ margin-top: 15px; }
+#observationBlock{ 
+	margin-top: 15px; 
+	margin-bottom: 25px;
+}
+
 .observation{
 	border:solid 1px black; 
 	font-family:tahoma; 

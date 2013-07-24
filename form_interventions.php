@@ -1,12 +1,14 @@
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="http://jquery-elastic.googlecode.com/svn/trunk/jquery.elastic.source.js"></script>
 
 <div id="formInterventions">
 	<form action="index.php?id_page=4" name="formIntervention" method="POST" onsubmit="return validerFormIntervention(this)">
 		<!-- Titre -->
-		<h5 title="Nom/Prenom">*Nom et Pr&eacute;nom de l'intervenant :</h5>
-		<div><font class='message_error' id='intervenant_error'></font></div> 
-		<input type="text" name="intervenant">
+		<div id='intervenant'>
+			<h5 title="Nom/Prenom">*Nom et Pr&eacute;nom de l'intervenant :</h5>
+			<div><font class='message_error' id='intervenant_error'></font></div> 
+			<input type="text" name="intervenant">
+		</div>
 		
 		<!-- DateDébut Datetimepicker -->
 		<div id="datetime_title"><h5>*Date de l'intervention : </h5><font class="message_error" id="datetime_intervention_error"></font></div>
@@ -25,17 +27,19 @@
 	    	});
 	    </script>
 		
-		<h5 title="Votre observation">*Observation</h5> 
-		<div><font class='message_error' id='observation_error'></font></div>
-		<textarea id='observation' name="observation" rows="10" cols="500"></textarea> 
-	    
-	     <script type="text/javascript">
-			$(document).ready(function() {
-			  $('#observation').elastic();
-			});
-		</script>
-
-		<br/>
+		<div id='observationBlock'>
+			<h5 title="Votre observation">*Observation</h5> 
+			<div><font class='message_error' id='observation_error'></font></div>
+			<textarea id='observation' name="observation" rows="10" cols="40"></textarea> 
+		    
+		     <script type="text/javascript">
+				$(document).ready(function() {
+				  $('#observation').elastic();
+				});
+			</script>
+		</div>
+		
+	
 		<input type="submit" value="Envoyer">
 	</form>
 </div>
