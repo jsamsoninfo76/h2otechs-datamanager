@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client: localhost
--- Généré le: Mar 09 Juillet 2013 à 17:34
+-- Généré le: Lun 22 Juillet 2013 à 18:09
 -- Version du serveur: 5.5.25
 -- Version de PHP: 5.4.4
 
@@ -28,7 +28,7 @@ CREATE TABLE `data_cfc` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_cfc`),
   UNIQUE KEY `datetime` (`datetime`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1840612 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1908010 ;
 
 -- --------------------------------------------------------
 
@@ -156,7 +156,7 @@ CREATE TABLE `data_pfil2` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_pfil2`),
   UNIQUE KEY `datetime` (`datetime`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=151825 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=75913 ;
 
 -- --------------------------------------------------------
 
@@ -172,7 +172,7 @@ CREATE TABLE `data_pfil3` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_pfil3`),
   UNIQUE KEY `datetime` (`datetime`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=283774 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=266176 ;
 
 -- --------------------------------------------------------
 
@@ -332,23 +332,22 @@ CREATE TABLE `data_rendt_etages` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_rendt_etages`),
   UNIQUE KEY `datetime` (`datetime`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=605717 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=582034 ;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `data_u12`
+-- Structure de la table `interventions`
 --
 
-CREATE TABLE `data_u12` (
-  `id_u12` int(11) NOT NULL AUTO_INCREMENT,
-  `datetime` datetime NOT NULL,
-  `value` varchar(255) NOT NULL,
-  `state` tinyint(4) NOT NULL,
+CREATE TABLE `interventions` (
+  `id_intervention` int(11) NOT NULL AUTO_INCREMENT,
+  `datetime` date NOT NULL,
+  `intervenant` varchar(255) NOT NULL,
+  `observation` varchar(255) NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id_u12`),
-  UNIQUE KEY `datetime` (`datetime`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=45149 ;
+  PRIMARY KEY (`id_intervention`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
 
 -- --------------------------------------------------------
 
@@ -363,7 +362,7 @@ CREATE TABLE `variables` (
   `description` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id_variable`),
   UNIQUE KEY `label` (`label`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=22 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=21 ;
 
 -- --------------------------------------------------------
 
