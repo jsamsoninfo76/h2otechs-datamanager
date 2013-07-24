@@ -14,11 +14,13 @@ http://openweb.eu.org/articles/validation_formulaire (validation form)
 	include("header.html");
 
 	switch($_GET['id_page']){
-		case 1 : include("form_list.php"); 			break;
-		case 2 : include("list.php"); 				break;
-		case 3 : include("form_interventions.php"); break;
-		case 4 : include("list_interventions.php"); break;
-		case 5 : include("statistique_line.php"); 	break;
+		case 1 : include("form_list.php"); 			break; // index?id_page=1
+		case 2 : include("list.php"); 				break; // index?id_page=2
+		case 3 : include("form_interventions.php"); break; // index?id_page=3
+		case 4 : include("list_interventions.php"); break; // index?id_page=4
+		case 5 : include("statistique_line.php"); 	break; // index?id_page=5
+		case 6 : include("excel.php"); 				break; // index?id_page=6
+		case 7 : include("php.php"); 				break; // index?id_page=7
 		default : 
 			?>
 				<div id="index">

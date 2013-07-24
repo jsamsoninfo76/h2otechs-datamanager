@@ -27,6 +27,12 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 								 	
 			<!-- Création du tableau et de son header-->
 			<div id="list">
+				<div id="actions">
+					<a href="index.php?id_page=5"><img class="icon" title="Voir le tableau sous forme de statistiques" src="img/stat.png"></a>
+					<a href="index.php?id_page=6"><img class="icon" title="Exporter au format Excel" src="img/excel.png"></a>
+					<a href="index.php?id_page=7"><img class="icon" title="Exporter au format PDF" src="img/pdf.png"></a>
+				</div>
+
 				<?php
 					if ($select == "datas") include("list_datas.php");
 					if ($select == "moyennes") include("list_moyennes.php");

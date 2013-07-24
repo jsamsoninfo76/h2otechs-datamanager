@@ -50,7 +50,12 @@ body{
 }
 
 /* Tableau list_data */
-.tabListData {}
+#actions { margin-top: 25px; }
+.icon{
+	width: 15px;
+	height: 15px;
+}
+#tabListData { margin-top: 15px; }
 .tabListDataCells {
 	text-align: center;
 	background-color: rgba(121,191,255,0.66);
