@@ -32,6 +32,9 @@
 session_start();
 //print_r($_SESSION);
 
+//Pour les gros tableaux 
+ini_set('memory_limit', '-1');
+
 /* STYLE */
 //array de configuration des bordures
 $bordersarray=array(
@@ -159,7 +162,7 @@ $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 
 //$objWriter->save(str_replace('.php', '.xlsx', __FILE__));
 $path = "upload";
-$fileName = date('Y-m-d_H:i') ."_". $_SESSION['yAxis_title'] ."_". "enky4.xlsx";
+$fileName = date('Y-m-d_H:i') ."_". $_SESSION['yAxis_title'] ."_". "Enky4.xlsx";
 
 //$objWriter->save(str_replace('.php', '.xlsx', "upload/excel.php"));
 $objWriter->save($path."/".$fileName);
