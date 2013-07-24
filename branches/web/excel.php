@@ -30,7 +30,37 @@
  */
  
 session_start();
-print_r($_SESSION);
+//print_r($_SESSION);
+
+/* STYLE */
+//array de configuration des bordures
+$bordersarray=array(
+'borders'=>array(
+'top'=>array(
+'style'=>PHPExcel_Style_Border::BORDER_THIN),
+'left'=>array(
+'style'=>PHPExcel_Style_Border::BORDER_THIN),
+'right'=>array(
+'style'=>PHPExcel_Style_Border::BORDER_THIN),
+'bottom'=>array(
+'style'=>PHPExcel_Style_Border::BORDER_THIN)));
+//array de configuration des polices
+//pour mettre en gras
+$gras=array('font' => array(
+'bold' => true
+));
+//on centre verticalement et horizontalement
+$center=array('alignment'=>array(
+'horizontal'=>PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+'vertical'=>PHPExcel_Style_Alignment::VERTICAL_CENTER));
+//pour aligner à gauche
+$left=array('alignment'=>array(
+'horizontal'=>PHPExcel_Style_Alignment::HORIZONTAL_LEFT));
+//pour souligner
+$souligner=array('font' => array(
+'underline' => PHPExcel_Style_Font::UNDERLINE_DOUBLE
+));
+
 
 /** Error reporting */
 error_reporting(E_ALL);
@@ -103,7 +133,9 @@ for($numColonne=0 ; $numColonne<count($_SESSION['subtitles']) ; $numColonne++){
 
 /* Augmentation de la taille de la colonne des dates*/
 $sheet->getColumnDimension('A')->setWidth(12);
-
+$sheet->getStyle('A')->applyFromArray($gras);
+$sheet->getStyle('A')->applyFromArray($center);
+$sheet->getStyle('B1:G8')->applyFromArray($left);
 /*
 $objPHPExcel->getActiveSheet()->setCellValue('A8',"Hello\nWorld");
 $objPHPExcel->getActiveSheet()->getRowDimension(8)->setRowHeight(-1);
@@ -126,11 +158,15 @@ $callStartTime = microtime(true);
 $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 
 //$objWriter->save(str_replace('.php', '.xlsx', __FILE__));
-$objWriter->save(str_replace('.php', '.xlsx', "upload/excel.php"));
+$path = "upload";
+$fileName = date('Y-m-d_H:i') ."_". $_SESSION['yAxis_title'] ."_". "enky4.xlsx";
+
+//$objWriter->save(str_replace('.php', '.xlsx', "upload/excel.php"));
+$objWriter->save($path."/".$fileName);
 $callEndTime = microtime(true);
 $callTime = $callEndTime - $callStartTime;
 
-echo date('H:i:s') , " File written to " , str_replace('.php', '.xlsx', pathinfo(__FILE__, PATHINFO_BASENAME)) , EOL;
+echo date('H:i:s') , " File written to " , $fileName , EOL;
 echo 'Call time to write Workbook was ' , sprintf('%.4f',$callTime) , " seconds" , EOL;
 // Echo memory usage
 echo date('H:i:s') , ' Current memory usage: ' , (memory_get_usage(true) / 1024 / 1024) , " MB" , EOL;
@@ -158,7 +194,7 @@ echo date('H:i:s') , " Peak memory usage: " , (memory_get_peak_usage(true) / 102
 // Echo done
 echo date('H:i:s') , " Done writing files" , EOL;
 echo 'Files have been created in ' , getcwd()."/upload/" , EOL;
-echo 'See by yourself : <a href="upload/excel.xlsx">Excel.xlsx</a>';
+echo 'See by yourself : <a href="upload/' .$fileName. '">' .$fileName. '</a>';
 
 
 ?>
