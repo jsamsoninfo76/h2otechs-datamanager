@@ -1,6 +1,3 @@
-<script type="text/javascript" src="js/jquery.min.js"></script>
-<script type="text/javascript" src="http://jquery-elastic.googlecode.com/svn/trunk/jquery.elastic.source.js"></script>
-
 <div id="formInterventions">
 	<form action="index.php?id_page=4" name="formIntervention" method="POST" onsubmit="return validerFormIntervention(this)">
 		<!-- Titre -->
@@ -27,10 +24,10 @@
 	    	});
 	    </script>
 		
-		<div id='observationBlock'>
+		<div class='observationBlock'>
 			<h5 title="Votre observation">*Observation</h5> 
 			<div><font class='message_error' id='observation_error'></font></div>
-			<textarea id='observation' name="observation" rows="10" cols="40"></textarea> 
+			<textarea id='observation' name="observation" rows="10" cols="50"></textarea> 
 		    
 		     <script type="text/javascript">
 				$(document).ready(function() {

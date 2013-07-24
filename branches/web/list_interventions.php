@@ -47,7 +47,7 @@
 			$query_select_interventions->execute();
 		
 		
-			echo "<option selected='selected'> ---- </option>";
+			echo "<option selected='selected'></option>";
 				
 			while($data=$query_select_interventions->fetch(PDO::FETCH_OBJ)){
 				$option = "<option ";
@@ -83,6 +83,14 @@
 
 	?>
 
-	<div id='observation'><h5>Observation :</h5><textarea rows="10" cols="500"><?php echo $observation; ?></textarea></div>
+	<div class="observationBlock">
+		<h5>Observation :</h5>		
+		<textarea id="observation" rows="10" cols="50"><?php echo $observation; ?></textarea>
+	</div>
+	<script type="text/javascript">
+		$(document).ready(function() {
+		  $('#observation').elastic();
+		});
+	</script>
 </div>
 
