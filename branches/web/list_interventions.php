@@ -35,6 +35,7 @@
 	
 	<!-- Creation du formulaire de l'intervention -->
 	<form name='formInterventions' method="post" action="index.php?id_page=4">
+		<div id='intervention_title'><h5>Date et Intervenant :</h5></div>
 		<a href='index.php?id_page=4&action=back&datetime=<?php echo getNextOrPrecDatetime($datetime, "back", $connexion);?>'><----&nbsp;&nbsp;</a>
 	<select name='datetime' id='selectDatetime' onChange='this.form.submit()'>
 		<?php
@@ -48,16 +49,22 @@
 			while($data=$query_select_interventions->fetch(PDO::FETCH_OBJ)){
 				$annee = substr($data->datetime, 0, 4);
 				$mois  = substr($data->datetime, 5, 2);
+				$date   = DateTime::createFromFormat('Y-m-d', $data->datetime);
+				$jourFR = $date->format('D');
+				$jourFR = getFrFormatJour($jourFR);
+				$moisFR = $date->format('M');
+				$moisFR = getFrFormatMois($moisFR);
+				$jour   = substr($data->datetime, 8, 2);
+				
 				if ($moisPrecedent != $mois){
 					if ($moisPrecedent != "") 
 						echo "</optgroup>";
 					
-					echo "<optgroup label='$mois/$annee'>";
+					echo "<optgroup label='$moisFR $annee'>";
 					$moisPrecedent = $mois;
 				}
-			
-				$option = "<option ";
-				
+
+				$option = "<option ";				
 				if ($data->datetime == $_POST['datetime']){
 					$option .= "selected='selected'";
 				}
@@ -65,8 +72,9 @@
 					if ($data->datetime == $_GET['datetime'])
 						$option .= "selected='selected'";
 				}
-				
-				$option .= "value='" .$data->datetime. "'>Le " .$data->Date. " par " .$data->intervenant. "</option>";
+
+				//$option .= "value='" .$data->datetime. "'>Le " .$data->Date. " par " .$data->intervenant. "</option>";
+				$option .= "value='" .$data->datetime. "'>Le " .$jourFR." " .$jour. "</option>";
 				echo $option;
 			}
 		?>

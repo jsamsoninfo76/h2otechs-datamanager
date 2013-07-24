@@ -1,5 +1,41 @@
 <?php
 
+/**
+ * http://php.net/manual/fr/datetime.createfromformat.php
+ * Mois En -> Fr
+ */
+function getFrFormatMois($jour){
+	if ($jour == "Jan") return "Janvier";
+	else if ($jour == "Feb") return "F&eagrave;vrier";
+	else if ($jour == "Mar") return "Mars";
+	else if ($jour == "Apr") return "Avril";
+	else if ($jour == "May") return "Mai";
+	else if ($jour == "Jun") return "Juin";
+	else if ($jour == "Jul") return "Juillet";
+	else if ($jour == "Aug") return "Ao&ucirc;t";
+	else if ($jour == "Sep") return "Septembre";
+	else if ($jour == "Oct") return "Octobre";
+	else if ($jour == "Nov") return "Novembre";
+	else return "D&eacute;cembre";
+}
+
+/**
+ * http://php.net/manual/fr/datetime.createfromformat.php 
+ * Jour En -> Fr
+ */
+function getFrFormatJour($jour){
+	if ($jour == "Mon") return "Lundi";
+	else if ($jour == "Tue") return "Mardi";
+	else if ($jour == "Wed") return "Mercredi";
+	else if ($jour == "Thu") return "Jeudi";
+	else if ($jour == "Fri") return "Vendredi";
+	else if ($jour == "Sat") return "Samedi";
+	else return "Dimanche";
+}
+
+/* 
+ * Recupere le libeler correct pour l'affichage 
+ */
 function getHeader($string){
 	$strings = explode("_", $string);
 	$res = "";
