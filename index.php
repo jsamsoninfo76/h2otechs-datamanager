@@ -20,7 +20,7 @@ http://openweb.eu.org/articles/validation_formulaire (validation form)
 		case 4 : include("list_interventions.php"); break; // index?id_page=4
 		case 5 : include("statistique_line.php"); 	break; // index?id_page=5
 		case 6 : include("excel.php"); 				break; // index?id_page=6
-		case 7 : include("php.php"); 				break; // index?id_page=7
+		case 7 : include("pdf.php"); 				break; // index?id_page=7
 		default : 
 			?>
 				<div id="index">
