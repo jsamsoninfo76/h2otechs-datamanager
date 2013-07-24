@@ -29,7 +29,7 @@
 error_reporting(E_ALL);
 
 /** Include PHPExcel */
-require_once dirname(__FILE__) . '/../Classes/PHPExcel.php';
+require_once '../include/include.php';
 
 
 // Create new PHPExcel object

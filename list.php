@@ -34,6 +34,15 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 				</div>
 
 				<?php
+					//Preparation des donnees de session
+					session_start();
+					session_unset();  
+					$_SESSION['subtitles'] = null;
+					$_SESSION['categories'] = null;
+					$_SESSION['yAxis_title'] = "Moyennes";
+					$_SESSION['tooltip'] = "";
+					$_SESSION['series'] = null;
+
 					if ($select == "datas") include("list_datas.php");
 					if ($select == "moyennes") include("list_moyennes.php");
 					if ($select == "datasmoyennes") include("list_datasmoyennes.php");

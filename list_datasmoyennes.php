@@ -16,6 +16,7 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 							
 							foreach($variables as $variable){
 								$variable = getHeader($variable);
+								$_SESSION['subtitles'][] = $variable;
 								echo "<th title='" .getDescriptionOfLabel($variable, $connexion). " en " .getUnite($variable, $connexion). "'>&nbsp;" .getLabel($variable). "&nbsp;</th>";
 							}
 					echo "</tr>";
@@ -33,6 +34,7 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 						$datetime = $data->datetime;
 												
 						echo '<tr class=tabListDataCells>';
+						$_SESSION['categories'][] = $data->Annee;
 						if ($compteurRowSpan == $nbRowSpan){
 							$nbRowSpan = getNombreRowSpan($variables[0], $datetime, $dateFin, $connexion);
 							echo "<td class='tabListDataCellsAnnee' rowspan=" .(($nbRowSpan>1) ? $nbRowSpan : 1). ">";
@@ -51,6 +53,8 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 						foreach($variables as $variable){ 
 							//Mise en lower du data_label_value
 							$value = strtolower($variable . "_value");
+							$header = getHeader($variable);
+							$_SESSION['series'][$header][] = round($data->$value);
 							
 							//Si la value est vide
 							if ($data->$value == "") {

@@ -12,14 +12,6 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 	<tr id="tabListDataHeader">
 			<th title="Date de la moyenne">Date</th>
 		<?php
-			session_start();
-			session_unset();  
-			$_SESSION['subtitles'] = null;
-			$_SESSION['categories'] = null;
-			$_SESSION['yAxis_title'] = "Moyennes";
-			$_SESSION['tooltip'] = "";
-			$_SESSION['series'] = null;
-			
 			foreach($variables as $variable){
 				$variable = getHeader($variable);
 				$_SESSION['subtitles'][] = $variable;
