@@ -32,24 +32,30 @@
 	<?php
 		$datetime = (!empty($_POST['datetime'])) ? $_POST['datetime'] : $_GET['datetime'];
 	?>
-		
+	
 	<!-- Creation du formulaire de l'intervention -->
 	<form name='formInterventions' method="post" action="index.php?id_page=4">
-
 		<a href='index.php?id_page=4&action=back&datetime=<?php echo getNextOrPrecDatetime($datetime, "back", $connexion);?>'><----&nbsp;&nbsp;</a>
 	<select name='datetime' id='selectDatetime' onChange='this.form.submit()'>
-	
-	
 		<?php
-			
 			$sql_select_interventions = generateInterventionsSQL();
 			$query_select_interventions = $connexion->prepare($sql_select_interventions);
 			$query_select_interventions->execute();
+			$moisPrecedent = "";
 		
-		
-			echo "<option selected='selected'></option>";
+			echo "<option selected='selected'>Aucune selection</option>";
 				
 			while($data=$query_select_interventions->fetch(PDO::FETCH_OBJ)){
+				$annee = substr($data->datetime, 0, 4);
+				$mois  = substr($data->datetime, 5, 2);
+				if ($moisPrecedent != $mois){
+					if ($moisPrecedent != "") 
+						echo "</optgroup>";
+					
+					echo "<optgroup label='$mois/$annee'>";
+					$moisPrecedent = $mois;
+				}
+			
 				$option = "<option ";
 				
 				if ($data->datetime == $_POST['datetime']){
