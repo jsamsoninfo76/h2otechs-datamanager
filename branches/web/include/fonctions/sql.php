@@ -19,14 +19,14 @@ function getNextOrPrecDatetime($datetime, $action, $connexion){
 function generateInterventionSQL($datetime){
 	$sql_select_interventions =  "SELECT DATE(datetime) AS Date,intervenant,observation, datetime ";
 	$sql_select_interventions .= "FROM interventions ";
-	$sql_select_interventions .= "WHERE datetime = '$datetime'";	
+	$sql_select_interventions .= "WHERE datetime = '$datetime' ";	
 	return $sql_select_interventions;
 }
 
 function generateInterventionsSQL(){
 	$sql_select_interventions =  "SELECT DATE(datetime) AS Date,intervenant,observation, datetime ";
 	$sql_select_interventions .= "FROM interventions ";
-	$sql_select_interventions .= "ORDER BY datetime DESC";
+	$sql_select_interventions .= "ORDER BY YEAR(datetime),DATE(datetime),DAY(datetime) ASC";
 	return $sql_select_interventions;
 }
 
