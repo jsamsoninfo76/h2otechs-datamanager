@@ -1,15 +1,17 @@
-<!-- 
-@autor Jérémie Samson
-@version 1
-
-Site :
-http://stackoverflow.com/questions/386281/how-to-implement-select-all-check-box-in-html (checkboxes)
-http://www.tizag.com/javascriptT/javascript-string-compare.php (compare strings)
-http://tarruda.github.io/bootstrap-datetimepicker/ (datetimepicker)
-http://openweb.eu.org/articles/validation_formulaire (validation form)
--->
-
 <?php
+	session_start();
+	
+	/*
+	 *@author Jérémie Samson
+	 *@version 1
+	 *
+	 *Site :
+	 *http://stackoverflow.com/questions/386281/how-to-implement-select-all-check-box-in-html (checkboxes)
+	 *http://www.tizag.com/javascriptT/javascript-string-compare.php (compare strings)
+	 *http://tarruda.github.io/bootstrap-datetimepicker/ (datetimepicker)
+	 *http://openweb.eu.org/articles/validation_formulaire (validation form)
+	 */
+
 	include("include/include.php");
 	include("header.html");
 

@@ -29,7 +29,6 @@
  * http://www.labo-web.com/blog/actualite/tutoriel-de-generation-de-document-excel-en-php-via-phpexcel/ 
  */
  
-session_start();
 //print_r($_SESSION);
 
 //Pour les gros tableaux 
@@ -95,6 +94,9 @@ $objPHPExcel->getProperties()->setCreator("H2oTechs")
 // Add some data
 echo date('H:i:s') , " Add some data" , EOL;
 
+//Test sur le document en cours
+$isMoyenne = ($_SESSION['yAxis_title'] == "Moyennes") ? 1 : 0;
+
 //Création d'un tableau avec les lettres des colonnes
 $cpt = 65;
 while($cpt<91){
@@ -108,8 +110,12 @@ $sheet->setTitle('Releve');
 
 /* GENERATION DES HEADERS */
 $sheet->setCellValue('A1', 'Date');
+if (!$isMoyenne) $sheet->setCellValue('B1', 'Heure');
+
 for($numColonne=0 ; $numColonne<count($_SESSION['subtitles']) ; $numColonne++){
-	$localisation  	= $colonne[$numColonne+1]. "1"; //+1 pour le décalage avec la colonne de date
+	$coordonneeX    = ($isMoyenne) ? $colonne[$numColonne+1] : $colonne[$numColonne+2]; //+1 pour Date, +1 pour Heure
+	$coordonneeY    = "1";
+	$localisation  	= $coordonneeX . $coordonneeY; //+1 pour le décalage avec la colonne de date
 	$value 			= $_SESSION['subtitles'][$numColonne];
 
 	$sheet->setCellValue($localisation, $value);
@@ -123,11 +129,23 @@ for($numColonne=0 ; $numColonne<count($_SESSION['categories']) ; $numColonne++){
 	$sheet->setCellValue($localisation, $value);
 }
 
+if (!$isMoyenne){
+	/* GENERATION DE LA DEUXIEME COLONNE D'HEURE */
+	for($numLigne=0 ; $numLigne<count($_SESSION['heures']) ; $numLigne++){
+		$localisation  	= 'B'.($numLigne+2);		
+		$value 			= $_SESSION['heures'][$numLigne];
+	
+		$sheet->setCellValue($localisation, $value);
+	}
+}
+
 /* GENERATION DES DATAS */
 for($numColonne=0 ; $numColonne<count($_SESSION['subtitles']) ; $numColonne++){
 	$nom = $_SESSION['subtitles'][$numColonne];
 	for($numLigne=0 ; $numLigne<count($_SESSION['series'][$nom]) ; $numLigne++){
-		$localisation  	= $colonne[$numColonne+1].($numLigne+2);		
+		$coordonneeX	= ($isMoyenne) ? $colonne[$numColonne+1] : $colonne[$numColonne+2];
+		$coordonneeY	= ($numLigne+2); //+1 Pour enlever la ligne de titre et +1 vue que ça commence à 1 et non 0
+		$localisation  	= $coordonneeX . $coordonneeY;
 		$value 			= $_SESSION['series'][$nom][$numLigne];
 	
 		$sheet->setCellValue($localisation, $value);
@@ -136,9 +154,9 @@ for($numColonne=0 ; $numColonne<count($_SESSION['subtitles']) ; $numColonne++){
 
 /* Augmentation de la taille de la colonne des dates*/
 $sheet->getColumnDimension('A')->setWidth(12);
-$sheet->getStyle('A')->applyFromArray($gras);
-$sheet->getStyle('A')->applyFromArray($center);
-$sheet->getStyle('B1:G8')->applyFromArray($left);
+//$sheet->getStyle('A')->applyFromArray($gras);
+//$sheet->getStyle('A')->applyFromArray($center);
+//$sheet->getStyle('B1:G8')->applyFromArray($left);
 /*
 $objPHPExcel->getActiveSheet()->setCellValue('A8',"Hello\nWorld");
 $objPHPExcel->getActiveSheet()->getRowDimension(8)->setRowHeight(-1);
