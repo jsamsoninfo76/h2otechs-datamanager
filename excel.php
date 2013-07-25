@@ -213,7 +213,11 @@ $callTime = $callEndTime - $callStartTime;
 // Echo done
 echo 'Cliquez sur le lien pour t&eacute;l&eacute;charger le fichier: <a href="upload/' .$fileName. '">' .$fileName. '</a>';
 
+
+
+
 /*
+* Rajoute une bordure autour de la case 
 * BORDER_NONE	 'none'
 * BORDER_DASHDOT	 'dashDot'
 * BORDER_DASHDOTDOT	 'dashDotDot'
@@ -241,5 +245,4 @@ function makeItBordered($sheet, $localisation){
 		)
 	);
 }
-
 ?>
