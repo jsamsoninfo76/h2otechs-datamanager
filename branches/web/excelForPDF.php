@@ -29,7 +29,7 @@
 error_reporting(E_ALL);
 
 /** Include PHPExcel */
-require_once '../include/include.php';
+require_once 'include/include.php';
 
 
 // Create new PHPExcel object
@@ -283,7 +283,7 @@ echo date('H:i:s') , " Add a drawing to the worksheet" , EOL;
 $objDrawing = new PHPExcel_Worksheet_Drawing();
 $objDrawing->setName('Logo');
 $objDrawing->setDescription('Logo');
-$objDrawing->setPath('./images/officelogo.jpg');
+$objDrawing->setPath('img/pdf/officelogo.jpg');
 $objDrawing->setHeight(36);
 $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 
@@ -292,7 +292,7 @@ echo date('H:i:s') , " Add a drawing to the worksheet" , EOL;
 $objDrawing = new PHPExcel_Worksheet_Drawing();
 $objDrawing->setName('Paid');
 $objDrawing->setDescription('Paid');
-$objDrawing->setPath('./images/paid.png');
+$objDrawing->setPath('img/pdf/paid.png');
 $objDrawing->setCoordinates('B15');
 $objDrawing->setOffsetX(110);
 $objDrawing->setRotation(25);
@@ -305,7 +305,7 @@ echo date('H:i:s') , " Add a drawing to the worksheet" , EOL;
 $objDrawing = new PHPExcel_Worksheet_Drawing();
 $objDrawing->setName('PHPExcel logo');
 $objDrawing->setDescription('PHPExcel logo');
-$objDrawing->setPath('./images/phpexcel_logo.gif');
+$objDrawing->setPath('img/pdf/phpexcel_logo.gif');
 $objDrawing->setHeight(36);
 $objDrawing->setCoordinates('D24');
 $objDrawing->setOffsetX(10);
@@ -375,7 +375,7 @@ echo date('H:i:s') , " Add a drawing to the worksheet" , EOL;
 $objDrawing = new PHPExcel_Worksheet_Drawing();
 $objDrawing->setName('Terms and conditions');
 $objDrawing->setDescription('Terms and conditions');
-$objDrawing->setPath('./images/termsconditions.jpg');
+$objDrawing->setPath('img/pdf/termsconditions.jpg');
 $objDrawing->setCoordinates('B14');
 $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 
