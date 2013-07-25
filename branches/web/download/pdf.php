@@ -46,7 +46,7 @@ require_once '../include/include.php';
 $rendererName = PHPExcel_Settings::PDF_RENDERER_TCPDF;
 //$rendererName = PHPExcel_Settings::PDF_RENDERER_MPDF;
 //$rendererName = PHPExcel_Settings::PDF_RENDERER_DOMPDF;
-$rendererLibrary = 'tcpdf.pdf';
+$rendererLibrary = 'tcpdf.php';
 //$rendererLibrary = 'mPDF5.4';
 //$rendererLibrary = 'domPDF0.6.0beta3';
 $rendererLibraryPath = 'tcpdf/' . $rendererLibrary;
