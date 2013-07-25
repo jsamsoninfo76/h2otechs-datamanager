@@ -27,6 +27,7 @@
  * http://www.developpez.net/forums/d400523/php/langage/fonctions/tableaux-incrementer-alphabet-sans-tableau/ (alphabet ASCII)
  * http://stackoverflow.com/questions/12041844/phpexcel-set-column-width (changer la taille des colonne)
  * http://www.labo-web.com/blog/actualite/tutoriel-de-generation-de-document-excel-en-php-via-phpexcel/ 
+ * http://g-ernaelsten.developpez.com/tutoriels/excel2007/?page=styles (style)
  */
  
 //print_r($_SESSION);
@@ -124,7 +125,7 @@ echo date('H:i:s') , " Remplissage de la premi&egrave;re colonne (Date)" , EOL;
 for($numColonne=0 ; $numColonne<count($_SESSION['categories']) ; $numColonne++){
 	$localisation  	= 'A' . ($numColonne+2); //colonne[0] pour rester sur A & $numColonnes+1 pour commencer à 1
 	$value 			= $_SESSION['categories'][$numColonne];
-
+	makeItBordered($sheet, $localisation);
 	$sheet->setCellValue($localisation, $value);
 }
 
@@ -134,7 +135,7 @@ if (!$isMoyenne){
 	for($numLigne=0 ; $numLigne<count($_SESSION['heures']) ; $numLigne++){
 		$localisation  	= 'B'.($numLigne+2);		
 		$value 			= $_SESSION['heures'][$numLigne];
-	
+		makeItBordered($sheet, $localisation);
 		$sheet->setCellValue($localisation, $value);
 	}
 }
@@ -148,7 +149,7 @@ for($numColonne=0 ; $numColonne<count($_SESSION['subtitles']) ; $numColonne++){
 		$coordonneeY	= ($numLigne+2); //+1 Pour enlever la ligne de titre et +1 vue que ça commence à 1 et non 0
 		$localisation  	= $coordonneeX . $coordonneeY;
 		$value 			= $_SESSION['series'][$nom][$numLigne];
-	
+		makeItBordered($sheet, $localisation);
 		$sheet->setCellValue($localisation, $value);
 	}	
 }
@@ -171,69 +172,74 @@ for($numColonne=0 ; $numColonne<count($_SESSION['subtitles']) ; $numColonne++){
 	$sheet->getColumnDimension($colonne[$numColonne+$decalage])->setWidth($nombreChar + $addWidth);
 }
 
+/* Style */
+echo date('H:i:s') , " Stylisation du fichier" , EOL;
 
-//$sheet->getStyle('A')->applyFromArray($gras);
-//$sheet->getStyle('A')->applyFromArray($center);
-//$sheet->getStyle('B1:G8')->applyFromArray($left);
-/*
-$objPHPExcel->getActiveSheet()->setCellValue('A8',"Hello\nWorld");
-$objPHPExcel->getActiveSheet()->getRowDimension(8)->setRowHeight(-1);
-$objPHPExcel->getActiveSheet()->getStyle('A8')->getAlignment()->setWrapText(true);
-*/
+//Mise en gras des Headers
+$decalage = ($isMoyenne) ? 1 : 2;
+for($numColonne=0 ; $numColonne<count($_SESSION['subtitles'])+$decalage ; $numColonne++){
+	$coordonneeX    = $colonne[$numColonne];
+	$coordonneeY    = 1;
+	$localisation  	= $coordonneeX . $coordonneeY;
+	makeItBordered($sheet, $localisation); 
+	$styleCase = $sheet->getStyle($localisation);
+	$styleFont = $styleCase->getFont();
+	$styleFont->setBold(true);
+}
+
+//Ajout des bordures au tableau
+echo date('H:i:s') , " Ajout des bordures" , EOL;
+$nbColonne = ($isMoyenne) ? count($_SESSION['subtitles'])+$decalage : count($_SESSION['subtitles'])+$decalage;
+$nom = $_SESSION['subtitles'][0];
+$nbLigne = count($_SESSION['series'][$nom])+1; //+1 Pour header
 
 // Rename worksheet
-echo date('H:i:s') , " Changement du titre de la feuille en " . $_SESSION['yAxis_title'], EOL;
+echo date('H:i:s') , " Changement du titre de la feuille en: " . $_SESSION['yAxis_title'], EOL;
 $objPHPExcel->getActiveSheet()->setTitle($_SESSION['yAxis_title']);
-
 
 // Set active sheet index to the first sheet, so Excel opens this as the first sheet
 $objPHPExcel->setActiveSheetIndex(0);
 
-
 // Save Excel 2007 file
 echo date('H:i:s') , " Ecriture en format Excel 2007" , EOL;
 $callStartTime = microtime(true);
-
 $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-
-//$objWriter->save(str_replace('.php', '.xlsx', __FILE__));
 $path = "upload";
 $fileName = date('Y-m-d_H:i') ."_". $_SESSION['yAxis_title'] ."_". "Enky4.xlsx";
-
-//$objWriter->save(str_replace('.php', '.xlsx', "upload/excel.php"));
 $objWriter->save($path."/".$fileName);
 $callEndTime = microtime(true);
 $callTime = $callEndTime - $callStartTime;
 
-//echo date('H:i:s') , " Le fichier &agrave; &eacute;t&eacute; &eacute;crit dans : " , $fileName , EOL;
-//echo 'Call time to write Workbook was ' , sprintf('%.4f',$callTime) , " seconds" , EOL;
-// Echo memory usage
-//echo date('H:i:s') , ' Current memory usage: ' , (memory_get_usage(true) / 1024 / 1024) , " MB" , EOL;
-
-
-// Save Excel 95 file
-/*echo date('H:i:s') , " Write to Excel5 format" , EOL;
-$callStartTime = microtime(true);
-
-$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-$objWriter->save(str_replace('.php', '.xls', __FILE__));
-$callEndTime = microtime(true);
-$callTime = $callEndTime - $callStartTime;
-
-
-echo date('H:i:s') , " File written to " , str_replace('.php', '.xls', pathinfo(__FILE__, PATHINFO_BASENAME)) , EOL;
-echo 'Call time to write Workbook was ' , sprintf('%.4f',$callTime) , " seconds" , EOL;
-// Echo memory usage
-echo date('H:i:s') , ' Current memory usage: ' , (memory_get_usage(true) / 1024 / 1024) , " MB" , EOL;
-
-
-// Echo memory peak usage
-echo date('H:i:s') , " Peak memory usage: " , (memory_get_peak_usage(true) / 1024 / 1024) , " MB" , EOL;
-*/
 // Echo done
-//echo date('H:i:s') , " Le fichier &agrave; bien &eacute;t&eacute; cr&eacute;&eacute;" , EOL;
-//echo 'Files have been created in ' , getcwd()."/upload/" , EOL;
 echo 'Cliquez sur le lien pour t&eacute;l&eacute;charger le fichier: <a href="upload/' .$fileName. '">' .$fileName. '</a>';
 
+/*
+* BORDER_NONE	 'none'
+* BORDER_DASHDOT	 'dashDot'
+* BORDER_DASHDOTDOT	 'dashDotDot'
+* BORDER_DASHED	 'dashed'
+* BORDER_DOTTED	 'dotted'
+* BORDER_DOUBLE	 'double'
+* BORDER_HAIR	 'hair'
+* BORDER_MEDIUM	 'medium'
+* BORDER_MEDIUMDASHDOT	 'mediumDashDot'
+* BORDER_MEDIUMDASHDOTDOT	 'mediumDashDotDot'
+* BORDER_MEDIUMDASHED	 'mediumDashed'
+* BORDER_SLANTDASHDOT	 'slantDashDot'
+* BORDER_THICK	 'thick'
+* BORDER_THIN	 'thin'
+*/
+function makeItBordered($sheet, $localisation){
+	$sheet->getStyle($localisation)->getBorders()->applyFromArray(
+		array(
+			'allborders' => array(
+				'style' => PHPExcel_Style_Border::BORDER_THIN,
+				'color' => array(
+					'rgb' => '808080'
+				)
+			)
+		)
+	);
+}
 
 ?>
