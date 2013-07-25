@@ -283,7 +283,7 @@ echo date('H:i:s') , " Add a drawing to the worksheet" , EOL;
 $objDrawing = new PHPExcel_Worksheet_Drawing();
 $objDrawing->setName('Logo');
 $objDrawing->setDescription('Logo');
-$objDrawing->setPath('img/pdf/officelogo.jpg');
+$objDrawing->setPath('img/logo.png');
 $objDrawing->setHeight(36);
 $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 
