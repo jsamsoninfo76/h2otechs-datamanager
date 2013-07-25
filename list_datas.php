@@ -25,6 +25,7 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 		
 	//Création de la requête et génération du tableau
 	$sql_select = generateDatasSQL($variables, $dateDebut, $dateFin);
+
 	//echo $sql_select;
 	$query_select = $connexion->prepare($sql_select);
 	$query_select->execute();

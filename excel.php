@@ -34,6 +34,8 @@
 
 //Pour les gros tableaux 
 ini_set('memory_limit', '-1');
+set_time_limit(65536); 
+
 
 /* STYLE */
 //array de configuration des bordures
@@ -205,7 +207,7 @@ echo date('H:i:s') , " Ecriture en format Excel 2007" , EOL;
 $callStartTime = microtime(true);
 $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 $path = "upload";
-$fileName = date('Y-m-d_H:i') ."_". $_SESSION['yAxis_title'] ."_". "Enky4.xlsx";
+$fileName = date('Y-m-d_H:i') ."_". $_SESSION['yAxis_title'] ."_". "Enky" .$config['enky']. ".xlsx";
 $objWriter->save($path."/".$fileName);
 $callEndTime = microtime(true);
 $callTime = $callEndTime - $callStartTime;

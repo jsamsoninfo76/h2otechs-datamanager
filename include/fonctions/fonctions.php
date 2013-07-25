@@ -77,6 +77,7 @@ function getMinFromDatetime($datetime){
 function getLabel($variable){
 	if (strpos($variable,'RENDT_ETAGES') !== false) return "ETAGES";
 	else if (strpos($variable,'RENDT_ETAGE') !== false) return "ETAGE " . $variable[strlen($variable)-1];
+	else if (strpos($variable,'TOTALISATEUR') !== false) return "TOT " . $variable[strlen($variable)-1];
 	else return str_replace('_', ' ', $variable);
 }
 ?>
