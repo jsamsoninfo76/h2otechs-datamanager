@@ -77,11 +77,11 @@ require_once 'include/include.php';
 
 
 // Create new PHPExcel object
-echo date('H:i:s') , " Create new PHPExcel object" , EOL;
+echo date('H:i:s') , " Cr&eacute;ation du nouveau fichier" , EOL;
 $objPHPExcel = new PHPExcel();
 
 // Set document properties
-echo date('H:i:s') , " Set document properties" , EOL;
+echo date('H:i:s') , " Changement des propri&eacute;t&eacute;es du fichier" , EOL;
 $objPHPExcel->getProperties()->setCreator("H2oTechs")
 							 ->setLastModifiedBy("H2oTechs")
 							 ->setTitle("Datamanager Reporting")
@@ -90,9 +90,6 @@ $objPHPExcel->getProperties()->setCreator("H2oTechs")
 							 ->setKeywords("office PHPExcel php")
 							 ->setCategory("Test result file");
 
-
-// Add some data
-echo date('H:i:s') , " Add some data" , EOL;
 
 //Test sur le document en cours
 $isMoyenne = ($_SESSION['yAxis_title'] == "Moyennes") ? 1 : 0;
@@ -108,6 +105,7 @@ $objPHPExcel->setActiveSheetIndex(0);
 $sheet=$objPHPExcel->getActiveSheet();
 $sheet->setTitle('Releve');
 
+echo date('H:i:s') , " G&eacute;n&eacute;ration des nom de colonne" , EOL;
 /* GENERATION DES HEADERS */
 $sheet->setCellValue('A1', 'Date');
 if (!$isMoyenne) $sheet->setCellValue('B1', 'Heure');
@@ -121,6 +119,7 @@ for($numColonne=0 ; $numColonne<count($_SESSION['subtitles']) ; $numColonne++){
 	$sheet->setCellValue($localisation, $value);
 }
 
+echo date('H:i:s') , " Remplissage de la premi&egrave;re colonne (Date)" , EOL;
 /* GENERATION DE LA PREMIERE COLONNE DE DATE */
 for($numColonne=0 ; $numColonne<count($_SESSION['categories']) ; $numColonne++){
 	$localisation  	= 'A' . ($numColonne+2); //colonne[0] pour rester sur A & $numColonnes+1 pour commencer à 1
@@ -130,6 +129,7 @@ for($numColonne=0 ; $numColonne<count($_SESSION['categories']) ; $numColonne++){
 }
 
 if (!$isMoyenne){
+	echo date('H:i:s') , " Remplissage de la deuxi&egrave;me colonne (Heure)" , EOL;
 	/* GENERATION DE LA DEUXIEME COLONNE D'HEURE */
 	for($numLigne=0 ; $numLigne<count($_SESSION['heures']) ; $numLigne++){
 		$localisation  	= 'B'.($numLigne+2);		
@@ -140,6 +140,7 @@ if (!$isMoyenne){
 }
 
 /* GENERATION DES DATAS */
+echo date('H:i:s') , " Ajout des donn&eacute;es" , EOL;
 for($numColonne=0 ; $numColonne<count($_SESSION['subtitles']) ; $numColonne++){
 	$nom = $_SESSION['subtitles'][$numColonne];
 	for($numLigne=0 ; $numLigne<count($_SESSION['series'][$nom]) ; $numLigne++){
@@ -153,6 +154,7 @@ for($numColonne=0 ; $numColonne<count($_SESSION['subtitles']) ; $numColonne++){
 }
 
 /* Augmentation de la taille de la colonne des dates*/
+echo date('H:i:s') , " Adaptation de la taille des colonnes" , EOL;
 $sheet->getColumnDimension('A')->setWidth(10);
 if (!$isMoyenne) $sheet->getColumnDimension('B')->setWidth(6);
 
@@ -180,8 +182,8 @@ $objPHPExcel->getActiveSheet()->getStyle('A8')->getAlignment()->setWrapText(true
 */
 
 // Rename worksheet
-echo date('H:i:s') , " Rename worksheet" , EOL;
-$objPHPExcel->getActiveSheet()->setTitle('Simple');
+echo date('H:i:s') , " Changement du titre de la feuille en " . $_SESSION['yAxis_title'], EOL;
+$objPHPExcel->getActiveSheet()->setTitle($_SESSION['yAxis_title']);
 
 
 // Set active sheet index to the first sheet, so Excel opens this as the first sheet
@@ -189,7 +191,7 @@ $objPHPExcel->setActiveSheetIndex(0);
 
 
 // Save Excel 2007 file
-echo date('H:i:s') , " Write to Excel2007 format" , EOL;
+echo date('H:i:s') , " Ecriture en format Excel 2007" , EOL;
 $callStartTime = microtime(true);
 
 $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
@@ -203,10 +205,10 @@ $fileName = date('Y-m-d_H:i') ."_". $_SESSION['yAxis_title'] ."_". "Enky4.xlsx";
 $callEndTime = microtime(true);
 $callTime = $callEndTime - $callStartTime;
 
-echo date('H:i:s') , " File written to " , $fileName , EOL;
-echo 'Call time to write Workbook was ' , sprintf('%.4f',$callTime) , " seconds" , EOL;
+//echo date('H:i:s') , " Le fichier &agrave; &eacute;t&eacute; &eacute;crit dans : " , $fileName , EOL;
+//echo 'Call time to write Workbook was ' , sprintf('%.4f',$callTime) , " seconds" , EOL;
 // Echo memory usage
-echo date('H:i:s') , ' Current memory usage: ' , (memory_get_usage(true) / 1024 / 1024) , " MB" , EOL;
+//echo date('H:i:s') , ' Current memory usage: ' , (memory_get_usage(true) / 1024 / 1024) , " MB" , EOL;
 
 
 // Save Excel 95 file
@@ -229,9 +231,9 @@ echo date('H:i:s') , ' Current memory usage: ' , (memory_get_usage(true) / 1024 
 echo date('H:i:s') , " Peak memory usage: " , (memory_get_peak_usage(true) / 1024 / 1024) , " MB" , EOL;
 */
 // Echo done
-echo date('H:i:s') , " Done writing files" , EOL;
-echo 'Files have been created in ' , getcwd()."/upload/" , EOL;
-echo 'See by yourself : <a href="upload/' .$fileName. '">' .$fileName. '</a>';
+//echo date('H:i:s') , " Le fichier &agrave; bien &eacute;t&eacute; cr&eacute;&eacute;" , EOL;
+//echo 'Files have been created in ' , getcwd()."/upload/" , EOL;
+echo 'Cliquez sur le lien pour t&eacute;l&eacute;charger le fichier: <a href="upload/' .$fileName. '">' .$fileName. '</a>';
 
 
 ?>
