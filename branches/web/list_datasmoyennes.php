@@ -13,6 +13,7 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 							<th title="Date au format AAAA/MM/JJ de la prise de donn&eacute;e">Date</th>
 							<th title="Heure de la prise de donn&eacute;e">Heure</th>
 						<?php
+							$_SESSION['yAxis_title'] = "DatasMoyennes";
 							
 							foreach($variables as $variable){
 								$variable = getHeader($variable);
@@ -49,6 +50,7 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 						}else $compteurRowSpan++;
 													
 						$heure = ($data->Heure >= 10) ? $data->Heure : "0".$data->Heure;
+						$_SESSION['heures'][] = $data->Heure;
 						echo "<td>$heure</td>";									
 						foreach($variables as $variable){ 
 							//Mise en lower du data_label_value
