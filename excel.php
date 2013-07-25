@@ -153,7 +153,23 @@ for($numColonne=0 ; $numColonne<count($_SESSION['subtitles']) ; $numColonne++){
 }
 
 /* Augmentation de la taille de la colonne des dates*/
-$sheet->getColumnDimension('A')->setWidth(12);
+$sheet->getColumnDimension('A')->setWidth(10);
+if (!$isMoyenne) $sheet->getColumnDimension('B')->setWidth(6);
+
+for($numColonne=0 ; $numColonne<count($_SESSION['subtitles']) ; $numColonne++){
+	$nombreChar = strlen($_SESSION['subtitles'][$numColonne]); //+1 pour ne pas être serré
+	$addWidth = 1;
+	if ($_SESSION['subtitles'][$numColonne] == "CFL") $addWidth += 2; // +2 pour CFPC
+	else if ($_SESSION['subtitles'][$numColonne] == "PL" || 
+			 $_SESSION['subtitles'][$numColonne] == "PP" || 
+			 $_SESSION['subtitles'][$numColonne] == "PC" ||
+			 $_SESSION['subtitles'][$numColonne] == "CFC") $addWidth++; // +1 pour PL / PP / PC / CFC
+		
+	$decalage   = ($isMoyenne) ? 1 : 2; // 1 pour la colonne de Date, 1 pour la colonne des heures
+	$sheet->getColumnDimension($colonne[$numColonne+$decalage])->setWidth($nombreChar + $addWidth);
+}
+
+
 //$sheet->getStyle('A')->applyFromArray($gras);
 //$sheet->getStyle('A')->applyFromArray($center);
 //$sheet->getStyle('B1:G8')->applyFromArray($left);
