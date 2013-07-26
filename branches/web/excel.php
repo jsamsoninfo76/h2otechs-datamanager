@@ -28,6 +28,7 @@
  * http://stackoverflow.com/questions/12041844/phpexcel-set-column-width (changer la taille des colonne)
  * http://www.labo-web.com/blog/actualite/tutoriel-de-generation-de-document-excel-en-php-via-phpexcel/ 
  * http://g-ernaelsten.developpez.com/tutoriels/excel2007/?page=styles (style)
+ * http://anthodevsec.wordpress.com/2011/07/02/phpexcel-une-librairie-excellente/ (style)
  */
  
 //print_r($_SESSION);
@@ -148,6 +149,7 @@ if (!$isMoyenne){
 		if ($value == "Moyenne du jour"){
 			$localisationMergeCelles = "A" . $coordonneeY . ":B" . $coordonneeY;
 			$sheet->mergeCells($localisationMergeCelles);
+			makeLigneColored($sheet, $colonne, $decalage, $coordonneeY);
 		}
 
 		makeItBordered($sheet, $localisation);
@@ -240,20 +242,20 @@ echo '<br/><a href="upload/' .$fileName. '">Cliquez ici pour t&eacute;l&eacute;c
 
 /*
 * Rajoute une bordure autour de la case 
-* BORDER_NONE	 'none'
-* BORDER_DASHDOT	 'dashDot'
-* BORDER_DASHDOTDOT	 'dashDotDot'
-* BORDER_DASHED	 'dashed'
-* BORDER_DOTTED	 'dotted'
-* BORDER_DOUBLE	 'double'
-* BORDER_HAIR	 'hair'
-* BORDER_MEDIUM	 'medium'
-* BORDER_MEDIUMDASHDOT	 'mediumDashDot'
-* BORDER_MEDIUMDASHDOTDOT	 'mediumDashDotDot'
-* BORDER_MEDIUMDASHED	 'mediumDashed'
-* BORDER_SLANTDASHDOT	 'slantDashDot'
-* BORDER_THICK	 'thick'
-* BORDER_THIN	 'thin'
+* BORDER_NONE	 		'none'
+* BORDER_DASHDOT 		'dashDot'
+* BORDER_DASHDOTDOT		'dashDotDot'
+* BORDER_DASHED	 		'dashed'
+* BORDER_DOTTED	 		'dotted'
+* BORDER_DOUBLE	 		'double'
+* BORDER_HAIR	 		'hair'
+* BORDER_MEDIUM	 		'medium'
+* BORDER_MEDIUMDASHDOT	'mediumDashDot'
+* BORDER_MEDIUMDASHDOTDOT'mediumDashDotDot'
+* BORDER_MEDIUMDASHED	'mediumDashed'
+* BORDER_SLANTDASHDOT	'slantDashDot'
+* BORDER_THICK	 		'thick'
+* BORDER_THIN	 		'thin'
 */
 function makeItBordered($sheet, $localisation){
 	$sheet->getStyle($localisation)->getBorders()->applyFromArray(
@@ -268,13 +270,28 @@ function makeItBordered($sheet, $localisation){
 	);
 }
 
-function makeItColored($sheet, $localisation){
-	$sheet->getStyle($localisation)->applyFromArray(
-	    array(
-	        'fill' => array(
-	            'color' => array('rgb' => 'FF0000')
-	        )
-	    )
-	);
+/*
+ * COLOR_BLACK	 	'FF000000'
+ * COLOR_WHITE	 	'FFFFFFFF'
+ * COLOR_RED	 	'FFFF0000'
+ * COLOR_DARKRED 	'FF800000'
+ * COLOR_BLUE	 	'FF0000FF'
+ * COLOR_DARKBLUE	'FF000080'
+ * COLOR_GREEN	 	'FF00FF00'
+ * COLOR_DARKGREEN	'FF008000'
+ * COLOR_YELLOW	 	'FFFFFF00'
+ * COLOR_DARKYELLOW	'FF808000'
+ * Orange moyenne 	'ffac42'
+ */
+function makeLigneColored($sheet, $colonne, $decalage, $coordonneeY){
+	for($numColonne=0 ; $numColonne<count($_SESSION['subtitles'])+$decalage ; $numColonne++){
+		$coordonneeX = $colonne[$numColonne];
+		$localisation = $coordonneeX . $coordonneeY;
+		$sheet->getStyle($localisation)
+		  ->getFill()
+		  ->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
+		  ->getStartColor()->setRGB('ffac42');
+			
+	}	
 }
 ?>
