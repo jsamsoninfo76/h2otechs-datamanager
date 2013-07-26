@@ -13,7 +13,7 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 							<th title="Date au format AAAA/MM/JJ de la prise de donn&eacute;e">Date</th>
 							<th title="Heure de la prise de donn&eacute;e">Heure</th>
 						<?php
-							$_SESSION['yAxis_title'] = "DatasMoyennes";
+							$_SESSION['yAxis_title'] = "DonneesEtMoyennes";
 							
 							foreach($variables as $variable){
 								$variable = getHeader($variable);

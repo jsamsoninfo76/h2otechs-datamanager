@@ -15,24 +15,29 @@
 	include("include/include.php");
 	include("header.html");
 
-	switch($_GET['id_page']){
-		case 1 : include("form_list.php"); 			break; // index?id_page=1
-		case 2 : include("list.php"); 				break; // index?id_page=2
-		case 3 : include("form_interventions.php"); break; // index?id_page=3
-		case 4 : include("list_interventions.php"); break; // index?id_page=4
-		case 5 : include("statistique_line.php"); 	break; // index?id_page=5
-		case 6 : include("excel.php"); 				break; // index?id_page=6
-		case 7 : include("pdf.php"); 				break; // index?id_page=7
-		default : 
-			?>
-				<div id="index">
-					<p id="presentation">
-						Bienvenue dans votre espace de gestion de donn&eacute;es, bonne navigation.
-					</p>
-				</div>
-			<?php
-		break;
+
+	if (isset($_GET['id_page'])){
+		$id_page = $_GET['id_page'];
+		
+		switch($id_page){
+			case 1 : include("form_list.php"); 			break; // index?id_page=1
+			case 2 : include("list.php"); 				break; // index?id_page=2
+			case 3 : include("form_interventions.php"); break; // index?id_page=3
+			case 4 : include("list_interventions.php"); break; // index?id_page=4
+			case 5 : include("statistique_line.php"); 	break; // index?id_page=5
+			case 6 : include("excel.php"); 				break; // index?id_page=6
+			case 7 : include("pdf.php"); 				break; // index?id_page=7
+		}
+	}else{
+		?>
+			<div id="index">
+				<p id="presentation">
+					Bienvenue dans votre espace de gestion de donn&eacute;es, bonne navigation.
+				</p>
+			</div>
+		<?php
 	}
+	
 
 	include("footer.html"); 
 ?>
