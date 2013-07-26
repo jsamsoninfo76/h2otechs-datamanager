@@ -145,7 +145,6 @@ for($numColonne=0 ; $numColonne<count($_SESSION['categories']) ; $numColonne++){
 			
 			if ($localisationDebut != "" && $localisationFin != "" && $localisationDebut != $localisationFin){
 				$localisationMergeCelles = $localisationDebut .":". $localisationFin;
-				echo "Merge Cells : $localisationMergeCelles <br/>";
 				$sheet->mergeCells($localisationDebut .":". $localisationFin);
 			}
 			
@@ -161,7 +160,6 @@ for($numColonne=0 ; $numColonne<count($_SESSION['categories']) ; $numColonne++){
 		$localisationMergeCelles = $localisationDebut .":". $localisationFin;
 		
 		if ($localisationDebut != $localisationFin){
-			echo "Merge Cells : $localisationMergeCelles <br/>";
 			$sheet->mergeCells($localisationDebut .":". $localisationFin);
 		}
 	}
