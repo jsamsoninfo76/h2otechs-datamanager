@@ -127,11 +127,45 @@ for($numColonne=0 ; $numColonne<count($_SESSION['subtitles']) ; $numColonne++){
 
 /* GENERATION DE LA PREMIERE COLONNE DE DATE */
 echo date('H:i:s') , " Remplissage de la premi&egrave;re colonne (Date)" , EOL;
-
+$localisationDebut = "";
+$localisationFin = "";
+$valuePrec = "";
 for($numColonne=0 ; $numColonne<count($_SESSION['categories']) ; $numColonne++){
-	$localisation  	= 'A' . ($numColonne+2); //colonne[0] pour rester sur A & $numColonnes+2 pour commencer à 2
+	$coordonneeX    = 'A';
+	$coordonneeY    = $numColonne+2;
+	$localisation  	= $coordonneeX . $coordonneeY; //colonne[0] pour rester sur A & $numColonnes+2 pour commencer à 2
 	$value 			= $_SESSION['categories'][$numColonne];
 	
+	// On met la localisation de début
+	if ($valuePrec != $value){
+		if ($valuePrec == ""){
+			$localisationDebut = $localisation;
+		}else{
+			$localisationFin = $coordonneeX. ($coordonneeY-1);
+			
+			if ($localisationDebut != "" && $localisationFin != "" && $localisationDebut != $localisationFin){
+				$localisationMergeCelles = $localisationDebut .":". $localisationFin;
+				echo "Merge Cells : $localisationMergeCelles <br/>";
+				$sheet->mergeCells($localisationDebut .":". $localisationFin);
+			}
+			
+			$localisationDebut = $coordonneeX . $coordonneeY;
+		}
+		
+		$valuePrec = $value;
+	}	
+	//echo "localisationDebut: $localisationDebut, localisationFin: $localisationFin<br/>";
+
+	if ($numColonne == count($_SESSION['categories'])-1){
+		$localisationFin = $localisation;
+		$localisationMergeCelles = $localisationDebut .":". $localisationFin;
+		
+		if ($localisationDebut != $localisationFin){
+			echo "Merge Cells : $localisationMergeCelles <br/>";
+			$sheet->mergeCells($localisationDebut .":". $localisationFin);
+		}
+	}
+		
 	makeItBordered($sheet, $localisation);
 	$sheet->setCellValue($localisation, $value);
 }
