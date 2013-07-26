@@ -36,7 +36,6 @@
 ini_set('memory_limit', '-1');
 set_time_limit(65536); 
 
-
 /* STYLE */
 //array de configuration des bordures
 $bordersarray=array(
@@ -111,8 +110,8 @@ $objPHPExcel->setActiveSheetIndex(0);
 $sheet=$objPHPExcel->getActiveSheet();
 $sheet->setTitle('Releve');
 
-echo date('H:i:s') , " G&eacute;n&eacute;ration des nom de colonne" , EOL;
 /* GENERATION DES HEADERS */
+echo date('H:i:s') , " G&eacute;n&eacute;ration des nom de colonne" , EOL;
 $sheet->setCellValue('A1', 'Date');
 if (!$isMoyenne) $sheet->setCellValue('B1', 'Heure');
 
@@ -125,11 +124,13 @@ for($numColonne=0 ; $numColonne<count($_SESSION['subtitles']) ; $numColonne++){
 	$sheet->setCellValue($localisation, $value);
 }
 
-echo date('H:i:s') , " Remplissage de la premi&egrave;re colonne (Date)" , EOL;
 /* GENERATION DE LA PREMIERE COLONNE DE DATE */
+echo date('H:i:s') , " Remplissage de la premi&egrave;re colonne (Date)" , EOL;
+
 for($numColonne=0 ; $numColonne<count($_SESSION['categories']) ; $numColonne++){
-	$localisation  	= 'A' . ($numColonne+2); //colonne[0] pour rester sur A & $numColonnes+1 pour commencer à 1
+	$localisation  	= 'A' . ($numColonne+2); //colonne[0] pour rester sur A & $numColonnes+2 pour commencer à 2
 	$value 			= $_SESSION['categories'][$numColonne];
+	
 	makeItBordered($sheet, $localisation);
 	$sheet->setCellValue($localisation, $value);
 }
@@ -138,8 +139,17 @@ if (!$isMoyenne){
 	echo date('H:i:s') , " Remplissage de la deuxi&egrave;me colonne (Heure)" , EOL;
 	/* GENERATION DE LA DEUXIEME COLONNE D'HEURE */
 	for($numLigne=0 ; $numLigne<count($_SESSION['heures']) ; $numLigne++){
-		$localisation  	= 'B'.($numLigne+2);		
+		$coordonneeX    = "B";
+		$coordonneeY    = ($numLigne+2);
+		$localisation  	= $coordonneeX . $coordonneeY;
 		$value 			= $_SESSION['heures'][$numLigne];
+		
+		// MERGE des deux première colonnes en cas de données et moyennes
+		if ($value == "Moyenne du jour"){
+			$localisationMergeCelles = "A" . $coordonneeY . ":B" . $coordonneeY;
+			$sheet->mergeCells($localisationMergeCelles);
+		}
+
 		makeItBordered($sheet, $localisation);
 		$sheet->setCellValue($localisation, $value);
 	}
@@ -147,8 +157,10 @@ if (!$isMoyenne){
 
 /* GENERATION DES DATAS */
 echo date('H:i:s') , " Ajout des donn&eacute;es" , EOL;
+
 for($numColonne=0 ; $numColonne<count($_SESSION['subtitles']) ; $numColonne++){
 	$nom = $_SESSION['subtitles'][$numColonne];
+	
 	for($numLigne=0 ; $numLigne<count($_SESSION['series'][$nom]) ; $numLigne++){
 		$coordonneeX	= ($isMoyenne) ? $colonne[$numColonne+$decalage] : $colonne[$numColonne+$decalage];
 		$coordonneeY	= ($numLigne+2); //+1 Pour enlever la ligne de titre et +1 vue que ça commence à 1 et non 0
@@ -156,23 +168,25 @@ for($numColonne=0 ; $numColonne<count($_SESSION['subtitles']) ; $numColonne++){
 		$value 			= $_SESSION['series'][$nom][$numLigne];
 		makeItBordered($sheet, $localisation);
 		
+		//Enregistrement de la taille max des valeurs de la colonne
 		$tailleColonne = strlen($value);
 		if ($tailleColonne > $_SESSION['tailleColonne'][$numColonne+$decalage])
 			$_SESSION['tailleColonne'][$numColonne+$decalage] = $tailleColonne;
-			
+		
 		$sheet->setCellValue($localisation, $value);
 	}	
 }
 
-/* Augmentation de la taille de la colonne des dates*/
+/* AUGMENTATION DE LA TAILLE DES COLONNES */
 echo date('H:i:s') , " Adaptation de la taille des colonnes" , EOL;
 $sheet->getColumnDimension('A')->setWidth(10);
 if (!$isMoyenne) $sheet->getColumnDimension('B')->setWidth(6);
 for($numColonne=2 ; $numColonne<count($_SESSION['tailleColonne']) ; $numColonne++){
 	$nombreChar = $_SESSION['tailleColonne'][$numColonne] + 2; // +2 en cas de '-' et 1 de marge
 	
-	if ($numColonne >= $decalage && strlen($_SESSION['subtitles'][$numColonne-$decalage]) > $nombreChar)
+	if ($numColonne >= $decalage && strlen($_SESSION['subtitles'][$numColonne-$decalage]) >= $nombreChar)		
 		$nombreChar = strlen($_SESSION['subtitles'][$numColonne-$decalage])+1; // Prend la taille du nom de la colonne +1 de marge
+
 	
 	$sheet->getColumnDimension($colonne[$numColonne])->setWidth($nombreChar);
 }
@@ -251,6 +265,16 @@ function makeItBordered($sheet, $localisation){
 				)
 			)
 		)
+	);
+}
+
+function makeItColored($sheet, $localisation){
+	$sheet->getStyle($localisation)->applyFromArray(
+	    array(
+	        'fill' => array(
+	            'color' => array('rgb' => 'FF0000')
+	        )
+	    )
 	);
 }
 ?>

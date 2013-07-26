@@ -79,9 +79,17 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 						
 						// Moyennes
 						if ($compteurRowSpan == $nbRowSpan && $select != "datas"){
+							$_SESSION['categories'][] = "Moyenne du jour";
+							$_SESSION['heures'][] = "Moyenne du jour";
+	
+//							$_SESSION['nombreLignesMoyennes']++;
 							echo "<tr class='tabListDataMoy'><td colspan=2>Moyenne du $data->Annee</td>";
-							foreach($variables as $variable)
+							foreach($variables as $variable){
+								$value = strtolower($variable . "_value");
+								$header = getHeader($variable);
+								$_SESSION['series'][$header][] = round($moyenne[$variable] / $nbRowSpan);
 								echo "<td>" . round($moyenne[$variable] / $nbRowSpan). "</td>";
+							}	
 							echo "</tr>";
 						} 
 						
