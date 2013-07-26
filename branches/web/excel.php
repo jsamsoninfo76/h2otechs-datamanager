@@ -96,6 +96,9 @@ $objPHPExcel->getProperties()->setCreator("H2oTechs")
 
 //Test sur le document en cours
 $isMoyenne = ($_SESSION['yAxis_title'] == "Moyennes") ? 1 : 0;
+$decalage   = ($isMoyenne) ? 1 : 2; // 1 pour la colonne de Date, 1 pour la colonne des heures
+for($numColonne=0 ; $numColonne<count($_SESSION['subtitles'])+$decalage ; $numColonne++)
+	$_SESSION['tailleColonne'][$numColonne] = 0;
 
 //Création d'un tableau avec les lettres des colonnes
 $cpt = 65;
@@ -114,7 +117,7 @@ $sheet->setCellValue('A1', 'Date');
 if (!$isMoyenne) $sheet->setCellValue('B1', 'Heure');
 
 for($numColonne=0 ; $numColonne<count($_SESSION['subtitles']) ; $numColonne++){
-	$coordonneeX    = ($isMoyenne) ? $colonne[$numColonne+1] : $colonne[$numColonne+2]; //+1 pour Date, +1 pour Heure
+	$coordonneeX    = ($isMoyenne) ? $colonne[$numColonne+$decalage] : $colonne[$numColonne+$decalage]; //+1 pour Date, +1 pour Heure
 	$coordonneeY    = "1";
 	$localisation  	= $coordonneeX . $coordonneeY; //+1 pour le décalage avec la colonne de date
 	$value 			= $_SESSION['subtitles'][$numColonne];
@@ -147,11 +150,16 @@ echo date('H:i:s') , " Ajout des donn&eacute;es" , EOL;
 for($numColonne=0 ; $numColonne<count($_SESSION['subtitles']) ; $numColonne++){
 	$nom = $_SESSION['subtitles'][$numColonne];
 	for($numLigne=0 ; $numLigne<count($_SESSION['series'][$nom]) ; $numLigne++){
-		$coordonneeX	= ($isMoyenne) ? $colonne[$numColonne+1] : $colonne[$numColonne+2];
+		$coordonneeX	= ($isMoyenne) ? $colonne[$numColonne+$decalage] : $colonne[$numColonne+$decalage];
 		$coordonneeY	= ($numLigne+2); //+1 Pour enlever la ligne de titre et +1 vue que ça commence à 1 et non 0
 		$localisation  	= $coordonneeX . $coordonneeY;
 		$value 			= $_SESSION['series'][$nom][$numLigne];
 		makeItBordered($sheet, $localisation);
+		
+		$tailleColonne = strlen($value);
+		if ($tailleColonne > $_SESSION['tailleColonne'][$numColonne+$decalage])
+			$_SESSION['tailleColonne'][$numColonne+$decalage] = $tailleColonne;
+			
 		$sheet->setCellValue($localisation, $value);
 	}	
 }
@@ -160,25 +168,19 @@ for($numColonne=0 ; $numColonne<count($_SESSION['subtitles']) ; $numColonne++){
 echo date('H:i:s') , " Adaptation de la taille des colonnes" , EOL;
 $sheet->getColumnDimension('A')->setWidth(10);
 if (!$isMoyenne) $sheet->getColumnDimension('B')->setWidth(6);
-
-for($numColonne=0 ; $numColonne<count($_SESSION['subtitles']) ; $numColonne++){
-	$nombreChar = strlen($_SESSION['subtitles'][$numColonne]); //+1 pour ne pas être serré
-	$addWidth = 1;
-	if ($_SESSION['subtitles'][$numColonne] == "CFL") $addWidth += 2; // +2 pour CFPC
-	else if ($_SESSION['subtitles'][$numColonne] == "PL" || 
-			 $_SESSION['subtitles'][$numColonne] == "PP" || 
-			 $_SESSION['subtitles'][$numColonne] == "PC" ||
-			 $_SESSION['subtitles'][$numColonne] == "CFC") $addWidth++; // +1 pour PL / PP / PC / CFC
-		
-	$decalage   = ($isMoyenne) ? 1 : 2; // 1 pour la colonne de Date, 1 pour la colonne des heures
-	$sheet->getColumnDimension($colonne[$numColonne+$decalage])->setWidth($nombreChar + $addWidth);
+for($numColonne=2 ; $numColonne<count($_SESSION['tailleColonne']) ; $numColonne++){
+	$nombreChar = $_SESSION['tailleColonne'][$numColonne] + 2; // +2 en cas de '-' et 1 de marge
+	
+	if ($numColonne >= $decalage && strlen($_SESSION['subtitles'][$numColonne-$decalage]) > $nombreChar)
+		$nombreChar = strlen($_SESSION['subtitles'][$numColonne-$decalage])+1; // Prend la taille du nom de la colonne +1 de marge
+	
+	$sheet->getColumnDimension($colonne[$numColonne])->setWidth($nombreChar);
 }
 
 /* Style */
 echo date('H:i:s') , " Stylisation du fichier" , EOL;
 
 //Mise en gras des Headers
-$decalage = ($isMoyenne) ? 1 : 2;
 for($numColonne=0 ; $numColonne<count($_SESSION['subtitles'])+$decalage ; $numColonne++){
 	$coordonneeX    = $colonne[$numColonne];
 	$coordonneeY    = 1;
@@ -195,8 +197,12 @@ $nbColonne = ($isMoyenne) ? count($_SESSION['subtitles'])+$decalage : count($_SE
 $nom = $_SESSION['subtitles'][0];
 $nbLigne = count($_SESSION['series'][$nom])+1; //+1 Pour header
 
+//FileName & Path
+$path = "upload";
+$fileName = $_SESSION['dateDebut'] ."_au_". $_SESSION['dateFin'] ."_". $_SESSION['yAxis_title'] ."_". "Enky" .$config['enky']. ".xlsx";
+
 // Rename worksheet
-echo date('H:i:s') , " Changement du titre de la feuille en: " . $_SESSION['yAxis_title'], EOL;
+echo date('H:i:s') , " Changement du titre de la feuille en: " . $fileName, EOL;
 $objPHPExcel->getActiveSheet()->setTitle($_SESSION['yAxis_title']);
 
 // Set active sheet index to the first sheet, so Excel opens this as the first sheet
@@ -207,18 +213,13 @@ echo date('H:i:s') , " Ecriture en format Excel 2007" , EOL;
 $callStartTime = microtime(true);
 $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 
-//FileName & Path
-$path = "upload";
-//$fileName = date('Y-m-d_H:i') ."_". $_SESSION['yAxis_title'] ."_". "Enky" .$config['enky']. ".xlsx";
-$fileName = $_SESSION['dateDebut'] ."_au_". $_SESSION['dateFin'] ."_". $_SESSION['yAxis_title'] ."_". "Enky" .$config['enky']. ".xlsx";
-
 //Save
 $objWriter->save($path."/".$fileName);
 $callEndTime = microtime(true);
 $callTime = $callEndTime - $callStartTime;
 
 // Echo done
-echo 'Cliquez sur le lien pour t&eacute;l&eacute;charger le fichier: <a href="upload/' .$fileName. '">' .$fileName. '</a>';
+echo '<br/><a href="upload/' .$fileName. '">Cliquez ici pour t&eacute;l&eacute;charger le fichier</a>';
 
 
 

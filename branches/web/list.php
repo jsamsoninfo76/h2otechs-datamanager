@@ -44,6 +44,7 @@ if (isset($variables) && isset($dateDebut) && isset($dateFin) && isset( $select)
 				$_SESSION['series'] = null;
 				$_SESSION['dateDebut'] = str_replace("/", "-", substr($dateDebut ,0 ,10 ));
 				$_SESSION['dateFin'] = str_replace("/", "-", substr($dateFin ,0 , 10));
+				$_SESSION['tailleColonne'] = null;
 				
 				if ($select == "datas") include("list_datas.php");
 				if ($select == "moyennes") include("list_moyennes.php");
