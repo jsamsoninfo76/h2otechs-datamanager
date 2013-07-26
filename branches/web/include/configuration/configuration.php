@@ -1,5 +1,5 @@
 <?php
-
+/*
 $config = array(
 	"host" => "localhost",
 	"user" => "root",
@@ -9,7 +9,16 @@ $config = array(
 	"enky" => "4"
 );
 
-/*
+$config = array(
+	"host" => "localhost",
+	"user" => "root",
+	"pass" => "root",
+	"port" => "8889", 
+	"db"   => "h2otechs_datamanager",
+	"enky" => "test"
+);
+*/
+
 $config = array(
 	"host" => "localhost",
 	"user" => "root",
@@ -18,6 +27,6 @@ $config = array(
 	"db"   => "h2otechs_datamanager_enky2",
 	"enky" => "2"
 );
-*/
+
 
 ?>

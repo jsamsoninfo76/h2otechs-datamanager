@@ -15,7 +15,7 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 		
 		<?php	
 
-			$_SESSION['yAxis_title'] = "Datas";
+			$_SESSION['yAxis_title'] = "Donnees";
 			foreach($variables as $variable){
 				$variable = getHeader($variable);
 				$_SESSION['subtitles'][] = $variable;

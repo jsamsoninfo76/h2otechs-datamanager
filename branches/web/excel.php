@@ -206,8 +206,13 @@ $objPHPExcel->setActiveSheetIndex(0);
 echo date('H:i:s') , " Ecriture en format Excel 2007" , EOL;
 $callStartTime = microtime(true);
 $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+
+//FileName & Path
 $path = "upload";
-$fileName = date('Y-m-d_H:i') ."_". $_SESSION['yAxis_title'] ."_". "Enky" .$config['enky']. ".xlsx";
+//$fileName = date('Y-m-d_H:i') ."_". $_SESSION['yAxis_title'] ."_". "Enky" .$config['enky']. ".xlsx";
+$fileName = $_SESSION['dateDebut'] ."_au_". $_SESSION['dateFin'] ."_". $_SESSION['yAxis_title'] ."_". "Enky" .$config['enky']. ".xlsx";
+
+//Save
 $objWriter->save($path."/".$fileName);
 $callEndTime = microtime(true);
 $callTime = $callEndTime - $callStartTime;
