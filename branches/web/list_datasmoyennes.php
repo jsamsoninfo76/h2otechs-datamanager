@@ -56,7 +56,6 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 							//Mise en lower du data_label_value
 							$value = strtolower($variable . "_value");
 							$header = getHeader($variable);
-							$_SESSION['series'][$header][] = round($data->$value);
 							
 							//Si la value est vide
 							if ($data->$value == "") {
@@ -70,6 +69,8 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 								$lastValue[$variable] = $data->$value;
 								echo "<td title='" .getHeader($variable). "'>" .$lastValue[$variable]. "</td>";
 							}
+							
+							$_SESSION['series'][$header][] = $lastValue[$variable];
 							
 							//Moyenne
 							if ($select != "datas") $moyenne[$variable] = $moyenne[$variable] + $lastValue[$variable];
