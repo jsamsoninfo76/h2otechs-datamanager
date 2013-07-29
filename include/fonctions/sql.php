@@ -48,7 +48,7 @@ function generateInsertIntervention($datetime, $intervenant, $observation){
 function generateMoySQL($variables, $dateDebut, $dateFin){		
 		$variables[0] = strtolower($variables[0]);
 		
-		$sql_select = "SELECT DATE($variables[0].datetime) AS date, ";
+		$sql_select = "SELECT DATE_FORMAT($variables[0].datetime, '%d/%m/%Y') AS Annee, ";
 		for($i=0 ; $i < count($variables) ; $i++){
 			$variables[$i] = strtolower($variables[$i]);
 			if ($i == count($variables) -1) $sql_select .= " AVG($variables[$i].value) AS " .$variables[$i]."_avg";
@@ -70,7 +70,7 @@ function generateMoySQL($variables, $dateDebut, $dateFin){
 function generateDatasSQL($variables, $dateDebut, $dateFin){
 	$variables[0] = strtolower($variables[0]);
 	
-	$sql_select = "SELECT $variables[0].datetime, DATE($variables[0].datetime) AS Annee, HOUR($variables[0].datetime) AS Heure, ";
+	$sql_select = "SELECT $variables[0].datetime, DATE_FORMAT($variables[0].datetime, '%d/%m/%Y') AS Annee, HOUR($variables[0].datetime) AS Heure, ";
 	for($i=0 ; $i < count($variables) ; $i++){
 		$variables[$i] = strtolower($variables[$i]);
 		if ($i == count($variables) -1) $sql_select .= $variables[$i]. ".value AS " .$variables[$i]."_value";
@@ -92,7 +92,7 @@ function generateDatasSQL($variables, $dateDebut, $dateFin){
 function generateDatasAndMoySQL($variables, $dateDebut, $dateFin){
 	$variables[0] = strtolower($variables[0]);
 	
-	$sql_select = "SELECT $variables[0].datetime, DATE($variables[0].datetime) AS Annee, HOUR($variables[0].datetime) AS Heure, ";
+	$sql_select = "SELECT $variables[0].datetime, DATE_FORMAT($variables[0].datetime, '%d/%m/%Y') AS Annee, HOUR($variables[0].datetime) AS Heure, ";
 	for($i=0 ; $i < count($variables) ; $i++){
 		$variables[$i] = strtolower($variables[$i]);
 		if ($i == count($variables) -1) $sql_select .= $variables[$i]. ".value AS " .$variables[$i]."_value";

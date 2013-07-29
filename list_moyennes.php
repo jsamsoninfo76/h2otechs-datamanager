@@ -31,8 +31,8 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 		$datetime = $data->datetime;						
 		
 		echo '<tr class=tabListDataCells>';
-			$_SESSION['categories'][] = $data->date;
-			echo "<td>" .$data->date. "</td>";
+			$_SESSION['categories'][] = $data->Annee;
+			echo "<td>" .$data->Annee. "</td>";
 		
 			foreach($variables as $variable){
 				$value = strtolower($variable . "_avg");
