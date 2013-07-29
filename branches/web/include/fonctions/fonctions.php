@@ -1,5 +1,19 @@
 <?php
 
+/*
+ * Modification pour la prise en compte des décimales du PH
+ */
+function traitementDecimal($variable, $value){
+	//Traitement PH, datas entre 0 & 140 
+	if (strpos($variable, "PH")){ 
+		if (strlen($value) == 3) return $value[0] . $value[1] . "," . $value[2];
+		else if(strlen($value) == 2) {
+			return $value[0].",". $value[1];
+			//print_r($value);
+		}
+		else return $value;
+	}
+}
 /**
  * http://php.net/manual/fr/datetime.createfromformat.php
  * Mois En -> Fr

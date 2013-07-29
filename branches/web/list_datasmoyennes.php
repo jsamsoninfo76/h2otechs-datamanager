@@ -63,11 +63,11 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 								if ($lastValue[$variable] == "")
 									$lastValue[$variable] = getLastValue($variable, $dateDebut, $connexion);
 									
-								echo "<td title='" .getHeader($variable). "'>" .$lastValue[$variable]. "</td>";
+								echo "<td title='" .getHeader($variable). "'>" .traitementDecimal($variable, $lastValue[$variable]). "</td>";
 							}
 							else {
 								$lastValue[$variable] = $data->$value;
-								echo "<td title='" .getHeader($variable). "'>" .$lastValue[$variable]. "</td>";
+								echo "<td title='" .getHeader($variable). "'>" .traitementDecimal($variable, $lastValue[$variable]). "</td>";
 							}
 							
 							$_SESSION['series'][$header][] = $lastValue[$variable];
@@ -90,6 +90,10 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 								$_SESSION['series'][$header][] = round($moyenne[$variable] / $nbRowSpan);
 								echo "<td>" . round($moyenne[$variable] / $nbRowSpan). "</td>";
 							}	
+							
+							//On vide la variable pour reinitialiser les moyennes
+							unset($moyenne);
+							
 							echo "</tr>";
 						} 
 						

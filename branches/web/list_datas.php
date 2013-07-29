@@ -59,11 +59,11 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 				if ($lastValue[$variable] == "")
 					$lastValue[$variable] = getLastValue($variable, $dateDebut, $connexion);
 				
-				echo "<td title='" .getHeader($variable). "'>" .$lastValue[$variable]. "</td>";
+				echo "<td title='" .getHeader($variable). "'>" .traitementDecimal($variable, $lastValue[$variable]). "</td>";
 			}
 			else {
 				$lastValue[$variable] = $data->$value;
-				echo "<td title='" .getHeader($variable). "'>" .$lastValue[$variable]. "</td>";
+				echo "<td title='" .getHeader($variable). "'>" .traitementDecimal($variable, $lastValue[$variable]). "</td>";
 			}
 			
 			$_SESSION['series'][$header][] = $lastValue[$variable];
