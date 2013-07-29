@@ -57,11 +57,13 @@ function generateMoySQL($variables, $dateDebut, $dateFin){
 		
 		$sql_select .= " FROM " .$variables[0]. " ";
 		for($i=1 ; $i < count($variables) ; $i++){
-			$sql_select .= "LEFT JOIN " .$variables[$i]. " ON " .$variables[$i].".datetime = " .$variables[0]. ".datetime ";
+			$sql_select .= " LEFT JOIN " .$variables[$i]. " ON " .$variables[$i].".datetime = " .$variables[0]. ".datetime ";
+			$sql_select .= " AND $variables[$i].state = 1";
 		}
 				
 		$sql_select .= " WHERE " .$variables[0]. ".datetime BETWEEN '" .$dateDebut. "'";
 		$sql_select .= " AND '" .$dateFin. "'";
+		$sql_select .= " AND $variables[0].state = 1";
 		$sql_select .= " GROUP BY DATE(" .$variables[0]. ".datetime)";
 		return $sql_select;
 	}
@@ -79,11 +81,13 @@ function generateDatasSQL($variables, $dateDebut, $dateFin){
 	
 	$sql_select .= " FROM " .$variables[0]. " ";		
 	for($i=1 ; $i < count($variables) ; $i++){
-		$sql_select .= "LEFT JOIN " .$variables[$i]. " ON " .$variables[$i].".datetime = " .$variables[0]. ".datetime ";
+		$sql_select .= " LEFT JOIN " .$variables[$i]. " ON " .$variables[$i].".datetime = " .$variables[0]. ".datetime ";
+		$sql_select .= " AND $variables[$i].state = 1";
 	}
 			
 	$sql_select .= " WHERE " .$variables[0]. ".datetime BETWEEN '" .$dateDebut. "'";
 	$sql_select .= " AND '" .$dateFin. "'";
+	$sql_select .= " AND $variables[0].state = 1";
 	$sql_select .= " GROUP BY YEAR($variables[0].datetime),MONTH($variables[0].datetime),DATE($variables[0].datetime), HOUR(" .$variables[0]. ".datetime)";
 	$sql_select .= " ORDER BY YEAR($variables[0].datetime),MONTH($variables[0].datetime),DATE($variables[0].datetime), HOUR($variables[0].datetime)";
 	return $sql_select;
@@ -101,11 +105,13 @@ function generateDatasAndMoySQL($variables, $dateDebut, $dateFin){
 	
 	$sql_select .= " FROM " .$variables[0]. " ";		
 	for($i=1 ; $i < count($variables) ; $i++){
-		$sql_select .= "LEFT JOIN " .$variables[$i]. " ON " .$variables[$i].".datetime = " .$variables[0]. ".datetime ";
+		$sql_select .= " LEFT JOIN " .$variables[$i]. " ON " .$variables[$i].".datetime = " .$variables[0]. ".datetime ";
+		$sql_select .= " AND $variables[$i].state = 1";
 	}
 			
 	$sql_select .= " WHERE " .$variables[0]. ".datetime BETWEEN '" .$dateDebut. "'";
 	$sql_select .= " AND '" .$dateFin. "'";
+	$sql_select .= " AND $variables[0].state = 1";
 	$sql_select .= " GROUP BY DATE($variables[0].datetime), HOUR($variables[0].datetime)";
 	$sql_select .= " ORDER BY DATE($variables[0].datetime), HOUR($variables[0].datetime)";
 	return $sql_select;
