@@ -87,8 +87,9 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 							foreach($variables as $variable){
 								$value = strtolower($variable . "_value");
 								$header = getHeader($variable);
-								$_SESSION['series'][$header][] = round($moyenne[$variable] / $nbRowSpan);
-								echo "<td>" . round($moyenne[$variable] / $nbRowSpan). "</td>";
+								$moy = round($moyenne[$variable] / $nbRowSpan);
+								$_SESSION['series'][$header][] = $moy;
+								echo "<td>" . traitementDecimal($variable, $moy). "</td>";
 							}	
 							
 							//On vide la variable pour reinitialiser les moyennes
