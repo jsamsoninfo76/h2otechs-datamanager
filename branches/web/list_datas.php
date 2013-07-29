@@ -19,8 +19,10 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 			foreach($variables as $variable){
 				$variable = getHeader($variable);
 				$_SESSION['subtitles'][] = $variable;
+				$lastValue[$variable] = "";
 				echo "<th title='" .getDescriptionOfLabel($variable, $connexion). " en " .getUnite($variable, $connexion). "'>&nbsp;" .getLabel($variable). "&nbsp;</th>";
 			}
+			
 	echo "</tr>";
 		
 	//Création de la requête et génération du tableau
@@ -59,11 +61,25 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 				if ($lastValue[$variable] == "")
 					$lastValue[$variable] = getLastValue($variable, $dateDebut, $connexion);
 				
-				echo "<td title='" .getHeader($variable). "'>" .traitementDecimal($variable, $lastValue[$variable]). "</td>";
+				echo "<td title='" .getHeader($variable). "'>";
+				echo "<span style='color:rgb(";
+				echo getPHColor($lastValue[$variable]);
+				echo ");'>";
+				echo traitementDecimal($variable, $lastValue[$variable]);
+				echo "</span>";
+				echo "</td>";
 			}
 			else {
 				$lastValue[$variable] = $data->$value;
-				echo "<td title='" .getHeader($variable). "'>" .traitementDecimal($variable, $lastValue[$variable]). "</td>";
+				echo "<td title='" .getHeader($variable). "'>";
+				echo "<span style='color:rgb(";
+				echo getPHColor($lastValue[$variable]);
+				echo ");'>";
+				echo traitementDecimal($variable, $lastValue[$variable]);
+				echo "</span>";
+				echo "</td>";
+				
+				
 			}
 			
 			$_SESSION['series'][$header][] = $lastValue[$variable];
