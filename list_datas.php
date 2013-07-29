@@ -60,27 +60,17 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 				//Si la dernière valeur est aussi vide
 				if ($lastValue[$variable] == "")
 					$lastValue[$variable] = getLastValue($variable, $dateDebut, $connexion);
-				
-				echo "<td title='" .getHeader($variable). "'>";
-				echo "<span style='color:rgb(";
-				echo getPHColor($lastValue[$variable]);
-				echo ");'>";
-				echo traitementDecimal($variable, $lastValue[$variable]);
-				echo "</span>";
-				echo "</td>";
 			}
-			else {
+			else 
 				$lastValue[$variable] = $data->$value;
-				echo "<td title='" .getHeader($variable). "'>";
-				echo "<span style='color:rgb(";
-				echo getPHColor($lastValue[$variable]);
-				echo ");'>";
-				echo traitementDecimal($variable, $lastValue[$variable]);
-				echo "</span>";
-				echo "</td>";
-				
-				
-			}
+			
+			echo "<td title='" .getHeader($variable). "'>";
+			echo "<span style='color:rgb(";
+			echo getColor($variable, $lastValue[$variable]);
+			echo ");'>";
+			echo traitementDecimal($variable, $lastValue[$variable]);
+			echo "</span>";
+			echo "</td>";
 			
 			$_SESSION['series'][$header][] = $lastValue[$variable];
 		}

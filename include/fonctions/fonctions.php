@@ -4,41 +4,35 @@
 /**
  * Recuperation des couleurs en fonction du PH
  */
-function getPHColor($ph){
-	if ($ph < 1) return "153,0,0";
-	else if ($ph >= 1 && $ph < 2) return "204,0,0";
-	else if ($ph >= 2 && $ph < "2,4") return "255,0,0";
-	else if ($ph >= "2,4" && $ph < "2,6") return "255,51,0";
-	else if ($ph >= "2,6" && $ph < "3,5") return "255,102,0";
-	else if ($ph >= "3,5" && $ph < "4,5") return "255,153,0";
-	else if ($ph >= "4,5" && $ph < 5) return "255,204,0";
-	else if ($ph >= 5 && $ph < "5,5") return "255,255,0";
-	else if ($ph >= "5,5" && $ph < "5,6") return "204,255,0";
-	else if ($ph >= "5,6" && $ph < "6,6") return "102,204,0";
-	else if ($ph >= "6,6" && $ph < "7,4") return "51,204,0";
-	else if ($ph >= "7,4" && $ph < 8) return "0,204,51";
-	else if ($ph >= 8 && $ph < 9) return "0,153,102";
-	else if ($ph >= 9 && $ph < "11,5") return "0,102,153";
-	else if ($ph >= "11,5" && $ph < "12,5") return "0,51,204";
-	else if ($ph >= "12,5" && $ph < 14) return "0,0,204"; 
-	else if ($ph >= 14) return "0,0,153";
+function getColor($variable, $value){
+	if (strpos($variable, "PH")) return getPHColor($value);
+	else return "255,255,255";
 }
 
-function rgbToHexa($r, $g, $b){
-	
-	$hex_value = dechex($r); 
-	
-		if(strlen($hex_value)<2){
-			$hex_value="0".$hex_value;
-		}
-	$hex_RGB.=$hex_value;
+function getPHColor($value){
+	if ($value < 1) return "153,0,0";
+	else if ($value >= 1 && $value < 2) return "204,0,0";
+	else if ($value >= 2 && $value < "2,4") return "255,0,0";
+	else if ($value >= "2,4" && $value < "2,6") return "255,51,0";
+	else if ($value >= "2,6" && $value < "3,5") return "255,102,0";
+	else if ($value >= "3,5" && $value < "4,5") return "255,153,0";
+	else if ($value >= "4,5" && $value < 5) return "255,204,0";
+	else if ($value >= 5 && $value < "5,5") return "255,255,0";
+	else if ($value >= "5,5" && $value < "5,6") return "204,255,0";
+	else if ($value >= "5,6" && $value < "6,6") return "102,204,0";
+	else if ($value >= "6,6" && $value < "7,4") return "51,204,0";
+	else if ($value >= "7,4" && $value < 8) return "0,204,51";
+	else if ($value >= 8 && $value < 9) return "0,153,102";
+	else if ($value >= 9 && $value < "11,5") return "0,102,153";
+	else if ($value >= "11,5" && $value < "12,5") return "0,51,204";
+	else if ($value >= "12,5" && $value < 14) return "0,0,204"; 
+	else if ($value >= 14) return "0,0,153";
 }
+
 /*
  * Modification pour la prise en compte des décimales du PH
  */
 function traitementDecimal($variable, $value){
-	
-
 	//Traitement PH, datas entre 0 & 140 
 	if (strpos($variable, "PH")){ 
 		if (strlen($value) == 3) 		return substr($value, 0, 1) . substr($value, 1, 1) . "," . substr($value, 2, 1);
