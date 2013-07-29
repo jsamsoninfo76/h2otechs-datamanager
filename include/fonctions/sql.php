@@ -17,14 +17,14 @@ function getNextOrPrecDatetime($datetime, $action, $connexion){
 }
 
 function generateInterventionSQL($datetime){
-	$sql_select_interventions =  "SELECT DATE(datetime) AS Date,intervenant,observation, datetime ";
+	$sql_select_interventions =  "SELECT id_intervention, intervenant, observation, datetime, DATE(datetime) AS Date ";
 	$sql_select_interventions .= "FROM interventions ";
 	$sql_select_interventions .= "WHERE datetime = '$datetime' ";	
 	return $sql_select_interventions;
 }
 
 function generateInterventionsSQL(){
-	$sql_select_interventions =  "SELECT DATE(datetime) AS Date,intervenant,observation, datetime ";
+	$sql_select_interventions =  "SELECT id_intervention, intervenant, observation, datetime, DATE(datetime) AS Date ";
 	$sql_select_interventions .= "FROM interventions ";
 	$sql_select_interventions .= "ORDER BY YEAR(datetime),DATE(datetime),DAY(datetime) ASC";
 	return $sql_select_interventions;
@@ -43,6 +43,13 @@ function getNextOrPrecIntervention($datetime, $action){
 function generateInsertIntervention($datetime, $intervenant, $observation){
 	$sql_insert = " INSERT INTO interventions(datetime, intervenant, observation) VALUES('$datetime', '$intervenant', '$observation')";
 	return $sql_insert;
+}
+
+function generateUpdateIntervention($id_intervention, $observation){
+	$sql_update =  "UPDATE interventions ";
+	$sql_update .= "SET observation = '$observation' ";
+	$sql_update .= "WHERE id_intervention = $id_intervention";
+	return $sql_update;
 }
 
 function generateMoySQL($variables, $dateDebut, $dateFin){		
