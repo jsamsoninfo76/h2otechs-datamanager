@@ -5,9 +5,9 @@
 			$connexion = new PDO('mysql:host='.$config['host'].';dbname='.$config['db'], $config['user'], $config['pass']);
 			
 			//Recuperation des variables
-			$dateintervention 	= $_POST['dateIntervention'];
-			$intervenant		= $_POST['intervenant'];
-			$observation		= $_POST['observation'];
+			if (isset($_POST['dateIntervention'])) $dateintervention= $_POST['dateIntervention'];
+			if (isset($_POST['intervenant'])) $intervenant			= $_POST['intervenant'];
+			if (isset($_POST['observation'])) $observation			= $_POST['observation'];
 			
 			//Test sur les variables
 			if (!empty($dateintervention) && !empty($intervenant) && !empty($observation)){
@@ -30,7 +30,8 @@
 	
 	<!-- Creation du bouton back et next -->
 	<?php
-		$datetime = (!empty($_POST['datetime'])) ? $_POST['datetime'] : $_GET['datetime'];
+		if (isset($_POST['datetime'])) $datetime = (!empty($_POST['datetime'])) ? $_POST['datetime'] : $_GET['datetime'];
+		else $datetime = "";
 	?>
 	
 	<!-- Creation du formulaire de l'intervention -->
@@ -65,12 +66,15 @@
 				}
 
 				$option = "<option ";				
-				if ($data->datetime == $_POST['datetime']){
-					$option .= "selected='selected'";
-				}
-				else if (!empty($_GET['datetime'])){
-					if ($data->datetime == $_GET['datetime'])
+				if (isset($_POST['datetime'])){
+					if ($data->datetime == $_POST['datetime'])
 						$option .= "selected='selected'";
+				}
+				else if (isset($_GET['datetime'])){
+					if (!empty($_GET['datetime'])){
+						if ($data->datetime == $_GET['datetime'])
+							$option .= "selected='selected'";
+					}
 				}
 
 				//$option .= "value='" .$data->datetime. "'>Le " .$data->Date. " par " .$data->intervenant. "</option>";
@@ -85,15 +89,16 @@
 	<?php
 	//echo "<br/>".$sql_select_interventions."</br>";
 	
-	if (!empty($_POST['datetime']))
-		$sql_select_interventions = generateInterventionSQL($_POST['datetime']);
-	else
-		$sql_select_interventions = generateInterventionSQL($_GET['datetime']); 
-
+	
+	if (isset($_POST['datetime']) && !empty($_POST['datetime'])) $datetime = $_POST['datetime'];
+	else if (isset($_GET['datetime']) && !empty($_GET['datetime'])) $datetime = $_GET['datetime'];
+	else $datetime = "";
+	
+	$sql_select_interventions = generateInterventionSQL($datetime); 
 	$query_select_interventions = $connexion->prepare($sql_select_interventions);
 	$query_select_interventions->execute();
-	$data = $query_select_interventions->fetch(PDO::FETCH_OBJ);
-	$observation = $data->observation;	
+	$data = $query_select_interventions->fetch(PDO::FETCH_ASSOC);
+	$observation = $data['observation'];	
 
 	?>
 
