@@ -38,7 +38,7 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 				$value = strtolower($variable . "_avg");
 				$header = getHeader($variable);
 				$_SESSION['series'][$header][] = round($data->$value);
-				echo "<td title='" .getHeader($variable). "'>" . round($data->$value). "</td>";
+				echo "<td title='" .getHeader($variable). "'>" . traitementDecimal($variable, round($data->$value)). "</td>";
 			}
 		echo "</tr>";
 			
