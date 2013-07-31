@@ -12,6 +12,7 @@
 		<!-- Outil pour sélection global et préférenciel -->
 		<div id="variables_tools">
 			<input type="radio" name="tools" onClick="selectAll(this)"> Tout s&eacute;lectionner<br>
+			<input type="radio" name="tools" onClick="resetAll(this)"> Reset<br>
 			<!--<input type="radio" name="tools" onClick="selectPref(this)"> S&eacute;lectionner CFP et PC<br><br>-->
 		</div>
 		

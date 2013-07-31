@@ -14,9 +14,7 @@
 	<div id='retour_insertion'>
 		<?php
 			$connexion = new PDO('mysql:host='.$config['host'].';dbname='.$config['db'], $config['user'], $config['pass']);
-			
-			print_r($_GET);
-			
+						
 			//Recuperation des variables
 			if (isset($_POST['dateIntervention'])) $dateintervention= $_POST['dateIntervention'];
 			if (isset($_POST['intervenant'])) $intervenant			= $_POST['intervenant'];

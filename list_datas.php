@@ -43,6 +43,7 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 		$_SESSION['categories'][] = $data->Annee;
 		if ($compteurRowSpan == $nbRowSpan){
 			$nbRowSpan = getNombreRowSpan($variables[0], $datetime, $dateFin, $connexion);
+			echo getCountInterventions($datetime);
 			echo "<td class='tabListDataCellsAnnee' rowspan=" .(($nbRowSpan>1) ? $nbRowSpan : 1). ">" .$data->Annee. "</td>";	
 			$compteurRowSpan = 1;
 		}else $compteurRowSpan++;
