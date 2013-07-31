@@ -1,5 +1,12 @@
 <?php
 
+function generateCountIntervention($date){
+	$sql_count_intervention =  "SELECT COUNT(*) AS nombreInterventions ";
+	$sql_count_intervention .= "FROM interventions ";
+	$sql_count_intervention .= "WHERE DATE(datetime) = '$date'";
+	return $sql_count_intervention;
+}
+
 function hasIntervention($datetime, $connexion){
 	$sql_select_intervention = "SELECT COUNT(*) AS nombre FROM interventions WHERE datetime='$datetime'";
 	$query_select_intervention = $connexion->prepare($sql_select_intervention);

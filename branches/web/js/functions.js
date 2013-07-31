@@ -3,7 +3,7 @@
  *@version 1
  * 
  *Sites
- *http://www.siteduzero.com/forum/sujet/verifier-une-date-au-format-jjmmaaaa-93090 (regex)
+ * http://www.siteduzero.com/forum/sujet/verifier-une-date-au-format-jjmmaaaa-93090 (regex)
  */
 
 /**
@@ -12,8 +12,19 @@
  */
 function selectAll(source){
 	checkboxes = document.getElementsByName('variables[]');
+	
 	for(var i=0, n=checkboxes.length;i<n;i++) {
 		checkboxes[i].checked = source.checked;
+	}
+}
+
+/**
+ * Désélectionne tous les boutons radios
+ * @param source bouton radio du resetAll
+ */
+function resetAll(source){
+	for(var i=0, n=checkboxes.length;i<n;i++) {
+		checkboxes[i].checked = !source.checked;
 	}
 }
 
@@ -30,6 +41,7 @@ function selectPref(source){
     	if(checkboxes[i].value == "data_CFP" || checkboxes[i].value == "data_PC")
 			checkboxes[i].checked = source.checked;
 	}
+
 }
 
 /**

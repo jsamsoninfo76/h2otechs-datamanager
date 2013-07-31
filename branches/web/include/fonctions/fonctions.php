@@ -1,14 +1,27 @@
 <?php
 
+/**
+ * Récupère le nombre d'intervention dans une journée
+ */
+function getCountInterventions($datetime){
+	$day = substr_compare($datetime, 0, 2);
+	$month = substr_compare($datetime, 3, 2);
+	$year = substr_compare($datetime, 5, 4);
+	$date = "$year-$month-$day";
+	$sql = generateCountIntervention($date);
+}
 
 /**
- * Recuperation des couleurs en fonction du PH
+ * Recuperation des couleurs
  */
 function getColor($variable, $value){
 	if (strpos($variable, "PH")) return getPHColor($value);
 	else return "255,255,255";
 }
 
+/**
+ * Recuperation des couleurs en fonction du PH
+ */
 function getPHColor($value){
 	if ($value < 1) return "153,0,0";
 	else if ($value >= 1 && $value < 2) return "204,0,0";
