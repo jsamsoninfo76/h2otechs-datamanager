@@ -13,6 +13,7 @@
 	<!-- Retour de l'insertion qui vient du formulaire -->
 	<div id='retour_insertion'>
 		<?php
+			$_GET['datetime'] = str_replace('_', ' ', $_GET['datetime']);
 			$connexion = new PDO('mysql:host='.$config['host'].';dbname='.$config['db'], $config['user'], $config['pass']);
 						
 			//Recuperation des variables
@@ -46,11 +47,15 @@
 	
 	<?php
 		//Déclaration de $datetime pour éviter les php_notices
-		if (isset($_POST['datetime']) || isset($_GET['datetime'])) 
-			$datetime = (!empty($_POST['datetime'])) ? $_POST['datetime'] : $_GET['datetime'];
+		if (isset($_POST['datetime']) && !empty($_POST['datetime']))
+			$datetime = $_POST['datetime'];
+		else if (isset($_GET['datetime']) && !empty($_GET['datetime'])){
+			$datetime = $_GET['datetime'];
+		}
 		else
 			$datetime = "";
-		
+			
+		$sql_select_interventions = generateInterventionsSQL();
 	?>
 	
 	<!-- Creation du formulaire de l'intervention -->
@@ -61,7 +66,7 @@
 	<select name='datetime' id='selectDatetime' onChange='this.form.submit()'>
 		<?php
 			//Création du select dynamique
-			$sql_select_interventions = generateInterventionsSQL();
+			
 			$query_select_interventions = $connexion->prepare($sql_select_interventions);
 			$query_select_interventions->execute();
 			$moisPrecedent = "";
@@ -69,13 +74,14 @@
 			echo "<option selected='selected'>Aucune selection</option>";
 				
 			while($data=$query_select_interventions->fetch(PDO::FETCH_OBJ)){
-				$annee = substr($data->datetime, 0, 4);
-				$mois  = substr($data->datetime, 5, 2);
-				$date   = DateTime::createFromFormat('Y-m-d', $data->datetime);
-				$jourFR = $date->format('D');
-				$jourFR = getFrFormatJour($jourFR);
-				$moisFR = $date->format('M');
-				$moisFR = getFrFormatMois($moisFR);
+				$explode = explode('-', $data->explode);
+
+				$mois = $data->month;
+				$annee = $data->year;
+				$time = $data->time;
+				
+				$jourFR = getFrFormatJour($explode[0]);
+				$moisFR = getFrFormatMois($explode[1]);
 				$jour   = substr($data->datetime, 8, 2);
 				
 				if ($moisPrecedent != $mois){
@@ -93,13 +99,14 @@
 				}
 				else if (isset($_GET['datetime'])){
 					if (!empty($_GET['datetime'])){
-						if ($data->datetime == $_GET['datetime'])
+						if ($data->datetime == $_GET['datetime']){
 							$option .= "selected='selected'";
+						}
 					}
 				}
 
 				//$option .= "value='" .$data->datetime. "'>Le " .$data->Date. " par " .$data->intervenant. "</option>";
-				$option .= "value='" .$data->datetime. "'>Le " .$jourFR." " .$jour. " " .$moisFR. " par " . $data->intervenant . "</option>";
+				$option .= "value='" .$data->datetime. "'>Le " .$jourFR." " .$jour. " " .$moisFR. " &agrave; " . $time . " par " . $data->intervenant . "</option>";
 				echo $option;
 			}
 		?>

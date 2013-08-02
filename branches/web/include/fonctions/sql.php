@@ -1,10 +1,55 @@
 <?php
 
-function generateCountIntervention($date){
-	$sql_count_intervention =  "SELECT COUNT(*) AS nombreInterventions ";
+function getDateTimeIntervention($datetime, $connexion){
+	$day = substr($datetime, 8, 2);
+	$month = substr($datetime, 5, 2);
+	$year = substr($datetime, 0, 4);
+	$hour  = substr($datetime, 11, 2);
+	$date = "$year-$month-$day";
+	
+	$sql_get_datetime_intervention =  "SELECT datetime ";
+	$sql_get_datetime_intervention .= "FROM interventions ";
+	$sql_get_datetime_intervention .= "WHERE DATE(datetime) = '$date' ";
+	$sql_get_datetime_intervention .= "AND HOUR(datetime) = '$hour'";
+
+	$query_get_datetime_intervention = $connexion->prepare($sql_get_datetime_intervention);
+	$query_get_datetime_intervention->execute();
+	$data = $query_get_datetime_intervention->fetch(PDO::FETCH_ASSOC);
+	return $data['datetime'];
+}
+
+function getCountInterventionsByDay($datetime, $connexion){
+	$day = substr($datetime, 8, 2);
+	$month = substr($datetime, 5, 2);
+	$year = substr($datetime, 0, 4);
+	$date = "$year-$month-$day";
+	
+	$sql_count_intervention =  "SELECT COUNT(*) AS nombreInterventionsByDate ";
 	$sql_count_intervention .= "FROM interventions ";
 	$sql_count_intervention .= "WHERE DATE(datetime) = '$date'";
-	return $sql_count_intervention;
+
+	$query_count_intervention = $connexion->prepare($sql_count_intervention);
+	$query_count_intervention->execute();
+	$data = $query_count_intervention->fetch(PDO::FETCH_ASSOC);
+	return $data['nombreInterventionsByDate'];
+}
+
+function getCountInterventionsByHour($datetime, $connexion){
+	$day   = substr($datetime, 8, 2);
+	$month = substr($datetime, 5, 2);
+	$year  = substr($datetime, 0, 4);
+	$hour  = substr($datetime, 11, 2);
+	$date  = "$year-$month-$day";
+	
+	$sql_count_intervention =  "SELECT COUNT(*) AS nombreInterventionsByHour ";
+	$sql_count_intervention .= "FROM interventions ";
+	$sql_count_intervention .= "WHERE DATE(datetime) = '$date' ";
+	$sql_count_intervention .= "AND HOUR(datetime) = '$hour'";
+
+	$query_count_intervention = $connexion->prepare($sql_count_intervention);
+	$query_count_intervention->execute();
+	$data = $query_count_intervention->fetch(PDO::FETCH_ASSOC);
+	return $data['nombreInterventionsByHour'];
 }
 
 function hasIntervention($datetime, $connexion){
@@ -31,9 +76,10 @@ function generateInterventionSQL($datetime){
 }
 
 function generateInterventionsSQL(){
-	$sql_select_interventions =  "SELECT id_intervention, intervenant, observation, datetime, DATE(datetime) AS Date ";
+	$sql_select_interventions =  "SELECT id_intervention, intervenant, observation, datetime, DATE(datetime) AS Date, DATE_FORMAT(datetime, '%a-%b') AS explode, MONTH(datetime) AS month, YEAR(datetime) AS year, TIME(datetime) AS time ";
 	$sql_select_interventions .= "FROM interventions ";
 	$sql_select_interventions .= "ORDER BY YEAR(datetime),DATE(datetime),DAY(datetime) ASC";
+//	echo $sql_select_interventions;
 	return $sql_select_interventions;
 }
 
