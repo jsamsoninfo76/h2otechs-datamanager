@@ -1,22 +1,11 @@
 <?php
 
 /**
- * Récupère le nombre d'intervention dans une journée
- */
-function getCountInterventions($datetime){
-	$day = substr_compare($datetime, 0, 2);
-	$month = substr_compare($datetime, 3, 2);
-	$year = substr_compare($datetime, 5, 4);
-	$date = "$year-$month-$day";
-	$sql = generateCountIntervention($date);
-}
-
-/**
  * Recuperation des couleurs
  */
 function getColor($variable, $value){
 	if (strpos($variable, "PH")) return getPHColor($value);
-	else return "255,255,255";
+	else return "0,0,0"; // Noir
 }
 
 /**

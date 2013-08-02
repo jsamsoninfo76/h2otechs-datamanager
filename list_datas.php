@@ -27,7 +27,7 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 		
 	//Création de la requête et génération du tableau
 	$sql_select = generateDatasSQL($variables, $dateDebut, $dateFin);
-	//echo $sql_select;
+	echo $sql_select;
 	
 	$query_select = $connexion->prepare($sql_select);
 	$query_select->execute();
@@ -43,14 +43,31 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 		$_SESSION['categories'][] = $data->Annee;
 		if ($compteurRowSpan == $nbRowSpan){
 			$nbRowSpan = getNombreRowSpan($variables[0], $datetime, $dateFin, $connexion);
-			echo getCountInterventions($datetime);
-			echo "<td class='tabListDataCellsAnnee' rowspan=" .(($nbRowSpan>1) ? $nbRowSpan : 1). ">" .$data->Annee. "</td>";	
+			echo "<td class='tabListDataCellsAnnee' rowspan=" .(($nbRowSpan>1) ? $nbRowSpan : 1). ">";
+			
+			//Affichage du nombre d'intervention
+			//$nombreInterventions = getCountInterventionsByDay($datetime, $connexion);
+			//if ($nombreInterventions > 0)
+			//	echo "(" .$nombreInterventions. "<img class='icon' src='img/intervention.png' title='intervention'>)&nbsp;";
+				
+			echo $data->Annee;
+			echo "</td>";	
 			$compteurRowSpan = 1;
 		}else $compteurRowSpan++;
 									
 		$heure = ($data->Heure >= 10) ? $data->Heure : "0".$data->Heure;
 		$_SESSION['heures'][] = $data->Heure;
-		echo "<td>$heure</td>";									
+		echo "<td>";
+		$nombreInterventionsHeure = getCountInterventionsByHour($datetime, $connexion);
+		if ($nombreInterventionsHeure > 0){
+			$datetimeIntervention = getDateTimeIntervention($datetime, $connexion);
+			$paramGetDatetime = str_replace(' ', '_', $datetimeIntervention);
+			echo "<a href ='index.php?id_page=4&datetime=$paramGetDatetime'><img class='icon' src='img/intervention.png' title='intervention'></a>$heure";
+		}	
+		else
+			echo "&nbsp;&nbsp;&nbsp; $heure";
+		echo "</td>";
+										
 		foreach($variables as $variable){ 
 			//Mise en lower du data_label_value
 			$value = strtolower($variable . "_value");
@@ -66,7 +83,7 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 				$lastValue[$variable] = $data->$value;
 			
 			echo "<td title='" .getHeader($variable). "'>";
-			echo "<span style='color:rgb(";
+			echo "<span style='color:;:;(";
 			echo getColor($variable, $lastValue[$variable]);
 			echo ");'>";
 			echo traitementDecimal($variable, $lastValue[$variable]);

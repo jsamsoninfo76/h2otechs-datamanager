@@ -51,7 +51,17 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 													
 						$heure = ($data->Heure >= 10) ? $data->Heure : "0".$data->Heure;
 						$_SESSION['heures'][] = $data->Heure;
-						echo "<td>$heure</td>";									
+						echo "<td>";
+						$nombreInterventionsHeure = getCountInterventionsByHour($datetime, $connexion);
+						if ($nombreInterventionsHeure > 0){
+							$datetimeIntervention = getDateTimeIntervention($datetime, $connexion);
+							$paramGetDatetime = str_replace(' ', '_', $datetimeIntervention);
+							echo "<a href ='index.php?id_page=4&datetime=$paramGetDatetime'><img class='icon' src='img/intervention.png' title='intervention'></a>$heure";
+						}	
+						else
+							echo "&nbsp;&nbsp;&nbsp; $heure";
+						echo "</td>";
+							
 						foreach($variables as $variable){ 
 							//Mise en lower du data_label_value
 							$value = strtolower($variable . "_value");
