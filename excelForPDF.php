@@ -38,11 +38,11 @@ $objPHPExcel = new PHPExcel();
 
 // Set document properties
 echo date('H:i:s') , " Set document properties" , EOL;
-$objPHPExcel->getProperties()->setCreator("Maarten Balliauw")
-							 ->setLastModifiedBy("Maarten Balliauw")
-							 ->setTitle("Office 2007 XLSX Test Document")
+$objPHPExcel->getProperties()->setCreator("H2otechs")
+							 ->setLastModifiedBy("H2otechs")
+							 ->setTitle("Exportation de données")
 							 ->setSubject("Office 2007 XLSX Test Document")
-							 ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+							 ->setDescription("Test document.")
 							 ->setKeywords("office 2007 openxml php")
 							 ->setCategory("Test result file");
 
@@ -50,10 +50,11 @@ $objPHPExcel->getProperties()->setCreator("Maarten Balliauw")
 // Create a first sheet, representing sales data
 echo date('H:i:s') , " Add some data" , EOL;
 $objPHPExcel->setActiveSheetIndex(0);
-$objPHPExcel->getActiveSheet()->setCellValue('B1', 'Invoice');
-$objPHPExcel->getActiveSheet()->setCellValue('D1', PHPExcel_Shared_Date::PHPToExcel( gmmktime(0,0,0,date('m'),date('d'),date('Y')) ));
-$objPHPExcel->getActiveSheet()->getStyle('D1')->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_XLSX15);
-$objPHPExcel->getActiveSheet()->setCellValue('E1', '#12566');
+$objPHPExcel->getActiveSheet()->setCellValue('B1', 'Tableau de données');
+$objPHPExcel->getActiveSheet()->setCellValue('D1', date('d/m/y'));
+//$objPHPExcel->getActiveSheet()->setCellValue('D1', PHPExcel_Sared_Date::PHPToExcel( gmmktime(0,0,0,date('m'),date('d'),date('Y')) ));
+//$objPHPExcel->getActiveSheet()->getStyle('D1')->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_XLSX15);
+//$objPHPExcel->getActiveSheet()->setCellValue('E1', '#12566');
 
 $objPHPExcel->getActiveSheet()->setCellValue('A3', 'Product Id');
 $objPHPExcel->getActiveSheet()->setCellValue('B3', 'Description');
@@ -289,7 +290,7 @@ $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 
 // Add a drawing to the worksheet
 echo date('H:i:s') , " Add a drawing to the worksheet" , EOL;
-$objDrawing = new PHPExcel_Worksheet_Drawing();
+/*$objDrawing = new PHPExcel_Worksheet_Drawing();
 $objDrawing->setName('Paid');
 $objDrawing->setDescription('Paid');
 $objDrawing->setPath('img/pdf/paid.png');
@@ -386,7 +387,7 @@ $objPHPExcel->getActiveSheet()->getPageSetup()->setPaperSize(PHPExcel_Worksheet_
 
 // Rename second worksheet
 echo date('H:i:s') , " Rename second worksheet" , EOL;
-$objPHPExcel->getActiveSheet()->setTitle('Terms and conditions');
+$objPHPExcel->getActiveSheet()->setTitle('Terms and conditions');*/
 
 
 // Set active sheet index to the first sheet, so Excel opens this as the first sheet
