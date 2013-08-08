@@ -290,3 +290,62 @@ function validerFormIntervention(form){
   if (res == 3) return true;
   else return false;
 }
+
+/**
+ * Vérification du formulaire
+ * @param source le formulaire
+ */	
+function validerFormPlanification(form){
+  var res = 0;
+  var regexDateTime = /^[2-9][0-9][0-9][0-9]\/[0-1][0-9]\/[0-3][0-9]\s[0-2][0-9]:[0-5][0-9]:[0-5][0-9]$/;
+  var dateDebut = form.elements['datePlanification'];
+  
+   //Verification sur la date de début
+  if(dateDebut.value != "") {
+	  var isDate = regexDateTime.test(dateDebut.value);
+	  if (isDate){
+	  	  res++;
+		  document.getElementById("datetime_planification_error").innerHTML = "";
+		  dateDebut.style.backgroundColor = '#FFFFFF';  	  
+	  }
+	  else{
+		  document.getElementById("datetime_planification_error").innerHTML = "Le format de la date doit être : 'AAAA/MM/JJ HH:MM:SS'.";
+		  dateDebut.style.backgroundColor = '#FF6469';
+	  }
+  }else{
+  	  document.getElementById("datetime_planification_error").innerHTML = "La date de la planification doit &ecirc;tre remplit au format : 'AAAA/MM/JJ HH:MM:SS'.";
+	  dateDebut.style.backgroundColor = '#FF6469';
+  }
+  
+  //Verification de la frequence et de l'uptime
+  var frequence = form.elements['frequence'];
+  var uptime 	= form.elements['uptime'];
+  if ((frequence.value != "" && uptime.value == "") || (frequence.value == "" && uptime.value != "")){
+  	  res++;
+	  document.getElementById('frequence_uptime_error').innerHTML = "";
+	  frequence.style.backgroundColor = '#FFFFFF';  	  
+	  uptime.style.backgroundColor = '#FFFFFF';
+  }else if(frequence.value != "" && uptime.value != "") {
+	  document.getElementById("frequence_uptime_error").innerHTML = "Vous devez s&eacute;lectionner l'un ou l'autre mais pas les deux.";
+	  frequence.style.backgroundColor = '#FF6469';
+	  uptime.style.backgroundColor = '#FF6469';
+  }else if(frequence.value == "" && uptime.value == ""){
+	  document.getElementById("frequence_uptime_error").innerHTML = "Vous devez au moins s&eacute;lectionner l'un ou l'autre.";
+	  frequence.style.backgroundColor = '#FF6469'; 
+	  uptime.style.backgroundColor = '#FF6469';
+  }
+  
+  //Verification de la description
+  var description = form.elements['description'];
+  if (description.value != ""){
+  	  res++;
+	  document.getElementById('description_error').innerHTML = "";
+	  description.style.backgroundColor = '#FFFFFF';  	  
+  }else {
+	  document.getElementById("description_error").innerHTML = "La description est vide";
+	  description.style.backgroundColor = '#FF6469';
+  }
+    
+  if (res == 3) return true;
+  else return false;
+}

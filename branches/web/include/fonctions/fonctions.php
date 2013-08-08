@@ -1,6 +1,15 @@
 <?php
 
 /**
+ * Traduction de la fréquence
+ */
+function getFrequence($frequence){
+	if ($frequence == "1/m") 		return "une fois par mois";
+	else if ($frequence == "1/d")	return "une fois par jour";
+	else if ($frequence == "1/y")   return "une fois par an";
+}
+
+/**
  * Recuperation des couleurs
  */
 function getColor($variable, $value){

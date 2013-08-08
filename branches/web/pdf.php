@@ -95,3 +95,5 @@ echo date('H:i:s') , " Peak memory usage: " , (memory_get_peak_usage(true) / 102
 // Echo done
 echo date('H:i:s') , " Done writing files" , EOL;
 echo 'File has been created in ' , getcwd() , EOL;
+echo '<br/><a href="upload/test.pdf">Cliquez ici pour t&eacute;l&eacute;charger le fichier</a>';
+

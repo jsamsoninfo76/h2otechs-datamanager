@@ -35,9 +35,8 @@
 				$query_insert->execute();
 			
 				//Affichage retour insertion
-				if ($query_insert){
+				if ($query_insert)
 					echo "<font class='message_info'>L'intervention &agrave; bien &eacute;t&eacute; ajout&eacute;.</font>";
-				}
 				else
 					echo "<font class='message_error'>Probleme lors de l'insertion de l'intervention</font>";
 				echo "<br/><br/>";

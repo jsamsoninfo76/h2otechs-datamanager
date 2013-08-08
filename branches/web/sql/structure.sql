@@ -3,15 +3,21 @@
 -- http://www.phpmyadmin.net
 --
 -- Client: localhost
--- Généré le: Lun 22 Juillet 2013 à 18:09
+-- Généré le: Mar 06 Août 2013 à 17:46
 -- Version du serveur: 5.5.25
 -- Version de PHP: 5.4.4
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+
 --
--- Base de données: `h2otechs_datamanager`
+-- Base de données: `h2otechs_datamanager_enky2`
 --
 
 -- --------------------------------------------------------
@@ -28,7 +34,7 @@ CREATE TABLE `data_cfc` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_cfc`),
   UNIQUE KEY `datetime` (`datetime`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1908010 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1999028 ;
 
 -- --------------------------------------------------------
 
@@ -60,7 +66,7 @@ CREATE TABLE `data_cfp` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_cfp`),
   UNIQUE KEY `datetime` (`datetime`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1732906 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1836631 ;
 
 -- --------------------------------------------------------
 
@@ -76,7 +82,7 @@ CREATE TABLE `data_cfpc` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_cfpc`),
   UNIQUE KEY `datetime` (`datetime`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1456872 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1555017 ;
 
 -- --------------------------------------------------------
 
@@ -92,7 +98,7 @@ CREATE TABLE `data_cfpl` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_cfpl`),
   UNIQUE KEY `datetime` (`datetime`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1444526 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1546081 ;
 
 -- --------------------------------------------------------
 
@@ -108,7 +114,7 @@ CREATE TABLE `data_fctl` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_fctl`),
   UNIQUE KEY `datetime` (`datetime`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=699702 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=707202 ;
 
 -- --------------------------------------------------------
 
@@ -124,7 +130,7 @@ CREATE TABLE `data_pc` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_pc`),
   UNIQUE KEY `datetime` (`datetime`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=740512 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=750477 ;
 
 -- --------------------------------------------------------
 
@@ -140,7 +146,7 @@ CREATE TABLE `data_pfil1` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_pfil1`),
   UNIQUE KEY `datetime` (`datetime`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=91239 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=92570 ;
 
 -- --------------------------------------------------------
 
@@ -156,7 +162,7 @@ CREATE TABLE `data_pfil2` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_pfil2`),
   UNIQUE KEY `datetime` (`datetime`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=75913 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=77234 ;
 
 -- --------------------------------------------------------
 
@@ -172,7 +178,7 @@ CREATE TABLE `data_pfil3` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_pfil3`),
   UNIQUE KEY `datetime` (`datetime`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=266176 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=268561 ;
 
 -- --------------------------------------------------------
 
@@ -188,7 +194,7 @@ CREATE TABLE `data_ph_c` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_ph_c`),
   UNIQUE KEY `datetime` (`datetime`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=198483 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=205925 ;
 
 -- --------------------------------------------------------
 
@@ -220,7 +226,7 @@ CREATE TABLE `data_ph_r` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_ph_r`),
   UNIQUE KEY `datetime` (`datetime`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=265579 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=273030 ;
 
 -- --------------------------------------------------------
 
@@ -236,7 +242,7 @@ CREATE TABLE `data_pl` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_pl`),
   UNIQUE KEY `datetime` (`datetime`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=769055 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=776726 ;
 
 -- --------------------------------------------------------
 
@@ -252,7 +258,7 @@ CREATE TABLE `data_pp` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_pp`),
   UNIQUE KEY `datetime` (`datetime`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=433500 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=438869 ;
 
 -- --------------------------------------------------------
 
@@ -268,7 +274,7 @@ CREATE TABLE `data_ppe` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_ppe`),
   UNIQUE KEY `datetime` (`datetime`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=580674 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=589617 ;
 
 -- --------------------------------------------------------
 
@@ -284,7 +290,7 @@ CREATE TABLE `data_rendt_etage1` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_rendt_etage1`),
   UNIQUE KEY `datetime` (`datetime`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=511582 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=580551 ;
 
 -- --------------------------------------------------------
 
@@ -300,7 +306,7 @@ CREATE TABLE `data_rendt_etage2` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_rendt_etage2`),
   UNIQUE KEY `datetime` (`datetime`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=458816 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=482714 ;
 
 -- --------------------------------------------------------
 
@@ -316,7 +322,7 @@ CREATE TABLE `data_rendt_etage3` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_rendt_etage3`),
   UNIQUE KEY `datetime` (`datetime`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=302351 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=305469 ;
 
 -- --------------------------------------------------------
 
@@ -342,12 +348,27 @@ CREATE TABLE `data_rendt_etages` (
 
 CREATE TABLE `interventions` (
   `id_intervention` int(11) NOT NULL AUTO_INCREMENT,
-  `datetime` date NOT NULL,
+  `datetime` datetime NOT NULL,
   `intervenant` varchar(255) NOT NULL,
   `observation` varchar(255) NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id_intervention`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+  PRIMARY KEY (`id_intervention`),
+  UNIQUE KEY `id_intervention` (`id_intervention`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=27 ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `maj`
+--
+
+CREATE TABLE `maj` (
+  `filename` varchar(255) NOT NULL,
+  `dirname` varchar(255) NOT NULL,
+  `number_ligne_reached` int(11) NOT NULL,
+  `done` int(11) NOT NULL DEFAULT '0',
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -377,3 +398,7 @@ CREATE TABLE `version` (
   `date_ajout` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_version`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
