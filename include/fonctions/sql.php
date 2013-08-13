@@ -1,4 +1,24 @@
 <?php
+function getDataCourbe($datedebut, $frequence, $variables, $connexion){
+	$variables[0] = strtolower($variables[0]);
+	
+	$sql_select = "SELECT $variables[0].datetime, DATE_FORMAT($variables[0].datetime, '%d/%m/%Y') AS Annee, HOUR($variables[0].datetime) AS Heure, ";
+	for($i=0 ; $i < count($variables) ; $i++){
+		$variables[$i] = strtolower($variables[$i]);
+		if ($i == count($variables) -1) $sql_select .= $variables[$i]. ".value AS " .$variables[$i]."_value";
+		else $sql_select .= $variables[$i]. ".value AS " .$variables[$i]."_value ,";
+	}
+	
+	$sql_select .= " FROM " .$variables[0]. " ";		
+	for($i=1 ; $i < count($variables) ; $i++){
+		$sql_select .= " LEFT JOIN " .$variables[$i]. " ON " .$variables[$i].".datetime = " .$variables[0]. ".datetime ";
+		$sql_select .= " AND $variables[$i].state = 1";
+	}
+	
+	$sql_select .= " WHERE $variables[0].datetime BETWEEN '$datedebut' AND DATE_ADD('$datedebut', INTERVAL $frequence HOUR)";
+	return $sql_select;
+}
+
 function insertPlanification($datetime_create, $frequence, $uptime, $description, $connexion){
 	$query_insert_planification = "";
 	

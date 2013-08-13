@@ -1,133 +1,54 @@
 <?php
-//print_r($_SESSION);
-
+/**
+ * Liens 
+ * http://www.php.net/manual/fr/class.dateinterval.php 
+ * http://php.net/manual/fr/function.date.php
+ */
+ 
 //Recuperation des variables envoyées
-$datedebut = (isset($_POST['datedebut'])) ? $_POST['datedebut'] : "";
-$frequence = (isset($_POST['timeFrequence'])) ? $_POST['timeFrequence'] : "";
+$_SESSION['variables'] = (isset($_POST['variables'])) ? $_POST['variables'] : $_SESSION['variables'];
+$_SESSION['datedebut'] = (isset($_POST['datedebut'])) ? $_POST['datedebut'] : $_SESSION['datedebut'];
+$_SESSION['frequence'] = (isset($_POST['timeFrequence'])) ? $_POST['timeFrequence'] : $_SESSION['frequence'];
+
+//Traitement action next et back (clik sur flèche datetime)
+if (isset($_GET['action']) && isset($_SESSION['datedebut']) && isset($_SESSION['frequence'])){
+
+	try {
+		$date = new DateTime($_SESSION['datedebut']);
+		$secondes = $_SESSION['frequence'] * 60 * 60;
+		if ($_GET['action'] == "next")	$date->add(new DateInterval('PT'.$secondes.'S'));
+		else if ($_GET['action'] == "back")  $date->sub(new DateInterval('PT'.$secondes.'S'));
+		$_SESSION['datedebut'] = $date->format('Y/m/d H:i:s');
+	} catch (Exception $e) {
+	    echo $e->getMessage();
+	    exit(1);
+	}
+}
+
+$variables = $_SESSION['variables'];
+$datedebut = $_SESSION['datedebut'];
+$frequence = $_SESSION['frequence'];
+
+//print_r($_SESSION);
 
 //Connexion à la base de données
 $connexion = new PDO('mysql:host='.$config['host'].';dbname='.$config['db'], $config['user'], $config['pass']);
 
 //Recuperation des données
-$sql_courbe = get1HourData($datedebut, $connexion);
-if ($datedebut != "" && $frequence != ""){
-	switch($frequence){
-		case 1 : $sql_courbe = get1HourData($datedebut, $connexion); break;
-		/*case 2 : $sql_courbe = get2HourData($datedebut, $connexion); break;
-		case 6 : $sql_courbe = get6HourData($datedebut, $connexion); break;
-		case 12 : $sql_courbe = get12HourData($datedebut, $connexion); break;
-		case 24 : $sql_courbe = get24HourData($datedebut, $connexion); break;*/
 
-	}
+if ($datedebut != "" && $frequence != "" && $variables != ""){
+	echo getDataCourbe($datedebut, $frequence, $variables, $connexion);	
 }
 
 ?>
-<script type="text/javascript">
-	$(function () {
-        $('#container').highcharts({
-            chart: {
-                type: 'line',
-                marginRight: 130,
-                marginBottom: 25
-            },
-            title: {
-                text: <?php 
-                	//Recupere le label en fonction de l'unité
-                	foreach($_SESSION['unite'] as $unite){ $unite = getUniteLabel($unite);}
-                	echo "'Courbe de $unite'"; 
-                		
-                ?>,
-                x: -20 //center
-            },
-            subtitle: {
-            	<?php
-            		//Recupere la date de début et de fin
-            		$subtitles = "text: 'Prelevement de l\'annee ";
-            		/*$datePrecedente = "";
-            			foreach($_SESSION['categories'] as $subtitle) {
-            				$souschaine = substr($subtitle, 6, 4);
-            				if ($datePrecedente != $souschaine){
-            					$subtitles .= "$souschaine - ";
-            					$datePrecedente = $souschaine;
-            				}
-            			}*/
-            		$subtitles .= substr($_SESSION['categories'][0], 0, 4);
-            		
-            		$subtitles .= " du " .substr($_SESSION['categories'][0], 5, 5). " au " .substr($_SESSION['categories'][count($_SESSION['categories'])-1], 5, 5);
-            		$subtitles .= "',";
-            		echo $subtitles;
-            	?>
-                x: -20
-            },
-            xAxis: {
-            	//Axe des abscisse 
-                <?php
-            		$categories = "categories: [";
-            		foreach($_SESSION['categories'] as $categorie) 
-            			$categories .= "'" .substr($categorie, 11, 2). "', ";
-            		$categories = substr($categories, 0, count($subtitles)-3) . "]";
-            		echo $categories;
-            	?>
-            },
-            yAxis: {
-            	//Axe des ordonnees
-                title: {
-                    text: <?php echo "'" .ucfirst($unite). " (" .$_SESSION['unite'][0]. ")'"; ?>
-                },
-                plotLines: [{
-                    value: 0,
-                    width: 1,
-                    color: '#808080'
-                }]
-            },
-            tooltip: {
-                valueSuffix: <?php echo "'" .$_SESSION['tooltip']. "'"; ?>
-            },
-            legend: {
-                layout: 'vertical',
-                align: 'right',
-                verticalAlign: 'top',
-                x: -10,
-                y: 100,
-                borderWidth: 0
-            },
-            series: [
-            	<?php
-            		$datas = "";
-            		foreach($_SESSION['subtitles'] as $nom){
-            			$datas .= "{";
-	            		$datas .= "name: '" .$nom. "',";
-	            		$datas .= "data: [";
-	            		foreach($_SESSION['series'][$nom] as $data){
-	            			$datas .= $data.", ";
-	            		}
-	            		$datas = substr($datas, 0, count($datas)-2);
-	            		$datas .= "]";
-	            		$datas .= "},";	
-            		}
-            		//$datas = substr($datas, 0, count($datas)-1);
-            		echo $datas;
-            	?>
-            ]
-        });
-    });
-</script>
-<script src="include/utile/Highcharts/js/highcharts.js"></script>
-<script src="include/utile/Highcharts/js/modules/exporting.js"></script>
 
 <div id="formCourbesBlock">
 
-	<form id="formCourbes" name="FormCourbes" method="post" onsubmit="return validerFormCourbes(this)">
+	<form id="formCourbes" name="formCourbes" method="post" onsubmit="validerFormCourbes(0)">
 
 		<!-- Titre -->
 		<h5 title="Au moins une">*Quelle donn&eacute;es voulez vous r&eacute;cup&eacute;rer ?</h5> 
-		
-		<!-- Outil pour sélection global et préférenciel -->
-		<div id="variables_tools">
-			<input type="radio" name="tools" onClick="selectAll(this)"> Tout s&eacute;lectionner
-			<input type="radio" name="tools" onClick="resetAll(this)"> Reset
-		</div>
-		
+				
 		<!-- Affichage erreur sur sélection -->
 		<font  class="message_error" id="variables_checked_error"></font>
 		
@@ -162,12 +83,15 @@ if ($datedebut != "" && $frequence != ""){
 							//On écrit l'unité puis la première value
 							echo '<td><input type="radio" name="tools" onClick="select_' .$unite. '(this)"></td>';
 							echo '<td id="tabVariablesHeader"><center>'.verifExposant($unite).'</center></td>';
-							echo '<td title="' .$data['description']. '"><input type="checkbox" name="variables[]" value="data_' .$data['label']. '">&nbsp;&nbsp;' .getLabel($data['label']) .'</td>';
+							$variable = 'data_' .$data['label'];
+							$variable = 'data_' .$data['label'];
+							echo '<td title="' .$data['description']. '"><input type="checkbox" name="variables[]" value="' .$variable. '" '.( (in_array($variable, $variables)) ? "checked" : "").'>&nbsp;&nbsp;' .getLabel($data['label']) .'</td>';
 							$numligne++;
 						}
 						else{
 							//On écrit la value
-							echo '<td title="' .$data['description']. '"><input type="checkbox" name="variables[]" value="data_' .$data['label']. '">&nbsp;&nbsp;' .getLabel($data['label']) .'</td>';	
+							$variable = 'data_' .$data['label'];
+							echo '<td title="' .$data['description']. '"><input type="checkbox" name="variables[]" value="' .$variable. '" '.( (in_array($variable, $variables)) ? "checked" : "").'>&nbsp;&nbsp;' .getLabel($data['label']) .'</td>';
 						}
 					}
 				?>
@@ -177,24 +101,24 @@ if ($datedebut != "" && $frequence != ""){
 	
 		<div id="timeFrequenceBloc">
 			<div id="timeFrequence_title"><h5>*Echelle : </h5></div>
-			<select name="timeFrequence" onchange="validerFormCourbes(this);">
-				<option value="1">1 heure</option>
-				<option value="2">2 heures</option>
-				<option value="6">6 heures</option>
-				<option value="12">12 heures</option>
-				<option value="24" selected="selected">24 heures</option>
+			<select name="timeFrequence" onchange="validerFormCourbes(1);">
+				<option value="1" <?php echo ("1" == $frequence) ? "selected=selected" : ""; ?>>1 heure</option>
+				<option value="2" <?php echo ("2" == $frequence) ? "selected=selected" : ""; ?>>2 heures</option>
+				<option value="6" <?php echo ("6" == $frequence) ? "selected=selected" : ""; ?>>6 heures</option>
+				<option value="12" <?php echo ("12" == $frequence) ? "selected=selected" : ""; ?>>12 heures</option>
+				<option value="24" <?php echo ("24" == $frequence) ? "selected=selected" : ""; ?>>24 heures</option>
 			</select>
 		</div>
 		
 		<!-- DateDébut Datetimepicker -->
 		<div id="datetime_title"><h5>*Date de d&eacute;but : </h5><font class="message_error" id="datetime_courbes_error"></font></div>
 		<div id="datetimepickerCourbe" class="input-append date">
-		<img src="img/left-arrow.png">
+		<a href="index.php?id_page=5&action=back"><img src="img/left-arrow.png">&nbsp;&nbsp;</a>
 			<input type="text" id="bouttonDate" name="datedebut" value="<?php echo $datedebut; ?>"></input>
-		<img src="img/right-arrow.png">
 	      <span class="add-on">
 	        <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
 	      </span>
+	    <a href="index.php?id_page=5&action=next">&nbsp;&nbsp;<img src="img/right-arrow.png"></a>
 	    </div>
 		 <!-- Ajout du javascript jquery-->
 	    <script type="text/javascript">
@@ -206,7 +130,7 @@ if ($datedebut != "" && $frequence != ""){
 	    <input type="submit" value="Voir courbe">
 	</form>
 	
-	<div id="container" style="min-width: 600px; height: 500px; margin: 0 auto"></div>
+	<!-- <div id="container" style="min-width: 600px; height: 500px; margin: 0 auto"></div> -->
 
 </div>
 

@@ -9,7 +9,8 @@
 /**
  * Submit le formulaire si les deux champs sont remplient
  */
-function validerFormCourbes(form){
+function validerFormCourbes(fromSelect){
+  var form = document.getElementById('formCourbes');
   var res = 0;
   var regexDateTime = /^[2-9][0-9][0-9][0-9]\/[0-1][0-9]\/[0-3][0-9]\s[0-2][0-9]:[0-5][0-9]:[0-5][0-9]$/;
   var dateDebut = form.elements['datedebut'];
@@ -48,7 +49,8 @@ function validerFormCourbes(form){
 	  dateDebut.style.backgroundColor = '#FF6469';
   }
 
-  if (res == 2) return true;
+  if (res == 2 && fromSelect == 0) return true;
+  else if (fromSelect == 1 && res == 2) form.submit();
   else return false;
 
 }
