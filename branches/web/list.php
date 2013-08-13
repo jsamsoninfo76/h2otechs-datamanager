@@ -42,7 +42,7 @@ if (isset($variables) && isset($dateDebut) && isset($dateFin) && isset( $select)
 
 			<?php
 				//Preparation des donnees de session
-				$_SESSION['subtitles'] = null;
+				/*$_SESSION['subtitles'] = null;
 				$_SESSION['categories'] = null;
 				$_SESSION['tooltip'] = "";
 				$_SESSION['series'] = null;
@@ -50,7 +50,7 @@ if (isset($variables) && isset($dateDebut) && isset($dateFin) && isset( $select)
 				$_SESSION['dateFin'] = str_replace("/", "-", substr($dateFin ,0 , 10));
 				$_SESSION['tailleColonne'] = null;
 				$_SESSION['moyennes'] = null;
-				$_SESSION['unite'] = null;
+				$_SESSION['unite'] = null;*/
 				
 				if ($select == "datas") include("list_datas.php");
 				if ($select == "moyennes") include("list_moyennes.php");

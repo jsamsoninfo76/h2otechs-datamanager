@@ -1,5 +1,4 @@
 <?php
-
 function getUniteLabel($unite){
 	if ($unite == "bar") return "pression";
 	if ($unite == "ph") return "ph";
@@ -165,4 +164,6 @@ function getLabel($variable){
 	else if (strpos($variable,'TOTALISATEUR') !== false) return "TOT " . $variable[strlen($variable)-1];
 	else return str_replace('_', ' ', $variable);
 }
+
+
 ?>
