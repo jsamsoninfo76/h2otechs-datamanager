@@ -7,6 +7,88 @@
  */
 
 /**
+ * Submit le formulaire si les deux champs sont remplient
+ */
+function validerFormCourbes(form){
+  var res = 0;
+  var regexDateTime = /^[2-9][0-9][0-9][0-9]\/[0-1][0-9]\/[0-3][0-9]\s[0-2][0-9]:[0-5][0-9]:[0-5][0-9]$/;
+  var dateDebut = form.elements['datedebut'];
+  
+  //Verification sur le nombre d'arguments coché
+  var variables = form.elements['variables[]'];
+  var nbChecked = 0;
+  for (var i=0 ; i< variables.length ; i++)
+  {
+  	if(variables.item(i).checked)
+  		nbChecked++;
+  }
+
+  if (nbChecked > 0 ){
+  	  res++;
+  	  document.getElementById("variables_checked_error").innerHTML = "";
+  }
+  else{
+  	  document.getElementById("variables_checked_error").innerHTML = "Il doit au moins y avoir une variable de coch&eacute;e.";
+  }
+  
+   //Verification sur la date de début
+  if(dateDebut.value != "") {
+	  var isDate = regexDateTime.test(dateDebut.value);
+	  if (isDate){
+	  	  res++;
+		  document.getElementById("datetime_courbes_error").innerHTML = "";
+		  dateDebut.style.backgroundColor = '#FFFFFF';  	  
+	  }
+	  else{
+		  document.getElementById("datetime_courbes_error").innerHTML = "Le format de la date doit être : 'AAAA/MM/JJ HH:MM:SS'.";
+		  dateDebut.style.backgroundColor = '#FF6469';
+	  }
+  }else{
+  	  document.getElementById("datetime_courbes_error").innerHTML = "La date de d&eacute;but doit &ecirc;tre remplit au format : 'AAAA/MM/JJ HH:MM:SS'.";
+	  dateDebut.style.backgroundColor = '#FF6469';
+  }
+
+  if (res == 2) return true;
+  else return false;
+
+}
+
+/** 
+ * Ajoute un champ select si la fréquence est sélectionné
+ */
+function innerMateriel(select){
+	var value = select.value;
+	var materielblock = document.getElementById("materielBloc");
+	materielblock.innerHTML = "";
+	
+	if (value != ""){
+		
+		materielblock.innerHTML  = '<div id="materiel_title">';
+			materielblock.innerHTML += '<h5>*Mat&eacute;riel : </h5>';
+			materielblock.innerHTML += '<font class="message_error" id="materiel_uptime_error"></font>';
+		materielblock.innerHTML += '</div>';
+		materielblock.innerHTML += '<select name="materiel"><option value="CATL">CATL</option></select>';
+	}
+}
+
+/** 
+ * Ajoute un champ select si la fréquence est sélectionné
+ */
+function innerUpdate(select){
+	var value = select.value;
+	var materielblock = document.getElementById("materielBloc");
+	
+	//Rien pour le moment
+	if (value != ""){
+		if (materielblock != "")
+			materielblock.innerHTML = "";
+	}
+	else{
+
+	}
+}
+
+/**
  * Sélectionne tous les boutons radios
  * @param source bouton radio du selectAll
  */
@@ -45,43 +127,57 @@ function selectPref(source){
 }
 
 /**
- * Sélectionne les boutons radios de la ligne 1 : CFC, CFL, CFP, CFPC, CFPL
+ * Sélectionne les unites cf : CFC, CFL, CFP, CFPC, CFPL
  * @param source bouton radio
  */
-function selectLigne0(source){
+function select_cf(source){
 	checkboxes = document.getElementsByName('variables[]');
 	for(var i=0, n=checkboxes.length;i<n;i++) checkboxes[i].checked = false;
 	
     for(var i=0, n=checkboxes.length;i<n;i++) {
-    	if(checkboxes[i].value == "data_CFC" || checkboxes[i].value == "data_CFL" || checkboxes[i].value == "data_CFP" || checkboxes[i].value == "data_CFPC" || checkboxes[i].value == "data_CFPL" )
+    	if(checkboxes[i].value == "data_CFC" || checkboxes[i].value == "data_CFL" || checkboxes[i].value == "data_CFL1" || checkboxes[i].value == "data_CFP" || checkboxes[i].value == "data_CFPC" || checkboxes[i].value == "data_CFPL" || checkboxes[i].value == "data_CFPL1" || checkboxes[i].value == "data_CFPL2" || checkboxes[i].value == "data_CFPL3")
 			checkboxes[i].checked = source.checked;
 	}
 }
 
 /**
- * Sélectionne les boutons radios de la ligne 1 : FCTL
+ * Sélectionne les unites h : Compt hor prod
  * @param source bouton radio
  */
-function selectLigne1(source){
+function select_h(source){
 	checkboxes = document.getElementsByName('variables[]');
 	for(var i=0, n=checkboxes.length;i<n;i++) checkboxes[i].checked = false;
 	
     for(var i=0, n=checkboxes.length;i<n;i++) {
-    	if(checkboxes[i].value == "data_FCTL")
+    	if(checkboxes[i].value == "data_Compt_hor_prod")
 			checkboxes[i].checked = source.checked;
 	}
 }
 
 /**
- * Sélectionne les boutons radios de la ligne 2 : PC, PFIL1, PFIL2, PFIL3
+ * Sélectionne les unites m3 : FCTL, FLE, Totalisateur 1 2 et 3
  * @param source bouton radio
  */
-function selectLigne2(source){
+function select_m3(source){
 	checkboxes = document.getElementsByName('variables[]');
 	for(var i=0, n=checkboxes.length;i<n;i++) checkboxes[i].checked = false;
 	
     for(var i=0, n=checkboxes.length;i<n;i++) {
-    	if(checkboxes[i].value == "data_PC" || checkboxes[i].value == "data_PFIL1" || checkboxes[i].value == "data_PFIL2" || checkboxes[i].value == "data_PFIL3")
+    	if(checkboxes[i].value == "data_FCTL" || checkboxes[i].value == "data_FLE" || checkboxes[i].value == "data_TOTALISATEUR_1" || checkboxes[i].value == "data_TOTALISATEUR_2" || checkboxes[i].value == "data_TOTALISATEUR_3")
+			checkboxes[i].checked = source.checked;
+	}
+}
+
+/**
+ * Sélectionne les unites PH : PC, PFIL1, PFIL2, PFIL3
+ * @param source bouton radio
+ */
+function select_bar(source){
+	checkboxes = document.getElementsByName('variables[]');
+	for(var i=0, n=checkboxes.length;i<n;i++) checkboxes[i].checked = false;
+	
+    for(var i=0, n=checkboxes.length;i<n;i++) {
+    	if(checkboxes[i].value == "data_PC" || checkboxes[i].value == "data_PFIL1" || checkboxes[i].value == "data_PFIL2" || checkboxes[i].value == "data_PFIL3" || checkboxes[i].value == "data_PL" || checkboxes[i].value == "data_PP" || checkboxes[i].value == "data_PPE")
 			checkboxes[i].checked = source.checked;
 	}
 }
@@ -90,26 +186,12 @@ function selectLigne2(source){
  * Sélectionne les boutons radios de la ligne 13: PH_R, PH_L, PH_C
  * @param source bouton radio
  */
-function selectLigne3(source){
+function select_ph(source){
 	checkboxes = document.getElementsByName('variables[]');
 	for(var i=0, n=checkboxes.length;i<n;i++) checkboxes[i].checked = false;
 	
     for(var i=0, n=checkboxes.length;i<n;i++) {
-    	if(checkboxes[i].value == "data_PH_R" || checkboxes[i].value == "data_PH_L" || checkboxes[i].value == "data_PH_C")
-			checkboxes[i].checked = source.checked;
-	}
-}
-
-/**
- * Sélectionne les boutons radios de la ligne 4 : PL, PP, PPE
- * @param source bouton radio
- */
-function selectLigne4(source){
-	checkboxes = document.getElementsByName('variables[]');
-	for(var i=0, n=checkboxes.length;i<n;i++) checkboxes[i].checked = false;
-	
-    for(var i=0, n=checkboxes.length;i<n;i++) {
-    	if(checkboxes[i].value == "data_PL" || checkboxes[i].value == "data_PP" || checkboxes[i].value == "data_PPE")
+    	if(checkboxes[i].value == "data_PH_R" || checkboxes[i].value == "data_PH_L" || checkboxes[i].value == "data_PH_C" || checkboxes[i].value == "data_PH_L1" || checkboxes[i].value == "data_PH_L2")
 			checkboxes[i].checked = source.checked;
 	}
 }
@@ -118,7 +200,7 @@ function selectLigne4(source){
  * Sélectionne les boutons radios de la ligne 5 : RENDT_ETAGE1, RENDT_ETAGE2, RENDT_ETAGE3, RENDT_ETAGES
  * @param source bouton radio
  */
-function selectLigne5(source){
+function select_pourcent(source){
 	checkboxes = document.getElementsByName('variables[]');
 	for(var i=0, n=checkboxes.length;i<n;i++) checkboxes[i].checked = false;
 	

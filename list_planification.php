@@ -4,12 +4,14 @@
 	
 	//Récupération des variables envoyées
 	if (isset($_POST['datePlanification']) && (isset($_POST['frequence']) || isset($_POST['uptime'])) && isset($_POST['description'])){
-		$datePlanification  = $_POST['datePlanification'];
+		$date_create  = $_POST['datePlanification'];
 		$frequence = (isset($_POST['frequence'])) ? $_POST['frequence'] : "";
 		$uptime = (isset($_POST['uptime'])) ? $_POST['uptime'] : "";
 		$description		= $_POST['description'];
 		
-		$resultat = insertPlanification($datePlanification, $frequence, $uptime, $description, $connexion);	
+		$resultat = insertPlanification($date_create, $frequence, $uptime, $description, $connexion);	
+		
+		echo "RESULTAT:".$resultat;
 		
 		if ($resultat)
 			echo "<font class='message_info'>La planification &agrave; bien &eacute;t&eacute; ajout&eacute;.</font>";
@@ -18,11 +20,13 @@
 	}
 	
 	//Tache à effectuer maintenant
-	$sql_planifications_today = getTodayPlanifications();
-	echo $sql_planifications_today;
-	$query_planifications_today = $connexion->prepare($sql_planifications_today);
-	$query_planifications_today->execute();
-	$count = $query_planifications_today->rowcount();
+	$sql_uptime_today = getUptimePlanification($connexion);
+	echo $sql_uptime_today;
+	
+	/*
+	$query_uptime_today = $connexion->prepare($sql_uptime_today);
+	$query_uptime_today->execute();
+	$count = $query_uptime_today->rowcount();
 	
 	if ($count > 0){
 		echo "<h5> T&acirc;che &agrave; effectuer aujourd'hui : </h5>";
@@ -38,7 +42,8 @@
 	}
 	
 	//Tache à effectuer plus tard
-	$sql_planifications_later = getlaterPlanifications();
+	$sql_planifications_later = getlaterPlanifications($connexion);
+	echo $sql_planifications_later;
 	$query_planifications_later = $connexion->prepare($sql_planifications_later);
 	$query_planifications_later->execute();
 	$count = $query_planifications_later->rowcount();
@@ -54,7 +59,7 @@
 			}
 			echo "</ul>";		
 		echo "</div>";
-	}
+	}*/
 	
 	?>
 	

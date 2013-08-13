@@ -18,6 +18,8 @@ $dateDebut = $_POST['dateDebut'];
 $dateFin   = $_POST['dateFin'];
 $select    = $_POST['selecteurMoy']; // datas, datasandmoyennes, moyennes
 
+echo "<a name='download'></a>";
+
 //Test sur les différentes variables récupérées
 if (isset($variables) && isset($dateDebut) && isset($dateFin) && isset( $select)){
 	//Test sur les variables si c'est un tableau ou non
@@ -31,7 +33,9 @@ if (isset($variables) && isset($dateDebut) && isset($dateFin) && isset( $select)
 		<!-- Création du tableau et de son header-->
 		<div id="list">
 			<div id="actions">
-				<a href="index.php?id_page=5" target="_blank"><img class="icon" title="Voir le tableau sous forme de statistiques" src="img/stat.png"></a>
+				<?php
+					if (hasOneUnite($variables,$connexion)) echo '<a href="index.php?id_page=5" target="_blank"><img class="icon" title="Voir le tableau sous forme de statistiques" src="img/stat.png"></a>'
+				?>
 				<a href="index.php?id_page=6" target="_blank"><img class="icon" title="Exporter au format Excel" src="img/excel.png"></a>
 				<a href="index.php?id_page=7" target="_blank"><img class="icon" title="Exporter au format PDF" src="img/pdf.png"></a>
 			</div>
@@ -46,6 +50,7 @@ if (isset($variables) && isset($dateDebut) && isset($dateFin) && isset( $select)
 				$_SESSION['dateFin'] = str_replace("/", "-", substr($dateFin ,0 , 10));
 				$_SESSION['tailleColonne'] = null;
 				$_SESSION['moyennes'] = null;
+				$_SESSION['unite'] = null;
 				
 				if ($select == "datas") include("list_datas.php");
 				if ($select == "moyennes") include("list_moyennes.php");

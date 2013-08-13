@@ -17,6 +17,7 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 			foreach($variables as $variable){
 				$variable = getHeader($variable);
 				$_SESSION['subtitles'][] = $variable;
+				$_SESSION['unite'][] = getUnite($variable, $connexion);
 				echo "<th title='" .getDescriptionOfLabel($variable, $connexion). " en " .getUnite($variable, $connexion). "'>&nbsp;" .getLabel($variable). "&nbsp;</th>";
 			}
 	echo "</tr>";

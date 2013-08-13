@@ -11,19 +11,19 @@
 	    </div>
 	    
 	    <!-- Frequence -->
-		<div id="frequence_title">
-			<h5>*Fr&eacute;quence / Uptime : </h5>
-			<font class="message_error" id="frequence_uptime_error"></font>
-		</div>
 		<div id="frequenceBloc">
-			<select name="frequence">
+			<div id="frequence_title">
+				<h5>*Fr&eacute;quence / Uptime : </h5>
+				<font class="message_error" id="frequence_uptime_error"></font>
+			</div>
+			<select name="frequence" onchange="innerMateriel(this)">
 				<option value="" selected="selected"></option>
 				<option value="1/d" >Une fois par jour</option>
 				<option value="1/m" >Une fois par mois</option>
 				<option value="1/y" >Une fois par an</option>
 			</select>
 			ou
-			<select name="uptime">
+			<select name="uptime" onchange="innerUpdate(this)">
 				<option value="" selected="selected"></option>
 				<option value="250">250 heures</option>
 				<option value="500">500 heures</option>
@@ -31,9 +31,9 @@
 				<option value="1000">1000 heures</option>
 			</select>
 	    </div>
-
-	    <div id="uptimeBloc">
-			
+	    
+	    <!-- Matériel -->
+	    <div id="materielBloc">
 	    </div>
 	    
 		 <!-- Ajout du javascript jquery-->

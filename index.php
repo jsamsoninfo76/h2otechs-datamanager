@@ -14,18 +14,18 @@
 
 	include("include/include.php");
 	include("header.html");
-
-	$id_page = $_GET['id_page'];
+	
+	$id_page = (isset($_GET['id_page'])) ? $_GET['id_page'] : 0;
 	
 	switch($id_page){
 		case 1 : include("form_list.php"); 			break; // index.php?id_page=1
-		case 2 : include("list.php"); 				break; // index.php?id_page=2
+		case 2 : include("list.php");				break; // index.php?id_page=2
 		case 3 : include("form_interventions.php"); break; // index.php?id_page=3
 		case 4 : include("list_interventions.php"); break; // index.php?id_page=4
 		case 5 : include("statistique_line.php"); 	break; // index.php?id_page=5
 		case 6 : include("excel.php"); 				break; // index.php?id_page=6
 		case 7 : include("pdf.php"); 				break; // index.php?id_page=7
-		case 8 : include("form_planification.php");	break; // index.php?id_page=8
+		case 9 : include("st.php");	break; // index.php?id_page=8
 		default: include("list_planification.php"); break; // index.php
 	}
 

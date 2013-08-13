@@ -1,51 +1,69 @@
 <?php
-
-function insertPlanification($datePlanification, $frequence, $uptime, $description, $connexion){
-	$select_planification =  " SELECT COUNT(*) AS count ";
-	$select_planification .= " FROM planification ";
-	$select_planification .= " WHERE date_debut='$datePlanification'";
-	$select_planification .= " AND frequence='$frequence' ";
-	$select_planification .= " AND description='$description'";
-	$query_select_planification = $connexion->prepare($select_planification);
-	$query_select_planification->execute();
-	$data = $query_select_planification->fetch(PDO::FETCH_ASSOC);
-	$count = $data['count'];
-	
+function insertPlanification($datetime_create, $frequence, $uptime, $description, $connexion){
 	$query_insert_planification = "";
 	
-	if ($count == 0){
-		$sql_insert_planification = "INSERT INTO planification";
-		if ($frequence != "") $sql_insert_planification .= "(date_debut, frequence, description) VALUES('$datePlanification', '$frequence', '$description')";
-		else if ($uptime != "") $sql_insert_planification .= "(date_debut, uptime, description) VALUES('$datePlanification', '$uptime', '$description')";
-		$query_insert_planification = $connexion->prepare($sql_insert_planification);
-		$query_insert_planification->execute();
+	if ($uptime != ""){
+		$select_planification =  "SELECT COUNT(*) AS count ";
+		$select_planification .= "FROM planification_update ";
+		$select_planification .= "WHERE datetime_create='$datetime_create' ";
+		$select_planification .= "AND uptime='$uptime' ";
+		$select_planification .= "AND description='$description'";
+		$query_select_planification = $connexion->prepare($select_planification);
+		$query_select_planification->execute();
+		$data = $query_select_planification->fetch(PDO::FETCH_ASSOC);
+		$count = $data['count'];
+		
+		if ($count == 0){
+			$sql_insert_planification = "INSERT INTO planification_uptime";
+			$sql_insert_planification .= "(uptime,datetime_create,uptimeTotal,datetime_maj,description)";
+			$sql_insert_planification .= "VALUES($uptime,'$datetime_create',0,'','$description')";
+		}
 	}
+	if ($frequence != ""){
+		$select_planification =  " SELECT COUNT(*) AS count ";
+		$select_planification .= " FROM planification_frequence ";
+		$select_planification .= " WHERE datetime_create='$datetime_create' ";
+		$select_planification .= " AND frequence='$frequence' ";
+		$select_planification .= " AND description='$description'";
+		$query_select_planification = $connexion->prepare($select_planification);
+		$query_select_planification->execute();
+		$data = $query_select_planification->fetch(PDO::FETCH_ASSOC);
+		$count = $data['count'];
+	
+		if ($count == 0){
+			$sql_insert_planification = "INSERT INTO planification_frequence";
+			$sql_insert_planification .= "(frequence,datetime_create,datetime_maj,description)";
+			$sql_insert_planification .= "VALUES('$frequence','$datetime_create','','$description')";			
+		}
+	}
+
+	//echo $sql_insert_planification;
+	$query_insert_planification = $connexion->prepare($sql_insert_planification);
+	$query_insert_planification->execute();
 	
 	return $query_insert_planification;
 }
 
-/**
- * Récupère les planifications d'aujourd'hui si
- * 1) si c'est une frequence d'une fois par moi et que la date de création est la même qu'aujourd'hui
- * 2) si l'intervalle depuis la dernière validation est inférieur à un mois
- */
-function getTodayPlanifications(){
-	$select_today_planifications  = " SELECT DISTINCT(p.id_planification), p.date_debut, p.frequence, p.uptime, p.description ";
-	$select_today_planifications .= " FROM planification p ";
-	$select_today_planifications .= " LEFT JOIN planification_datas pd ON p.id_planification = pd.id_planification ";
-	$select_today_planifications .= " WHERE "; // Si elle vient d'être ajouté
-	$select_today_planifications .= " (frequence='1/m' AND (DAY(date_debut) >= DAY(NOW()"; // Ou la fréquence est une fois par mois et le jour de la date de début est aujourd'hui
-	$select_today_planifications .= " AND (MONTH(date_debut) = MONTH(NOW()) AND ";// si elle n'a pas déjà été faite ce mois-ci
+function getUptimePlanification($connexion){
+	$select_uptime_planifications  = "SELECT *  ";
+	$select_uptime_planifications .= "FROM planification_uptime ";
+	$uptime = getHeureProd($connexion);
+	$select_uptime_planifications .= "WHERE ( $uptime - uptimeTotal ) < uptime";
 	
-	return $select_today_planifications;
+	return $select_uptime_planifications;
 }
 
-function getLaterPlanifications(){
-	$select_later_planifications  = " SELECT * ";
-	$select_later_planifications .= " FROM planification ";
-	$select_later_planifications .= " WHERE DATE(date_debut) > DATE(NOW()) ";
-	
-	return $select_later_planifications;
+
+function getHeureProd($connexion){
+	$sql_last_uptime =  "SELECT value AS uptime ";
+	$sql_last_uptime .= "FROM data_compt_hor_prod ";
+	$sql_last_uptime .= "WHERE state = 1 ";
+	$sql_last_uptime .= "ORDER BY datetime DESC ";
+	$sql_last_uptime .= "LIMIT 0,1";
+	$query_last_uptime = $connexion->prepare($sql_last_uptime);
+	$query_last_uptime->execute();
+	$data = $query_last_uptime->fetch(PDO::FETCH_ASSOC);
+	return $data['uptime'];
 }
 
 function getDateTimeIntervention($connexion){
@@ -64,34 +82,6 @@ function getDateTimeIntervention($connexion){
 	$query_get_datetime_intervention->execute();
 	$data = $query_get_datetime_intervention->fetch(PDO::FETCH_ASSOC);
 	return $data['datetime'];
-}
-
-function getUptimeInterventions(){
-	$sql_get_uptime_intervention =  "SELECT * ";	   	
-	$sql_get_uptime_intervention .= "FROM planification ";
-	$sql_get_uptime_intervention .= "WHERE uptime != 0 ";	
-}
-
-function getTodayUptimeInterventions() {
-	
-}
-
-function getNextUptimeInterventions() {
-	$sql_get_next_uptile_intervention =  "SELECT * ";
-	$sql_get_next_uptile_intervention .= "FROM planification_uptime pu ";
-	$sql_get_next_uptile_intervention .= "WHERE " 
-}
-
-function getHeureProd($connexion){
-	$sql_heure_prod =  "SELECT value AS uptime ";
-	$sql_heure_prod .= "FROM data_compt_hor_prod ";
-	$sql_heure_prod .= "WHERE state = 1 ";
-	$sql_heure_prod .= "ORDER BY datetime DESC ";
-	$sql_heure_prod .= "LIMIT 0,1";
-	$query_heure_prod = $connexion->prepare($sql_heure_prod);
-	$query_heure_prod->execute();
-	$data = $query_heure_prod->fetch(PDO::FETCH_ASSOC);
-	return $data['uptime'];
 }
 
 function getCountInterventionsByDay($datetime, $connexion){

@@ -4,41 +4,83 @@
  *
  *Sites
  *http://coding.smashingmagazine.com/2008/08/13/top-10-css-table-designs/ (design tableau)
+
+
+bleu : #225975
+turquoise : #009997
+orange : #FFB200
+gris : #CEDAE0
+
+
  */
 
-/**********************************************************************************************************************
- ******************************************************* HEADER *******************************************************
- **********************************************************************************************************************/
+#arrow:hover{
+	
+}
+
+/* ---------- STRUCTURE ---------- */
+
+* {font-family:  Helvetica, Arial, sans-serif ;color:#225975; font-size: 14px; margin: 0; padding: 0;}
+
+header, section, footer {margin: 0 auto 0 auto; width: 1024px;}
+
+header {height:150px;margin: 5em auto 50px auto;}
+nav {position: absolute; top: 0; left: 0; background: black 10px 8px url(../img/logo.png) no-repeat ; width: 100%;height: 42px;}
+section {min-height: 500px;}
+footer {min-height: 30px; position: relative; bottom : 1em; top : 2em;}
+
+
+/* ---------- FONTS ---------- */
+
+
+
+p {padding: 0 1em;}
+
+nav { letter-spacing: 1px;}
+
+
+/* ---------- HEADER ---------- */
+
 header{ 
-	text-align: center; 
-	margin-top: 0px;
-	margin-bottom: 25px;	
+	background: url(../img/HEADER-DataManager-v1.jpg) no-repeat top center;	
+}
+
+header>h1{
+	display: none;
 }
 
 
 
-/**********************************************************************************************************************
- ******************************************************** BODY ********************************************************
- **********************************************************************************************************************/
+/* ---------- TABLEAUX ---------- */
 
-/* LIGNES CORRESPONDANT AU STYLE DU BODY EN GENERAL */
-body{
-	background-image: url("../img/fond.png");
-	margin-left: 50px;
-	margin-right: 50px;
-}
+
 .message_error{ color: #FF6469; }
 .message_info{ color: #049f42 }
-.ligne_impair { background-color: #72e3b3; }
+.ligne_impair { background-color: #CEDAE0; padding-bottom: 1em; }
 .ligne_pair { background-color: #72e3b3; }
+
 #bouttonDate { height: 30px; }
 
+table {width: 100%; border: 0px solid; border-radius: 7px; }
 
-/* LIGNE CORRESPONDANT AUX STYLE DE LA PAGE DE LA LISTE DES DONNEES */
+tr {height: 2em; line-height: 2em;min-width: 50px;}
+
+td { }
+
+th {color: #FFF; font-variant: small-caps;	background:#225975; font-size: 18px; height: 34px;}
+
 /* Tableau de variable */
 #tabVariablesHeader { 
 	font-weight : bold;
 	width: 50px; 
+}
+
+#variables_tools {
+	background: #CEDAE0;
+	padding: 1em 1.5em ;
+	width: 200px;
+	border-radius: 14px;
+	margin-bottom:  
 }
 
 /* Formulaire */
@@ -52,22 +94,40 @@ body{
 /* Tableau list_data */
 #actions { margin-top: 25px; }
 .icon{
-	width: 15px;
-	height: 15px;
+	width: 28px;
+	height: 28px;
+	margin: 0 1em 0 0;
 }
 #tabListData { margin-top: 15px; }
 .tabListDataCells {
 	text-align: center;
-	background-color: rgba(121,191,255,0.66);
+	background-color: ;
 }
-.tabListDataCells:hover { background-color: #588cfc; }
-.tabListDataCellsAnnee{ background-color: #588cfc; }
+.tabListDataCells {border-bottom: 1px solid #225975 !important;  }
+.tabListDataCells:hover { background-color: #CEDAE0; }
+.tabListDataCellsAnnee{ background-color: #009997; font-size: 2em; color: white; font-weight: lighter; width :250px; }
 .tabListDataMoy {
 	text-align: center;
-	background-color: #ffac42;
+	background-color: #FFB200;
+	border-bottom: 10px solid #fff;
+	border-top: 10px solid #fff;
+	font-style: italic;
 }
 
 #tabListDataHeader{ background-image: url("../img/gradhead.png"); }
+
+.switch { background: #fff ; color: #225975; }
+.dow {background: #fff; color:#FFB200; }
+.next {color: #009997; background: #fff;}
+.prev {color: #009997; background: #fff;}
+
+.day:active {background:#009997; background-image: none !important; }
+
+.bootstrap-datetimepicker-widget td.active:hover, .bootstrap-datetimepicker-widget td.active:hover:hover, .bootstrap-datetimepicker-widget td.active:active, .bootstrap-datetimepicker-widget td.active:hover:active, .bootstrap-datetimepicker-widget td.active.active, .bootstrap-datetimepicker-widget td.active:hover.active, .bootstrap-datetimepicker-widget td.active.disabled, .bootstrap-datetimepicker-widget td.active:hover.disabled, .bootstrap-datetimepicker-widget td.active[disabled], .bootstrap-datetimepicker-widget td.active:hover[disabled] {
+	background:  #009997 !important;
+	}
+	
+li.picker-switch.accordion-toggle:hover {background: #FFB200;background-image: none !important;}
 
 
 /* LIGNES CORRESPONDANT A LA PAGE DES INTERVENTION (ajout / Liste) */
@@ -93,46 +153,84 @@ body{
 	margin-bottom: 50px;
 }
 
-/*#back{
-	margin-left: 0px;
-	float: left;
-}
-#next{
-	margin-right: 0px;
-	float: right;
-}*/
-
 #selectDatetime{
 	width: auto;
 }
-
 
 /* LIGNES CORRESPONDANT A LA PAGE DES PLANIFICATIONS */
 #formPlanificateur{
 	text-align: center;	
 }
 
-/**********************************************************************************************************************
- ******************************************************** NAV *********************************************************
- **********************************************************************************************************************/
-nav{
- text-align: center;
+/* ---------- COURBES --------- */
+
+#formCourbesBlock{
+	text-align: center;	
 }
+
+
+
+/* ---------- INPUT ---------- */
+
+
+input[type="checkbox"]:checked,
+input[type="checkbox"]:not(:checked),
+input[type="radio"]:checked,
+input[type="radio"]:not(:checked) {
+	width: 2em;
+	height: 2em;
+	margin: 0 .5em;
+	line-height: 2em;
+	}
+	
+input[type="submit"] {
+	padding: .5em 1em;
+	border-radius: .5em;
+	background:#CEDAE0;
+	border: 0px solid; 
+}
+input[type="submit"]:hover {
+	background:#FFB200;
+}
+
+textarea {width: 80%;}
+
+
+
+/* ---------- NAV ---------- */
+
+ul#menu_horizontal {line-height: 42px;width: 1024px;margin: 0 auto;}
+
+.logo {display: block; width: 30px; height: 30px; background: url(../img/logo.png); margin-right: 1em;}
 
 ul#menu_horizontal li { 
 	display : inline;
-	padding : 0 0.5em; /* Pour espacer les boutons entre eux */
+	padding : 0 1em 0 0; 
 }
 ul#menu_horizontal {
-	list-style-type : none; /* Car sinon les puces se placent n'importe où */
+	list-style-type : none; 
 }
 
+ul#menu_horizontal li a {
+	background: #444;
+	padding: .25em .5em;
+	border-radius: 5px;
+	color: white;
+}
+
+ul#menu_horizontal li a:hover { 
+	background: #009997;
+	text-decoration: none;
+	cursor: default ;
+}
  
 
 /**********************************************************************************************************************
  ******************************************************* FOOTER *******************************************************
  **********************************************************************************************************************/
  footer { 
- 	text-align: center; 
- 	margin-top: 25px;
+ 	text-align: center;
+ 	background: #CEDAE0;
+ 	padding: 1em 0 3em 0;
+ 	border-radius: 14px; 
  }

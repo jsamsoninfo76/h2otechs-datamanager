@@ -60,7 +60,7 @@
 	<!-- Creation du formulaire de l'intervention -->
 	<form name='formInterventions' method="post" action="index.php?id_page=4">
 		<div id='intervention_title'><h5>Date et Intervenant :</h5></div>
-		<a href='index.php?id_page=4&action=back&datetime=<?php echo getNextOrPrecDatetime($datetime, "back", $connexion);?>'><----&nbsp;&nbsp;</a>
+		<a href='index.php?id_page=4&action=back&datetime=<?php echo getNextOrPrecDatetime($datetime, "back", $connexion);?>'><img src="img/left-arrow.png">&nbsp;&nbsp;</a>
 		
 	<select name='datetime' id='selectDatetime' onChange='this.form.submit()'>
 		<?php
@@ -110,7 +110,7 @@
 			}
 		?>
 		</select>
-		<a href='index.php?id_page=4&action=next&datetime=<?php echo getNextOrPrecDatetime($datetime, "next", $connexion);?>'>&nbsp;&nbsp;----></a>
+		<a class="arrow" href='index.php?id_page=4&action=next&datetime=<?php echo getNextOrPrecDatetime($datetime, "next", $connexion);?>'>&nbsp;&nbsp;<img src="img/right-arrow.png"></a>
 	
 		<?php
 			//Déclaration du datetime pour éviter le php_notices
