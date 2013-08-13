@@ -29,7 +29,7 @@
 					
 					//Recupération des données de variable
 					$connexion = new PDO('mysql:host='.$config['host'].';dbname='.$config['db'], $config['user'], $config['pass']);
-					$sql_select_variables = "SELECT * FROM variables";
+					$sql_select_variables = "SELECT * FROM variables ORDER BY unite ASC";
 					$query_select_variables = $connexion->prepare($sql_select_variables);
 					$query_select_variables->execute();
 	
@@ -45,18 +45,17 @@
 							if ($unite != "") echo "</tr>"; //Si l'unite est vide (première data)
 							echo "<tr $trColor>";
 
-							//Verification sur l'exposant pour <sup>
-							$unite = verifExposant($data['unite']);
+							$unite = $data['unite'];
 							
 							//On écrit l'unité puis la première value
-							echo '<td><input type="radio" name="tools" onClick="selectLigne' .$numligne. '(this)"></td>';
-							echo '<td id="tabVariablesHeader"><center>'.$unite.'</center></td>';
-							echo '<td title="' .$data['description']. '"><input type="checkbox" name="variables[]" value="data_' .$data['label']. '">&nbsp;&nbsp;' .$data['label'] .'</td>';
+							echo '<td><input type="radio" name="tools" onClick="select_' .$unite. '(this)"></td>';
+							echo '<td id="tabVariablesHeader"><center>'.verifExposant($unite).'</center></td>';
+							echo '<td title="' .$data['description']. '"><input type="checkbox" name="variables[]" value="data_' .$data['label']. '">&nbsp;&nbsp;' .getLabel($data['label']) .'</td>';
 							$numligne++;
 						}
 						else{
 							//On écrit la value
-							echo '<td title="' .$data['description']. '"><input type="checkbox" name="variables[]" value="data_' .$data['label']. '">&nbsp;&nbsp;' .$data['label'] .'</td>';	
+							echo '<td title="' .$data['description']. '"><input type="checkbox" name="variables[]" value="data_' .$data['label']. '">&nbsp;&nbsp;' .getLabel($data['label']) .'</td>';	
 						}
 					}
 				?>

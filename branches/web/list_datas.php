@@ -20,6 +20,7 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 				$variable = getHeader($variable);
 				$_SESSION['subtitles'][] = $variable;
 				$lastValue[$variable] = "";
+				$_SESSION['unite'][] = getUnite($variable, $connexion);
 				echo "<th title='" .getDescriptionOfLabel($variable, $connexion). " en " .getUnite($variable, $connexion). "'>&nbsp;" .getLabel($variable). "&nbsp;</th>";
 			}
 			
@@ -27,7 +28,6 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 		
 	//Création de la requête et génération du tableau
 	$sql_select = generateDatasSQL($variables, $dateDebut, $dateFin);
-	echo $sql_select;
 	
 	$query_select = $connexion->prepare($sql_select);
 	$query_select->execute();
@@ -40,7 +40,7 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 		$datetime = $data->datetime;
 		$compteurPair++;								
 		echo '<tr class=tabListDataCells>';
-		$_SESSION['categories'][] = $data->Annee;
+		$_SESSION['categories'][] = $data->datetime;
 		if ($compteurRowSpan == $nbRowSpan){
 			$nbRowSpan = getNombreRowSpan($variables[0], $datetime, $dateFin, $connexion);
 			echo "<td class='tabListDataCellsAnnee' rowspan=" .(($nbRowSpan>1) ? $nbRowSpan : 1). ">";

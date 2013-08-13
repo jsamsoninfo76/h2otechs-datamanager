@@ -37,6 +37,8 @@
 ini_set('memory_limit', '-1');
 set_time_limit(65536); 
 
+$verbose = (isset($_GET['verbose'])) ? true : false;
+
 /* STYLE */
 //array de configuration des bordures
 $bordersarray=array(
@@ -80,11 +82,11 @@ require_once 'include/include.php';
 
 
 // Create new PHPExcel object
-echo date('H:i:s') , " Cr&eacute;ation du nouveau fichier" , EOL;
+if ($verbose) echo date('H:i:s') , " Cr&eacute;ation du nouveau fichier" , EOL;
 $objPHPExcel = new PHPExcel();
 
 // Set document properties
-echo date('H:i:s') , " Changement des propri&eacute;t&eacute;es du fichier" , EOL;
+if ($verbose) echo date('H:i:s') , " Changement des propri&eacute;t&eacute;es du fichier" , EOL;
 $objPHPExcel->getProperties()->setCreator("H2oTechs")
 							 ->setLastModifiedBy("H2oTechs")
 							 ->setTitle("Datamanager Reporting")
@@ -112,7 +114,7 @@ $sheet=$objPHPExcel->getActiveSheet();
 $sheet->setTitle('Releve');
 
 /* GENERATION DES HEADERS */
-echo date('H:i:s') , " G&eacute;n&eacute;ration des nom de colonne" , EOL;
+if ($verbose) echo date('H:i:s') , " G&eacute;n&eacute;ration des nom de colonne" , EOL;
 $sheet->setCellValue('A1', 'Date');
 if (!$isMoyenne) $sheet->setCellValue('B1', 'Heure');
 
@@ -126,7 +128,7 @@ for($numColonne=0 ; $numColonne<count($_SESSION['subtitles']) ; $numColonne++){
 }
 
 /* GENERATION DE LA PREMIERE COLONNE DE DATE */
-echo date('H:i:s') , " Remplissage de la premi&egrave;re colonne (Date)" , EOL;
+if ($verbose) echo date('H:i:s') , " Remplissage de la premi&egrave;re colonne (Date)" , EOL;
 $localisationDebut = "";
 $localisationFin = "";
 $valuePrec = "";
@@ -169,7 +171,7 @@ for($numColonne=0 ; $numColonne<count($_SESSION['categories']) ; $numColonne++){
 }
 
 if (!$isMoyenne){
-	echo date('H:i:s') , " Remplissage de la deuxi&egrave;me colonne (Heure)" , EOL;
+	if ($verbose) echo date('H:i:s') , " Remplissage de la deuxi&egrave;me colonne (Heure)" , EOL;
 	/* GENERATION DE LA DEUXIEME COLONNE D'HEURE */
 	for($numLigne=0 ; $numLigne<count($_SESSION['heures']) ; $numLigne++){
 		$coordonneeX    = "B";
@@ -190,7 +192,7 @@ if (!$isMoyenne){
 }
 
 /* GENERATION DES DATAS */
-echo date('H:i:s') , " Ajout des donn&eacute;es" , EOL;
+if ($verbose) echo date('H:i:s') , " Ajout des donn&eacute;es" , EOL;
 
 for($numColonne=0 ; $numColonne<count($_SESSION['subtitles']) ; $numColonne++){
 	$nom = $_SESSION['subtitles'][$numColonne];
@@ -212,7 +214,7 @@ for($numColonne=0 ; $numColonne<count($_SESSION['subtitles']) ; $numColonne++){
 }
 
 /* AUGMENTATION DE LA TAILLE DES COLONNES */
-echo date('H:i:s') , " Adaptation de la taille des colonnes" , EOL;
+if ($verbose) echo date('H:i:s') , " Adaptation de la taille des colonnes" , EOL;
 $sheet->getColumnDimension('A')->setWidth(10);
 if (!$isMoyenne) $sheet->getColumnDimension('B')->setWidth(6);
 for($numColonne=2 ; $numColonne<count($_SESSION['tailleColonne']) ; $numColonne++){
@@ -226,7 +228,7 @@ for($numColonne=2 ; $numColonne<count($_SESSION['tailleColonne']) ; $numColonne+
 }
 
 /* Style */
-echo date('H:i:s') , " Stylisation du fichier" , EOL;
+if ($verbose) echo date('H:i:s') , " Stylisation du fichier" , EOL;
 
 //Mise en gras des Headers
 for($numColonne=0 ; $numColonne<count($_SESSION['subtitles'])+$decalage ; $numColonne++){
@@ -240,36 +242,35 @@ for($numColonne=0 ; $numColonne<count($_SESSION['subtitles'])+$decalage ; $numCo
 }
 
 //Ajout des bordures au tableau
-echo date('H:i:s') , " Ajout des bordures" , EOL;
+if ($verbose) echo date('H:i:s') , " Ajout des bordures" , EOL;
 $nbColonne = ($isMoyenne) ? count($_SESSION['subtitles'])+$decalage : count($_SESSION['subtitles'])+$decalage;
 $nom = $_SESSION['subtitles'][0];
 $nbLigne = count($_SESSION['series'][$nom])+1; //+1 Pour header
 
-//FileName & Path
+//filename & Path
 $path = "upload";
-$fileName = $_SESSION['dateDebut'] ."_au_". $_SESSION['dateFin'] ."_". $_SESSION['yAxis_title'] ."_". "Enky" .$config['enky']. ".xlsx";
+$filename = $_SESSION['dateDebut'] ."_au_". $_SESSION['dateFin'] ."_". $_SESSION['yAxis_title'] ."_". "Enky" .$config['enky']. ".xlsx";
 
 // Rename worksheet
-echo date('H:i:s') , " Changement du titre de la feuille en: " . $fileName, EOL;
+if ($verbose) echo date('H:i:s') , " Changement du titre de la feuille en: " . $filename, EOL;
 $objPHPExcel->getActiveSheet()->setTitle($_SESSION['yAxis_title']);
 
 // Set active sheet index to the first sheet, so Excel opens this as the first sheet
 $objPHPExcel->setActiveSheetIndex(0);
 
 // Save Excel 2007 file
-echo date('H:i:s') , " Ecriture en format Excel 2007" , EOL;
+if ($verbose) echo date('H:i:s') , " Ecriture en format Excel 2007" , EOL;
 $callStartTime = microtime(true);
 $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 
 //Save
-$objWriter->save($path."/".$fileName);
+$objWriter->save($path."/".$filename);
 $callEndTime = microtime(true);
 $callTime = $callEndTime - $callStartTime;
 
 // Echo done
-echo '<br/><a href="upload/' .$fileName. '">Cliquez ici pour t&eacute;l&eacute;charger le fichier</a>';
-
-
+echo '<br/><a href="upload/' .$filename. '">Cliquez ici si le t&eacute;l&eacute;chargement ne commence pas</a>';
+echo "<META HTTP-EQUIV='Refresh' CONTENT='0;URL=downloadfile.php?filename=$filename'>";
 
 
 /*

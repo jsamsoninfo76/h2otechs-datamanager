@@ -95,5 +95,7 @@ echo date('H:i:s') , " Peak memory usage: " , (memory_get_peak_usage(true) / 102
 // Echo done
 echo date('H:i:s') , " Done writing files" , EOL;
 echo 'File has been created in ' , getcwd() , EOL;
-echo '<br/><a href="upload/test.pdf">Cliquez ici pour t&eacute;l&eacute;charger le fichier</a>';
+echo '<br/><a href="upload/test.pdf">Cliquez ici si le t&eacute;l&eacute;chargement ne commence pas</a>';
 
+echo "<META HTTP-EQUIV='Refresh' CONTENT='0;URL=downloadfile.php?filename=$filename'>";
+?>

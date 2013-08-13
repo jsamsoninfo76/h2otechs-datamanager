@@ -1,5 +1,32 @@
 <?php
 
+function getUniteLabel($unite){
+	if ($unite == "bar") return "pression";
+	if ($unite == "ph") return "ph";
+	if ($unite == "%") return "rendement";
+	if ($unite == "m3") return "débit";
+	if ($unite == "cf") return "conductivit&eacute;";
+	if ($unite == "h") return "horaire";
+}
+
+/**
+ * 
+ */
+function hasOneUnite($variables, $connexion){
+	$repere = "";
+
+	foreach($variables as $variable){
+		$variable = getHeader($variable);
+		$unite = getUnite($variable, $connexion);
+		//echo "Repere=".$repere."|Unite=".$unite."<br/>";
+		if ($repere == "") $repere = $unite;
+		else if ($repere != $unite) return false;
+	}
+
+	return true;
+}
+ 
+
 /**
  * Traduction de la fréquence
  */
@@ -107,7 +134,7 @@ function getHeader($string){
 function verifExposant($unite){
 	if (is_numeric(substr($unite, strlen($unite)-1, strlen($unite))))
 		$unite = substr($unite, 0, strlen($unite)-1) . "<sup>" .substr($unite, strlen($unite)-1, strlen($unite)). "</sup>";
-	return $unite;
+	return getLabelHeader($unite);
 }
 
 function isOneHourDiff($heure, $datetime){
@@ -125,6 +152,11 @@ function getMinFromDatetime($datetime){
 	$tmp = explode(" ", $datetime);
 	$time = explode(":", $tmp[1]);
 	return $time[1];
+}
+
+function getLabelHeader($header){
+	if ($header == "pourcent") return "%";
+	else return $header;
 }
 
 function getLabel($variable){
