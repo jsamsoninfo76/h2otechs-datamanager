@@ -1,4 +1,32 @@
 <?php
+
+/**
+ *Compare la taille des DB
+ */
+function getBiggerTableIndex($variables, $connexion){
+	$tableau = array();
+	$nom = array();
+	for($i=0 ; $i < count($variables) ; $i++){
+		$variable = strtolower($variables[$i]);
+		$sql = "SELECT COUNT(*) AS nombre FROM $variable";
+		$query = $connexion->prepare($sql);
+		$query->execute();
+		$data = $query->fetch(PDO::FETCH_ASSOC);
+		$tableau[] = $data['nombre'];
+		$nom[] = $variable;
+	}
+
+	$return = 0;
+	for($i=0 ; $i < count($tableau) ; $i++){
+		if ($tableau[$i] > $return){
+			$return = $tableau[$i];
+			$index = $i;
+		}
+	}
+	
+	return $index;
+}
+
 /**
  * Récupère les datas en fonctio nde la frequence
  *
@@ -6,22 +34,28 @@
  * http://www.w3resource.com/mysql/mathematical-functions/mysql-mod-function.php (Modulo)
  */
 function getDataCourbe($datedebut, $frequence, $variables, $connexion){
-	$variables[0] = strtolower($variables[0]);
+	//Calcule de la plus grosse table pour se baser dessus
+	$biggerIndex = getBiggerTableIndex($variables, $connexion);
+	$variables[$biggerIndex] = strtolower($variables[$biggerIndex]);
 	
-	$sql_select = "SELECT $variables[0].datetime, DATE_FORMAT($variables[0].datetime, '%d/%m/%Y') AS Annee, DATE_FORMAT($variables[0].datetime, '%H')  AS Heure, ";
+	$sql_select = "SELECT ".$variables[$biggerIndex].".datetime, DATE_FORMAT(".$variables[$biggerIndex].".datetime, '%d/%m/%Y') AS Annee, DATE_FORMAT(".$variables[$biggerIndex].".datetime, '%H')  AS Heure, ";
 	for($i=0 ; $i < count($variables) ; $i++){
-		$variables[$i] = strtolower($variables[$i]);
-		if ($i == count($variables) -1) $sql_select .= $variables[$i]. ".value AS " .$variables[$i]."_value";
-		else $sql_select .= $variables[$i]. ".value AS " .$variables[$i]."_value ,";
+		if ($i != $biggerIndex){
+			$variables[$i] = strtolower($variables[$i]);
+			if ($i == count($variables) -1) $sql_select .= $variables[$i]. ".value AS " .$variables[$i]."_value";
+			else $sql_select .= $variables[$i]. ".value AS " .$variables[$i]."_value ,";
+		}
 	}
 	
-	$sql_select .= " FROM " .$variables[0]. " ";		
-	for($i=1 ; $i < count($variables) ; $i++){
-		$sql_select .= " LEFT JOIN " .$variables[$i]. " ON " .$variables[$i].".datetime = " .$variables[0]. ".datetime ";
-		$sql_select .= " AND $variables[$i].state = 1";
+	$sql_select .= " FROM " .$variables[$biggerIndex]. " ";		
+	for($i=0 ; $i < count($variables) ; $i++){
+		if ($i != $biggerIndex){
+			$sql_select .= " LEFT JOIN " .$variables[$i]. " ON " .$variables[$i].".datetime = " .$variables[$biggerIndex]. ".datetime ";
+			$sql_select .= " AND $variables[$i].state = 1";
+		}
 	}
 	
-	$sql_select .= " WHERE $variables[0].datetime BETWEEN '$datedebut' AND DATE_ADD('$datedebut', INTERVAL $frequence HOUR)";
+	$sql_select .= " WHERE ".$variables[$biggerIndex].".datetime BETWEEN '$datedebut' AND DATE_ADD('$datedebut', INTERVAL $frequence HOUR)";
 	
 	switch ($frequence){
 		case 1 : $modulo = 5; break; 	//Données toutes les 2 minutes 	-> 30 Données
@@ -35,14 +69,14 @@ function getDataCourbe($datedebut, $frequence, $variables, $connexion){
 	$query_test = $connexion->prepare($sql_select);
 	$query_test->execute();
 	$count_simple = $query_test->rowcount();
-	echo $sql_select;
+	
 	$sql_select_params = $sql_select;
 	//VOIR POUR MODIFIER SELECTION SUR 24H
-	if ($modulo == 0) $sql_select_params .= " GROUP BY HOUR($variables[0].datetime)";
+	if ($modulo == 0) $sql_select_params .= " GROUP BY HOUR(".$variables[$biggerIndex].".datetime)";
 	else {
-		$sql_select_param_mod = $sql_select . " AND MOD(MINUTE($variables[0].datetime), $modulo) = 0";
-		$sql_select_param_groupby = $sql_select . " GROUP BY MINUTE($variables[0].datetime)";
-		$sql_select_params .= " AND MOD(MINUTE($variables[0].datetime), $modulo) = 0 GROUP BY MINUTE($variables[0].datetime)";
+		$sql_select_param_mod = $sql_select . " AND MOD(MINUTE(".$variables[$biggerIndex].".datetime), $modulo) = 0";
+		$sql_select_param_groupby = $sql_select . " GROUP BY MINUTE(".$variables[$biggerIndex].".datetime)";
+		$sql_select_params .= " AND MOD(MINUTE(".$variables[$biggerIndex].".datetime), $modulo) = 0 GROUP BY MINUTE(".$variables[$biggerIndex].".datetime)";
 	}
 	
 	//Group by
@@ -64,7 +98,7 @@ function getDataCourbe($datedebut, $frequence, $variables, $connexion){
 	$query_test->execute();
 	$count_params = $query_test->rowcount();
 
-	echo "SIMPLE:$count_simple, PARAMS:$count_params, GROUPBY:$count_groupby, MOD:$count_mod</br>";	
+	//echo "SIMPLE:$count_simple, PARAMS:$count_params, GROUPBY:$count_groupby, MOD:$count_mod</br>";	
 	
 	//Triage du tableau et recuperation du parametre le plus grand et <= 30 
 	$tri = array($count_simple, $count_params, $count_groupby, $count_mod);
@@ -152,7 +186,7 @@ function getHeureProd($connexion){
 	return $data['uptime'];
 }
 
-function getDateTimeIntervention($connexion){
+function getDateTimeIntervention($datetime, $connexion){
 	$day = substr($datetime, 8, 2);
 	$month = substr($datetime, 5, 2);
 	$year = substr($datetime, 0, 4);
@@ -257,75 +291,102 @@ function generateUpdateIntervention($id_intervention, $observation){
 	return $sql_update;
 }
 
-function generateMoySQL($variables, $dateDebut, $dateFin){		
-		$variables[0] = strtolower($variables[0]);
-		
-		$sql_select = "SELECT DATE_FORMAT($variables[0].datetime, '%d/%m/%Y') AS Annee, ";
-		for($i=0 ; $i < count($variables) ; $i++){
+function generateMoySQL($variables, $dateDebut, $dateFin, $connexion){		
+	//Calcule de la plus grosse table pour se baser dessus
+	$biggerIndex = getBiggerTableIndex($variables, $connexion);
+	
+	$variables[$biggerIndex] = strtolower($variables[$biggerIndex]);
+	
+	$sql_select = "SELECT DATE_FORMAT(".$variables[$biggerIndex].".datetime, '%d/%m/%Y') AS Annee, ";
+	for($i=0 ; $i < count($variables) ; $i++){
+		if ($i != $biggerIndex){
 			$variables[$i] = strtolower($variables[$i]);
 			if ($i == count($variables) -1) $sql_select .= " AVG($variables[$i].value) AS " .$variables[$i]."_avg";
 			else $sql_select .= " AVG($variables[$i].value) AS " .$variables[$i]."_avg,";
 		}
-		
-		$sql_select .= " FROM " .$variables[0]. " ";
-		for($i=1 ; $i < count($variables) ; $i++){
-			$sql_select .= " LEFT JOIN " .$variables[$i]. " ON " .$variables[$i].".datetime = " .$variables[0]. ".datetime ";
+	}
+	
+	$sql_select = ($sql_select[strlen($sql_select)-1] == ',') ? substr($sql_select, 0, strlen($sql_select)-1) : $sql_select;
+
+	$sql_select .= " FROM " .$variables[$biggerIndex]. " ";
+	for($i=0 ; $i < count($variables) ; $i++){
+		if ($i != $biggerIndex){
+			$sql_select .= " LEFT JOIN " .$variables[$i]. " ON " .$variables[$i].".datetime = " .$variables[$biggerIndex]. ".datetime ";
 			$sql_select .= " AND $variables[$i].state = 1";
 		}
-				
-		$sql_select .= " WHERE " .$variables[0]. ".datetime BETWEEN '" .$dateDebut. "'";
-		$sql_select .= " AND '" .$dateFin. "'";
-		$sql_select .= " AND $variables[0].state = 1";
-		$sql_select .= " GROUP BY DATE(" .$variables[0]. ".datetime)";
-		return $sql_select;
-	}
-
-
-function generateDatasSQL($variables, $dateDebut, $dateFin){
-	$variables[0] = strtolower($variables[0]);
-	
-	$sql_select = "SELECT $variables[0].datetime, DATE_FORMAT($variables[0].datetime, '%d/%m/%Y') AS Annee, HOUR($variables[0].datetime) AS Heure, ";
-	for($i=0 ; $i < count($variables) ; $i++){
-		$variables[$i] = strtolower($variables[$i]);
-		if ($i == count($variables) -1) $sql_select .= $variables[$i]. ".value AS " .$variables[$i]."_value";
-		else $sql_select .= $variables[$i]. ".value AS " .$variables[$i]."_value ,";
-	}
-	
-	$sql_select .= " FROM " .$variables[0]. " ";		
-	for($i=1 ; $i < count($variables) ; $i++){
-		$sql_select .= " LEFT JOIN " .$variables[$i]. " ON " .$variables[$i].".datetime = " .$variables[0]. ".datetime ";
-		$sql_select .= " AND $variables[$i].state = 1";
 	}
 			
-	$sql_select .= " WHERE " .$variables[0]. ".datetime BETWEEN '" .$dateDebut. "'";
+	$sql_select .= " WHERE " .$variables[$biggerIndex]. ".datetime BETWEEN '" .$dateDebut. "'";
 	$sql_select .= " AND '" .$dateFin. "'";
-	$sql_select .= " AND $variables[0].state = 1";
-	$sql_select .= " GROUP BY YEAR($variables[0].datetime),MONTH($variables[0].datetime),DATE($variables[0].datetime), HOUR(" .$variables[0]. ".datetime)";
-	$sql_select .= " ORDER BY YEAR($variables[0].datetime),MONTH($variables[0].datetime),DATE($variables[0].datetime), HOUR($variables[0].datetime)";
+	$sql_select .= " AND ".$variables[$biggerIndex].".state = 1";
+	$sql_select .= " GROUP BY DATE(" .$variables[$biggerIndex]. ".datetime)";
 	return $sql_select;
 }
 
-function generateDatasAndMoySQL($variables, $dateDebut, $dateFin){
-	$variables[0] = strtolower($variables[0]);
+
+function generateDatasSQL($variables, $dateDebut, $dateFin, $connexion){
+	//Calcule de la plus grosse table pour se baser dessus
+	$biggerIndex = getBiggerTableIndex($variables, $connexion);
+	$variables[$biggerIndex] = strtolower($variables[$biggerIndex]);
 	
-	$sql_select = "SELECT $variables[0].datetime, DATE_FORMAT($variables[0].datetime, '%d/%m/%Y') AS Annee, HOUR($variables[0].datetime) AS Heure, ";
+	$sql_select = "SELECT ".$variables[$biggerIndex].".datetime, DATE_FORMAT(".$variables[$biggerIndex].".datetime, '%d/%m/%Y') AS Annee, HOUR(".$variables[$biggerIndex].".datetime) AS Heure, ";
 	for($i=0 ; $i < count($variables) ; $i++){
-		$variables[$i] = strtolower($variables[$i]);
-		if ($i == count($variables) -1) $sql_select .= $variables[$i]. ".value AS " .$variables[$i]."_value";
-		else $sql_select .= $variables[$i]. ".value AS " .$variables[$i]."_value ,";
+		if ($i != $biggerIndex){
+			$variables[$i] = strtolower($variables[$i]);
+			if ($i == count($variables) -1) $sql_select .= $variables[$i]. ".value AS " .$variables[$i]."_value";
+			else $sql_select .= $variables[$i]. ".value AS " .$variables[$i]."_value ,";
+		}
 	}
 	
-	$sql_select .= " FROM " .$variables[0]. " ";		
-	for($i=1 ; $i < count($variables) ; $i++){
-		$sql_select .= " LEFT JOIN " .$variables[$i]. " ON " .$variables[$i].".datetime = " .$variables[0]. ".datetime ";
-		$sql_select .= " AND $variables[$i].state = 1";
+	$sql_select = ($sql_select[strlen($sql_select)-1] == ',') ? substr($sql_select, 0, strlen($sql_select)-1) : $sql_select;
+	
+	$sql_select .= " FROM " .$variables[$biggerIndex]. " ";		
+	for($i=0 ; $i < count($variables) ; $i++){
+		if ($i != $biggerIndex){
+			$sql_select .= " LEFT JOIN " .$variables[$i]. " ON " .$variables[$i].".datetime = " .$variables[$biggerIndex]. ".datetime ";
+			$sql_select .= " AND $variables[$i].state = 1";
+		}
 	}
 			
-	$sql_select .= " WHERE " .$variables[0]. ".datetime BETWEEN '" .$dateDebut. "'";
+	$sql_select .= " WHERE " .$variables[$biggerIndex]. ".datetime BETWEEN '" .$dateDebut. "'";
 	$sql_select .= " AND '" .$dateFin. "'";
-	$sql_select .= " AND $variables[0].state = 1";
-	$sql_select .= " GROUP BY DATE($variables[0].datetime), HOUR($variables[0].datetime)";
-	$sql_select .= " ORDER BY DATE($variables[0].datetime), HOUR($variables[0].datetime)";
+	$sql_select .= " AND ".$variables[$biggerIndex].".state = 1";
+	$sql_select .= " GROUP BY YEAR(".$variables[$biggerIndex].".datetime),MONTH(".$variables[$biggerIndex].".datetime),DATE(".$variables[$biggerIndex].".datetime), HOUR(" .$variables[$biggerIndex]. ".datetime)";
+	$sql_select .= " ORDER BY YEAR(".$variables[$biggerIndex].".datetime),MONTH(".$variables[$biggerIndex].".datetime),DATE(".$variables[$biggerIndex].".datetime), HOUR(".$variables[$biggerIndex].".datetime)";
+	return $sql_select;
+}
+
+function generateDatasAndMoySQL($variables, $dateDebut, $dateFin, $connexion){
+	//Calcule de la plus grosse table pour se baser dessus
+	$biggerIndex = getBiggerTableIndex($variables, $connexion);
+	
+	
+	$variables[$biggerIndex] = strtolower($variables[$biggerIndex]);
+	
+	$sql_select = "SELECT $variables[$biggerIndex].datetime, DATE_FORMAT($variables[$biggerIndex].datetime, '%d/%m/%Y') AS Annee, HOUR($variables[$biggerIndex].datetime) AS Heure, ";
+	for($i=0 ; $i < count($variables) ; $i++){
+		if ($i != $biggerIndex){
+			$variables[$i] = strtolower($variables[$i]);
+			if ($i == count($variables) -1) $sql_select .= $variables[$i]. ".value AS " .$variables[$i]."_value";
+			else $sql_select .= $variables[$i]. ".value AS " .$variables[$i]."_value ,";
+		}
+	}
+	
+	$sql_select = ($sql_select[strlen($sql_select)-1] == ',') ? substr($sql_select, 0, strlen($sql_select)-1) : $sql_select;
+	
+	$sql_select .= " FROM " .$variables[$biggerIndex]. " ";		
+	for($i=0 ; $i < count($variables) ; $i++){
+		if ($i != $biggerIndex){
+			$sql_select .= " LEFT JOIN " .$variables[$i]. " ON " .$variables[$i].".datetime = " .$variables[$biggerIndex]. ".datetime ";
+			$sql_select .= " AND $variables[$i].state = 1";
+		}
+	}
+			
+	$sql_select .= " WHERE " .$variables[$biggerIndex]. ".datetime BETWEEN '" .$dateDebut. "'";
+	$sql_select .= " AND '" .$dateFin. "'";
+	$sql_select .= " AND " .$variables[$biggerIndex]. ".state = 1";
+	$sql_select .= " GROUP BY DATE(" .$variables[$biggerIndex]. ".datetime), HOUR(" .$variables[$biggerIndex]. ".datetime)";
+	$sql_select .= " ORDER BY DATE(".$variables[$biggerIndex].".datetime), HOUR(" .$variables[$biggerIndex]. ".datetime)";
 	return $sql_select;
 }
 
@@ -359,8 +420,11 @@ function getLastValue($variable, $dateDebut, $connexion){
 	return $data['value'];
 }
 
-function getNombreRowSpan($table, $datetime, $dateFin, $connexion){
-	$table = strtolower($table);
+function getNombreRowSpan($variables, $datetime, $dateFin, $connexion){
+	//Calcule de la plus grosse table pour se baser dessus
+	$biggerIndex = getBiggerTableIndex($variables, $connexion);
+	$table = strtolower($variables[$biggerIndex]);
+	
 	$sql_select  = "SELECT COUNT(DISTINCT(HOUR($table.datetime))) AS Nombre 
 					FROM $table 
 					WHERE $table.datetime >= '" .$datetime. "' AND $table.datetime < DATE('" .$datetime. "' + INTERVAL 1 DAY) 
