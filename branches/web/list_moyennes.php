@@ -12,12 +12,8 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 	<tr id="tabListDataHeader">
 			<th title="Date de la moyenne">Date</th>
 		<?php
-			$_SESSION['yAxis_title'] = "Moyennes";	
-	
 			foreach($variables as $variable){
 				$variable = getHeader($variable);
-				$_SESSION['subtitles'][] = $variable;
-				$_SESSION['unite'][] = getUnite($variable, $connexion);
 				echo "<th title='" .getDescriptionOfLabel($variable, $connexion). " en " .getUnite($variable, $connexion). "'>&nbsp;" .getLabel($variable). "&nbsp;</th>";
 			}
 	echo "</tr>";
@@ -32,13 +28,11 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 		$datetime = $data->datetime;						
 		
 		echo '<tr class=tabListDataCells>';
-			$_SESSION['categories'][] = $data->Annee;
 			echo "<td>" .$data->Annee. "</td>";
 		
 			foreach($variables as $variable){
 				$value = strtolower($variable . "_avg");
 				$header = getHeader($variable);
-				$_SESSION['series'][$header][] = round($data->$value);
 				echo "<td title='" .getHeader($variable). "'>" . traitementDecimal($variable, round($data->$value)). "</td>";
 			}
 		echo "</tr>";

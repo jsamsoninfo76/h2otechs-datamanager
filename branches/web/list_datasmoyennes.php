@@ -13,12 +13,8 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 							<th title="Date au format AAAA/MM/JJ de la prise de donn&eacute;e">Date</th>
 							<th title="Heure de la prise de donn&eacute;e">Heure</th>
 						<?php
-							$_SESSION['yAxis_title'] = "DonneesEtMoyennes";
-							
 							foreach($variables as $variable){
 								$variable = getHeader($variable);
-								$_SESSION['subtitles'][] = $variable;
-								$_SESSION['unite'][] = getUnite($variable, $connexion);
 								echo "<th title='" .getDescriptionOfLabel($variable, $connexion). " en " .getUnite($variable, $connexion). "'>&nbsp;" .getLabel($variable). "&nbsp;</th>";
 							}
 					echo "</tr>";
@@ -36,7 +32,6 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 						$datetime = $data->datetime;
 												
 						echo '<tr class=tabListDataCells>';
-						$_SESSION['categories'][] = $data->Annee;
 						if ($compteurRowSpan == $nbRowSpan){
 							$nbRowSpan = getNombreRowSpan($variables[0], $datetime, $dateFin, $connexion);
 							echo "<td class='tabListDataCellsAnnee' rowspan=" .(($nbRowSpan>1) ? $nbRowSpan : 1). ">";
@@ -51,7 +46,6 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 						}else $compteurRowSpan++;
 													
 						$heure = ($data->Heure >= 10) ? $data->Heure : "0".$data->Heure;
-						$_SESSION['heures'][] = $data->Heure;
 						echo "<td>";
 						$nombreInterventionsHeure = getCountInterventionsByHour($datetime, $connexion);
 						if ($nombreInterventionsHeure > 0){
@@ -81,8 +75,6 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 								echo "<td title='" .getHeader($variable). "'>" .traitementDecimal($variable, $lastValue[$variable]). "</td>";
 							}
 							
-							$_SESSION['series'][$header][] = $lastValue[$variable];
-							
 							//Moyenne
 							if ($select != "datas") $moyenne[$variable] = $moyenne[$variable] + $lastValue[$variable];
 						}
@@ -90,16 +82,12 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 						
 						// Moyennes
 						if ($compteurRowSpan == $nbRowSpan && $select != "datas"){
-							$_SESSION['categories'][] = "Moyenne du jour";
-							$_SESSION['heures'][] = "Moyenne du jour";
-	
 //							$_SESSION['nombreLignesMoyennes']++;
 							echo "<tr class='tabListDataMoy'><td colspan=2>Moyenne du $data->Annee</td>";
 							foreach($variables as $variable){
 								$value = strtolower($variable . "_value");
 								$header = getHeader($variable);
 								$moy = round($moyenne[$variable] / $nbRowSpan);
-								$_SESSION['series'][$header][] = $moy;
 								echo "<td>" . traitementDecimal($variable, $moy). "</td>";
 							}	
 							

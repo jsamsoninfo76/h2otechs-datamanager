@@ -8,9 +8,6 @@
  * http://php.net/manual/fr/function.count.php (count)
  * http://php.net/manual/fr/function.strtolower.php (lowercase)
  */
- 
-session_unset();  
-
 
 //Récupération des variables
 $variables = $_POST['variables'];
@@ -41,17 +38,6 @@ if (isset($variables) && isset($dateDebut) && isset($dateFin) && isset( $select)
 			</div>
 
 			<?php
-				//Preparation des donnees de session
-				/*$_SESSION['subtitles'] = null;
-				$_SESSION['categories'] = null;
-				$_SESSION['tooltip'] = "";
-				$_SESSION['series'] = null;
-				$_SESSION['dateDebut'] = str_replace("/", "-", substr($dateDebut ,0 ,10 ));
-				$_SESSION['dateFin'] = str_replace("/", "-", substr($dateFin ,0 , 10));
-				$_SESSION['tailleColonne'] = null;
-				$_SESSION['moyennes'] = null;
-				$_SESSION['unite'] = null;*/
-				
 				if ($select == "datas") include("list_datas.php");
 				if ($select == "moyennes") include("list_moyennes.php");
 				if ($select == "datasmoyennes") include("list_datasmoyennes.php");

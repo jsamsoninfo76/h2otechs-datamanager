@@ -4,7 +4,6 @@
  * http://www.php.net/manual/fr/class.dateinterval.php 
  * http://php.net/manual/fr/function.date.php
  */
- 
 //Recuperation des variables envoyées
 $_SESSION['variables'] = (isset($_POST['variables'])) ? $_POST['variables'] : $_SESSION['variables'];
 $_SESSION['datedebut'] = (isset($_POST['datedebut'])) ? $_POST['datedebut'] : $_SESSION['datedebut'];
@@ -20,7 +19,7 @@ if (isset($_GET['action']) && isset($_SESSION['datedebut']) && isset($_SESSION['
 		else if ($_GET['action'] == "back")  $date->sub(new DateInterval('PT'.$secondes.'S'));
 		$_SESSION['datedebut'] = $date->format('Y/m/d H:i:s');
 	} catch (Exception $e) {
-	    echo $e->getMessage();
+	    //echo $e->getMessage();
 	    exit(1);
 	}
 }
@@ -29,24 +28,199 @@ $variables = $_SESSION['variables'];
 $datedebut = $_SESSION['datedebut'];
 $frequence = $_SESSION['frequence'];
 
-//print_r($_SESSION);
-
 //Connexion à la base de données
 $connexion = new PDO('mysql:host='.$config['host'].';dbname='.$config['db'], $config['user'], $config['pass']);
 
 //Recuperation des données
+$_SESSION['subtitles'] = null;
+$_SESSION['categories'] = null;
+$_SESSION['series'] = null;
+$_SESSION['heures'] = null;
+$_SESSION['unite'] = null;
 
 if ($datedebut != "" && $frequence != "" && $variables != ""){
-	echo getDataCourbe($datedebut, $frequence, $variables, $connexion);	
+	$sql_select_data = getDataCourbe($datedebut, $frequence, $variables, $connexion);	
+	//echo $sql_select_data."<br/><br/>";
+	$query_select_data = $connexion->prepare($sql_select_data);
+	$query_select_data->execute();
+	
+	foreach($variables as $variable){
+		$variable = getHeader($variable);
+		$_SESSION['subtitles'][] = $variable;
+		$lastValue[$variable] = "";
+		$_SESSION['unite'][] = getUnite($variable, $connexion);
+	}
+	
+	while($data=$query_select_data->fetch(PDO::FETCH_OBJ)){
+		$datetime = $data->datetime;
+		$_SESSION['categories'][] = $datetime;							
+		$_SESSION['heures'][] = $data->Heure;
+		
+		foreach($variables as $variable){ 
+			//Mise en lower du data_label_value
+			$value = strtolower($variable . "_value");
+			$header = getHeader($variable);
+			
+			//Si la value est vide
+			if ($data->$value == "") {
+				//Si la dernière valeur est aussi vide
+				if ($lastValue[$variable] == "")
+					$lastValue[$variable] = getLastValue($variable, $datedebut, $connexion);
+			}
+			else 
+				$lastValue[$variable] = $data->$value;
+			
+			$_SESSION['series'][$header][] = traitementDecimal($variable, $lastValue[$variable]);
+		}
+	} 
 }
 
 ?>
+<script type="text/javascript">
+	$(function () {
+        $('#container').highcharts({
+            chart: {
+                type: 'line',
+                marginRight: 130,
+                marginBottom: 25
+            },
+            title: {
+                text: <?php 
+                	//Recupere le label en fonction de l'unité
+                	foreach($_SESSION['unite'] as $unite){ $unite = getUniteLabel($unite);}
+                	echo "'Courbe de $unite'"; 
+                		
+                ?>,
+                x: -20 //center
+            },
+            subtitle: {
+            	<?php
+            		//Recupere la date de début et de fin
+            		$subtitles = "text: 'Prelevement de l\'annee ";
+            		/*$datePrecedente = "";
+            			foreach($_SESSION['categories'] as $subtitle) {
+            				$souschaine = substr($subtitle, 6, 4);
+            				if ($datePrecedente != $souschaine){
+            					$subtitles .= "$souschaine - ";
+            					$datePrecedente = $souschaine;
+            				}
+            			}*/
+            		$subtitles .= substr($_SESSION['categories'][0], 0, 4);
+            		
+            		$subtitles .= " du " .substr($_SESSION['categories'][0], 5, 5). " au " .substr($_SESSION['categories'][count($_SESSION['categories'])-1], 5, 5);
+            		$subtitles .= "',";
+            		echo $subtitles;
+            	?>
+                x: -20
+            },
+            xAxis: {
+            	//Axe des abscisse 
+                <?php
+            		$categories = "categories: [";
+            		foreach($_SESSION['heures'] as $heure) {
+            			$categories .= "'" .$heure. "h', ";
+            		}
+            		$categories = substr($categories, 0, count($subtitles)-3) . "]";
+            		echo $categories ;
+            	?>
+            },
+            yAxis: {
+            	//Axe des ordonnees
+                title: {
+                    text: <?php echo "'" .ucfirst($unite). " (" . (($_SESSION['unite'][0] == "pourcent") ? "%" : $_SESSION['unite'][0]). ")'"; ?>
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                valueSuffix: <?php echo "' " .$_SESSION['unite'][0]. "'"; ?>
+            },
+            plotOptions: {
+                line: {
+                    dataLabels: {
+                        enabled: true
+                    },
+                    enableMouseTracking: true
+                }
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'top',
+                x: -10,
+                y: 100,
+                borderWidth: 0
+            },
+            series: [
+            	<?php
+            		$datas = "";
+            		//			echo traitementDecimal($variable, $lastValue[$variable]);
+            		foreach($_SESSION['subtitles'] as $nom){
+            			$datas .= "{";
+	            		$datas .= "name: '" .$nom. "',";
+	            		$datas .= "data: [";
+	            		foreach($_SESSION['series'][$nom] as $data){
+	            			$datas .= $data.", ";
+	            		}
+	            		$datas = substr($datas, 0, count($datas)-2);
+	            		$datas .= "]";
+	            		$datas .= "},";	
+            		}
+            		//$datas = substr($datas, 0, count($datas)-1);
+            		echo $datas;
+            	?>
+            ]
+        });
+    });
+</script>
+<script src="include/utile/Highcharts/js/highcharts.js"></script>
+<script src="include/utile/Highcharts/js/modules/exporting.js"></script>
 
 <div id="formCourbesBlock">
 
-	<form id="formCourbes" name="formCourbes" method="post" onsubmit="validerFormCourbes(0)">
-
-		<!-- Titre -->
+	<form id="formCourbes" name="formCourbes" method="post" onsubmit="validerFormCourbes(0)">	
+		<div id="timeFrequenceBloc">
+			<table>
+				<tr>
+					<td><div id="timeFrequence_title"><h5>*Echelle : </h5></div></td>
+					<td><div id="datetime_title"><h5>*Date de d&eacute;but : </h5><font class="message_error" id="datetime_courbes_error"></font></div></td>
+				</tr>
+				<tr>
+					<td>
+						<select name="timeFrequence" onchange="validerFormCourbes(1);">
+							<option value="1" <?php echo ("1" == $frequence) ? "selected=selected" : ""; ?>>1 heure</option>
+							<option value="2" <?php echo ("2" == $frequence) ? "selected=selected" : ""; ?>>2 heures</option>
+							<option value="6" <?php echo ("6" == $frequence) ? "selected=selected" : ""; ?>>6 heures</option>
+							<option value="12" <?php echo ("12" == $frequence) ? "selected=selected" : ""; ?>>12 heures</option>
+							<option value="24" <?php echo ("24" == $frequence) ? "selected=selected" : ""; ?>>24 heures</option>
+						</select>
+					</td>
+					<td>
+						<div id="datetimepickerCourbe" class="input-append date">
+						<a href="index.php?id_page=5&action=back"><img src="img/left-arrow.png">&nbsp;&nbsp;</a>
+							<input type="text" id="bouttonDate" name="datedebut" value="<?php echo $datedebut; ?>"></input>
+					      <span class="add-on">
+					        <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+					      </span>
+					    <a href="index.php?id_page=5&action=next">&nbsp;&nbsp;<img src="img/right-arrow.png"></a>
+					    </div>
+						 <!-- Ajout du javascript jquery-->
+					    <script type="text/javascript">
+					    	$('#datetimepickerCourbe').datetimepicker({ 
+					    		format: 'yyyy/MM/dd hh:mm:ss'
+					    	});
+					    </script>
+					</td>
+				</tr>
+			</table>
+		</div>
+	    
+	    <div id="container" style="min-width: 600px; height: 500px; margin: 0 auto"></div>
+	    
+	    <!-- Titre -->
 		<h5 title="Au moins une">*Quelle donn&eacute;es voulez vous r&eacute;cup&eacute;rer ?</h5> 
 				
 		<!-- Affichage erreur sur sélection -->
@@ -97,40 +271,9 @@ if ($datedebut != "" && $frequence != "" && $variables != ""){
 				?>
 			</tr>
 			</table>
+			<input type="submit" value="Voir courbe">
 		</div>
-	
-		<div id="timeFrequenceBloc">
-			<div id="timeFrequence_title"><h5>*Echelle : </h5></div>
-			<select name="timeFrequence" onchange="validerFormCourbes(1);">
-				<option value="1" <?php echo ("1" == $frequence) ? "selected=selected" : ""; ?>>1 heure</option>
-				<option value="2" <?php echo ("2" == $frequence) ? "selected=selected" : ""; ?>>2 heures</option>
-				<option value="6" <?php echo ("6" == $frequence) ? "selected=selected" : ""; ?>>6 heures</option>
-				<option value="12" <?php echo ("12" == $frequence) ? "selected=selected" : ""; ?>>12 heures</option>
-				<option value="24" <?php echo ("24" == $frequence) ? "selected=selected" : ""; ?>>24 heures</option>
-			</select>
-		</div>
-		
-		<!-- DateDébut Datetimepicker -->
-		<div id="datetime_title"><h5>*Date de d&eacute;but : </h5><font class="message_error" id="datetime_courbes_error"></font></div>
-		<div id="datetimepickerCourbe" class="input-append date">
-		<a href="index.php?id_page=5&action=back"><img src="img/left-arrow.png">&nbsp;&nbsp;</a>
-			<input type="text" id="bouttonDate" name="datedebut" value="<?php echo $datedebut; ?>"></input>
-	      <span class="add-on">
-	        <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
-	      </span>
-	    <a href="index.php?id_page=5&action=next">&nbsp;&nbsp;<img src="img/right-arrow.png"></a>
-	    </div>
-		 <!-- Ajout du javascript jquery-->
-	    <script type="text/javascript">
-	    	$('#datetimepickerCourbe').datetimepicker({ 
-	    		format: 'yyyy/MM/dd hh:mm:ss'
-	    	});
-	    </script>
-	
-	    <input type="submit" value="Voir courbe">
 	</form>
 	
-	<!-- <div id="container" style="min-width: 600px; height: 500px; margin: 0 auto"></div> -->
-
+	
 </div>
-

@@ -3,9 +3,10 @@ function getUniteLabel($unite){
 	if ($unite == "bar") return "pression";
 	if ($unite == "ph") return "ph";
 	if ($unite == "%") return "rendement";
-	if ($unite == "m3") return "débit";
-	if ($unite == "cf") return "conductivit&eacute;";
+	if ($unite == "m3") return "debit";
+	if ($unite == "cf") return "conductivite";
 	if ($unite == "h") return "horaire";
+	if ($unite == "pourcent") return "pourcentage";
 }
 
 /**
@@ -71,12 +72,12 @@ function getPHColor($value){
  */
 function traitementDecimal($variable, $value){
 	//Traitement PH, datas entre 0 & 140 
-	if (strpos($variable, "PH")){ 
-		if (strlen($value) == 3) 		return substr($value, 0, 1) . substr($value, 1, 1) . "," . substr($value, 2, 1);
-		else if(strlen($value) == 2) 	return substr($value, 0, 1) . "," . substr($value, 1, 1);		
+	if (strpos($variable, "PH") || strpos($variable, "PP") || strpos($variable, "PL")){ 
+		if (strlen($value) == 3) 		return substr($value, 0, 1) . substr($value, 1, 1) . "." . substr($value, 2, 1);
+		else if(strlen($value) == 2) 	return substr($value, 0, 1) . "." . substr($value, 1, 1);		
 		else 							return $value;
 	}
-	else
+	else 
 		return $value;
 }
 /**

@@ -15,7 +15,6 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 		
 		<?php	
 
-			$_SESSION['yAxis_title'] = "Donnees";
 			foreach($variables as $variable){
 				$variable = getHeader($variable);
 				$_SESSION['subtitles'][] = $variable;
@@ -40,7 +39,6 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 		$datetime = $data->datetime;
 		$compteurPair++;								
 		echo '<tr class=tabListDataCells>';
-		$_SESSION['categories'][] = $data->datetime;
 		if ($compteurRowSpan == $nbRowSpan){
 			$nbRowSpan = getNombreRowSpan($variables[0], $datetime, $dateFin, $connexion);
 			echo "<td class='tabListDataCellsAnnee' rowspan=" .(($nbRowSpan>1) ? $nbRowSpan : 1). ">";
@@ -56,7 +54,6 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 		}else $compteurRowSpan++;
 									
 		$heure = ($data->Heure >= 10) ? $data->Heure : "0".$data->Heure;
-		$_SESSION['heures'][] = $data->Heure;
 		echo "<td>";
 		$nombreInterventionsHeure = getCountInterventionsByHour($datetime, $connexion);
 		if ($nombreInterventionsHeure > 0){
@@ -89,8 +86,6 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 			echo traitementDecimal($variable, $lastValue[$variable]);
 			echo "</span>";
 			echo "</td>";
-			
-			$_SESSION['series'][$header][] = $lastValue[$variable];
 		}
 		echo "</tr>";
 	} ?>
