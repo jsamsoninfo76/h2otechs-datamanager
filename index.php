@@ -25,7 +25,6 @@
 		case 5 : include("statistique_line.php"); 	break; // index.php?id_page=5
 		case 6 : include("excel.php"); 				break; // index.php?id_page=6
 		case 7 : include("pdf.php"); 				break; // index.php?id_page=7
-		case 9 : include("st.php");	break; // index.php?id_page=8
 		default: include("list_planification.php"); break; // index.php
 	}
 

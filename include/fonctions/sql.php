@@ -1,8 +1,14 @@
 <?php
+/**
+ * Récupère les datas en fonctio nde la frequence
+ *
+ * Liens
+ * http://www.w3resource.com/mysql/mathematical-functions/mysql-mod-function.php (Modulo)
+ */
 function getDataCourbe($datedebut, $frequence, $variables, $connexion){
 	$variables[0] = strtolower($variables[0]);
 	
-	$sql_select = "SELECT $variables[0].datetime, DATE_FORMAT($variables[0].datetime, '%d/%m/%Y') AS Annee, HOUR($variables[0].datetime) AS Heure, ";
+	$sql_select = "SELECT $variables[0].datetime, DATE_FORMAT($variables[0].datetime, '%d/%m/%Y') AS Annee, DATE_FORMAT($variables[0].datetime, '%H')  AS Heure, ";
 	for($i=0 ; $i < count($variables) ; $i++){
 		$variables[$i] = strtolower($variables[$i]);
 		if ($i == count($variables) -1) $sql_select .= $variables[$i]. ".value AS " .$variables[$i]."_value";
@@ -16,7 +22,67 @@ function getDataCourbe($datedebut, $frequence, $variables, $connexion){
 	}
 	
 	$sql_select .= " WHERE $variables[0].datetime BETWEEN '$datedebut' AND DATE_ADD('$datedebut', INTERVAL $frequence HOUR)";
-	return $sql_select;
+	
+	switch ($frequence){
+		case 1 : $modulo = 5; break; 	//Données toutes les 2 minutes 	-> 30 Données
+		case 2 : $modulo = 5; break;	//Données toutes les 5 minutes	-> 24 Données
+		case 6 : $modulo = 15; break;	//Données toutes les 15 minutes -> 24 Données
+		case 12 : $modulo = 30; break;	//Données toutes les 30 minutes	-> 24 Données
+		default : $modulo = 0; break; 	//Données toutes les heures		-> 24 Données
+	}
+	
+	//SQL Simple
+	$query_test = $connexion->prepare($sql_select);
+	$query_test->execute();
+	$count_simple = $query_test->rowcount();
+	echo $sql_select;
+	$sql_select_params = $sql_select;
+	//VOIR POUR MODIFIER SELECTION SUR 24H
+	if ($modulo == 0) $sql_select_params .= " GROUP BY HOUR($variables[0].datetime)";
+	else {
+		$sql_select_param_mod = $sql_select . " AND MOD(MINUTE($variables[0].datetime), $modulo) = 0";
+		$sql_select_param_groupby = $sql_select . " GROUP BY MINUTE($variables[0].datetime)";
+		$sql_select_params .= " AND MOD(MINUTE($variables[0].datetime), $modulo) = 0 GROUP BY MINUTE($variables[0].datetime)";
+	}
+	
+	//Group by
+	if (isset($sql_select_param_groupby)){
+		$query_test = $connexion->prepare($sql_select_param_groupby);
+		$query_test->execute();
+		$count_groupby = $query_test->rowcount();
+	}
+	
+	//Mod
+	if (isset($sql_select_param_mod)){
+		$query_test = $connexion->prepare($sql_select_param_mod);
+		$query_test->execute();
+		$count_mod = $query_test->rowcount();
+	}
+	
+	//Group by et Mod
+	$query_test = $connexion->prepare($sql_select_params);
+	$query_test->execute();
+	$count_params = $query_test->rowcount();
+
+	echo "SIMPLE:$count_simple, PARAMS:$count_params, GROUPBY:$count_groupby, MOD:$count_mod</br>";	
+	
+	//Triage du tableau et recuperation du parametre le plus grand et <= 30 
+	$tri = array($count_simple, $count_params, $count_groupby, $count_mod);
+	sort($tri);
+	
+	$return = 0;
+	for($i=0 ; $i < count($tri) ; $i++){
+		$value = $tri[$i];
+		if ($value <= 30 && $value > $return) {
+			$return = $value;
+			$index = $i;
+		}
+	}
+	
+	if ($return == $count_simple) return $sql_select;
+	else if ($return == $count_params) return $sql_select_params;
+	else if ($return == $count_groupby) return $sql_select_param_groupby;
+	else if ($return == $count_mod) return $sql_select_param_mod;
 }
 
 function insertPlanification($datetime_create, $frequence, $uptime, $description, $connexion){
