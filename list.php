@@ -35,6 +35,10 @@ if (isset($variables) && isset($dateDebut) && isset($dateFin) && isset( $select)
 			</div>
 
 			<?php
+				$_SESSION = array();
+                $_SESSION['dateDebut'] = str_replace("/", "-", substr($dateDebut ,0 ,10 ));
+                $_SESSION['dateFin'] = str_replace("/", "-", substr($dateFin ,0 , 10));
+                
 				if ($select == "datas") include("list_datas.php");
 				if ($select == "moyennes") include("list_moyennes.php");
 				if ($select == "datasmoyennes") include("list_datasmoyennes.php");
