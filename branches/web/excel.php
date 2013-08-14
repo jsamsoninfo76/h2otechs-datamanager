@@ -30,14 +30,14 @@
  * http://g-ernaelsten.developpez.com/tutoriels/excel2007/?page=styles (style)
  * http://anthodevsec.wordpress.com/2011/07/02/phpexcel-une-librairie-excellente/ (style)
  */
- 
-//print_r($_SESSION);
 
 //Pour les gros tableaux 
 ini_set('memory_limit', '-1');
 set_time_limit(65536); 
 
 $verbose = (isset($_GET['verbose'])) ? true : false;
+
+print_r($_SESSION);
 
 /* STYLE */
 //array de configuration des bordures
@@ -136,7 +136,7 @@ for($numColonne=0 ; $numColonne<count($_SESSION['categories']) ; $numColonne++){
 	$coordonneeX    = 'A';
 	$coordonneeY    = $numColonne+2;
 	$localisation  	= $coordonneeX . $coordonneeY; //colonne[0] pour rester sur A & $numColonnes+2 pour commencer à 2
-	$value 			= $_SESSION['categories'][$numColonne];
+	$value 			= ($_SESSION['categories'][$numColonne] == "Moyenne du jour") ? $_SESSION['categories'][$numColonne] : substr($_SESSION['categories'][$numColonne], 0, 10);
 	
 	// On met la localisation de début
 	if ($valuePrec != $value){

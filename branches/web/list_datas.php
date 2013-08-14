@@ -7,7 +7,7 @@ http://stackoverflow.com/questions/2309801/how-to-submit-checkbox-values-with-ph
 http://php.net/manual/fr/function.count.php (count)
 http://php.net/manual/fr/function.strtolower.php (lowercase)
 -->
-
+
 <table id="tabListData" border="1" rules="rows">
     <tr id="tabListDataHeader">
         <th title="Date au format AAAA/MM/JJ de la prise de donn&eacute;e">Date</th>
