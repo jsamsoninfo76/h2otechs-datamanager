@@ -35,7 +35,6 @@ $connexion = new PDO('mysql:host='.$config['host'].';dbname='.$config['db'], $co
 $_SESSION['subtitles'] = null;
 $_SESSION['categories'] = null;
 $_SESSION['series'] = null;
-$_SESSION['heures'] = null;
 $_SESSION['unite'] = null;
 
 if ($datedebut != "" && $frequence != "" && $variables != ""){
@@ -43,36 +42,44 @@ if ($datedebut != "" && $frequence != "" && $variables != ""){
 	//echo $sql_select_data."<br/><br/>";
 	$query_select_data = $connexion->prepare($sql_select_data);
 	$query_select_data->execute();
+	$rowCount = $query_select_data->rowcount();
 	
-	foreach($variables as $variable){
-		$variable = getHeader($variable);
-		$_SESSION['subtitles'][] = $variable;
-		$lastValue[$variable] = "";
-		$_SESSION['unite'][] = getUnite($variable, $connexion);
-	}
-	
-	while($data=$query_select_data->fetch(PDO::FETCH_OBJ)){
-		$datetime = $data->datetime;
-		$_SESSION['categories'][] = $datetime;							
-		$_SESSION['heures'][] = $data->Heure;
-		
-		foreach($variables as $variable){ 
-			//Mise en lower du data_label_value
-			$value = strtolower($variable . "_value");
-			$header = getHeader($variable);
-			
-			//Si la value est vide
-			if ($data->$value == "") {
-				//Si la dernière valeur est aussi vide
-				if ($lastValue[$variable] == "")
-					$lastValue[$variable] = getLastValue($variable, $datedebut, $connexion);
-			}
-			else 
-				$lastValue[$variable] = $data->$value;
-			
-			$_SESSION['series'][$header][] = traitementDecimal($variable, $lastValue[$variable]);
+	if ($rowCount > 0){
+		foreach($variables as $variable){
+			$variable = getHeader($variable);
+			$_SESSION['subtitles'][] = $variable;
+			$lastValue[$variable] = "";
+			$_SESSION['unite'][] = getUnite($variable, $connexion);
 		}
-	} 
+		
+		while($data=$query_select_data->fetch(PDO::FETCH_OBJ)){
+			$datetime = $data->datetime;
+			$_SESSION['categories'][] = $datetime;							
+			
+			foreach($variables as $variable){ 
+				//Mise en lower du data_label_value
+				$value = strtolower($variable . "_value");
+				$header = getHeader($variable);
+				
+				//Si la value est vide
+				if ($data->$value == ""){
+					//Si la dernière valeur est aussi vide
+					if ($lastValue[$variable] == "")
+						$lastValue[$variable] = getLastValue($variable, $datedebut, $connexion);
+				}
+				else 
+					$lastValue[$variable] = $data->$value;
+				
+				$_SESSION['series'][$header][] = traitementDecimal($variable, $lastValue[$variable]);
+			}
+		} 
+	}
+	else{
+		?>
+		<font class="message_error" id="countRow">Il n\'y a aucune donn&eacute;es pour cette &eacute;chelle et date de d&eacute;but.</font>
+		
+		<?php
+	}
 }
 
 ?>
@@ -96,18 +103,16 @@ if ($datedebut != "" && $frequence != "" && $variables != ""){
             subtitle: {
             	<?php
             		//Recupere la date de début et de fin
-            		$subtitles = "text: 'Prelevement de l\'annee ";
-            		/*$datePrecedente = "";
-            			foreach($_SESSION['categories'] as $subtitle) {
-            				$souschaine = substr($subtitle, 6, 4);
-            				if ($datePrecedente != $souschaine){
-            					$subtitles .= "$souschaine - ";
-            					$datePrecedente = $souschaine;
-            				}
-            			}*/
-            		$subtitles .= substr($_SESSION['categories'][0], 0, 4);
-            		
-            		$subtitles .= " du " .substr($_SESSION['categories'][0], 5, 5). " au " .substr($_SESSION['categories'][count($_SESSION['categories'])-1], 5, 5);
+            		$annee	    = substr($_SESSION['categories'][0], 0, 4); 	//Recuperation année
+            		$subtitles  = "text: 'Prelevement de l\'annee $annee";
+            		$moisDebut  = substr($_SESSION['categories'][0], 5, 5);		//Recuperation mois de debut
+            		$subtitles .= " du $moisDebut";
+            		$heureDebut = substr($_SESSION['categories'][0], 11, 2); 	//Recuperation heure de debut
+            		$subtitles .= " a " .$heureDebut. "h";
+            		$moisFin	= substr($_SESSION['categories'][count($_SESSION['categories'])-1], 5, 5); //Recuperation mois de fin
+            		$subtitles .= " au $moisFin";
+            		$heureFin = substr($_SESSION['categories'][count($_SESSION['categories'])-1], 11, 2); //Recuperation heure de debut
+            		$subtitles .= " a " .$heureFin. "h";
             		$subtitles .= "',";
             		echo $subtitles;
             	?>
@@ -117,8 +122,9 @@ if ($datedebut != "" && $frequence != "" && $variables != ""){
             	//Axe des abscisse 
                 <?php
             		$categories = "categories: [";
-            		foreach($_SESSION['heures'] as $heure) {
-            			$categories .= "'" .$heure. "h', ";
+            		foreach($_SESSION['categories'] as $datetime) {
+            			$heure = substr($datetime, 11, 5);
+            			$categories .= "'" .$heure. "', ";
             		}
             		$categories = substr($categories, 0, count($subtitles)-3) . "]";
             		echo $categories ;
@@ -185,11 +191,11 @@ if ($datedebut != "" && $frequence != "" && $variables != ""){
 		<div id="timeFrequenceBloc">
 			<table>
 				<tr>
-					<td><div id="timeFrequence_title"><h5>*Echelle : </h5></div></td>
-					<td><div id="datetime_title"><h5>*Date de d&eacute;but : </h5><font class="message_error" id="datetime_courbes_error"></font></div></td>
+					<td class="tdstatistique"><div id="timeFrequence_title"><h5>*&Eacute;chelle : </h5></div></td>
+					<td class="tdstatistique"><div id="datetime_title"><h5>*Date de d&eacute;but : </h5><font class="message_error" id="datetime_courbes_error"></font></div></td>
 				</tr>
 				<tr>
-					<td>
+					<td class="tdstatistique">
 						<select name="timeFrequence" onchange="validerFormCourbes(1);">
 							<option value="1" <?php echo ("1" == $frequence) ? "selected=selected" : ""; ?>>1 heure</option>
 							<option value="2" <?php echo ("2" == $frequence) ? "selected=selected" : ""; ?>>2 heures</option>
@@ -198,7 +204,7 @@ if ($datedebut != "" && $frequence != "" && $variables != ""){
 							<option value="24" <?php echo ("24" == $frequence) ? "selected=selected" : ""; ?>>24 heures</option>
 						</select>
 					</td>
-					<td>
+					<td class="tdstatistique">
 						<div id="datetimepickerCourbe" class="input-append date">
 						<a href="index.php?id_page=5&action=back"><img src="img/left-arrow.png">&nbsp;&nbsp;</a>
 							<input type="text" id="bouttonDate" name="datedebut" value="<?php echo $datedebut; ?>"></input>
@@ -276,4 +282,4 @@ if ($datedebut != "" && $frequence != "" && $variables != ""){
 	</form>
 	
 	
-</div>
+</div> 

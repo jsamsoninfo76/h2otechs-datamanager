@@ -53,7 +53,14 @@ header>h1{
 
 /* ---------- TABLEAUX ---------- */
 
+/* TABLEAU STATISTIQUE */
+#trtitre{ width: 30%;}
+#trinput{ width: 70%;}
+.tdstatistique{
+	text-align: center;
+}
 
+/* TABLEAU DATAS */
 .message_error{ color: #FF6469; }
 .message_info{ color: #049f42 }
 .ligne_impair { background-color: #CEDAE0; padding-bottom: 1em; }

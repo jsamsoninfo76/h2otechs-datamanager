@@ -30,9 +30,6 @@ if (isset($variables) && isset($dateDebut) && isset($dateFin) && isset( $select)
 		<!-- Création du tableau et de son header-->
 		<div id="list">
 			<div id="actions">
-				<?php
-					if (hasOneUnite($variables,$connexion)) echo '<a href="index.php?id_page=5" target="_blank"><img class="icon" title="Voir le tableau sous forme de statistiques" src="img/stat.png"></a>'
-				?>
 				<a href="index.php?id_page=6" target="_blank"><img class="icon" title="Exporter au format Excel" src="img/excel.png"></a>
 				<a href="index.php?id_page=7" target="_blank"><img class="icon" title="Exporter au format PDF" src="img/pdf.png"></a>
 			</div>
