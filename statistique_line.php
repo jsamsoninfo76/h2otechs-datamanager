@@ -126,7 +126,10 @@ if ($datedebut != "" && $frequence != "" && $variables != ""){
             			$heure = substr($datetime, 11, 5);
             			$categories .= "'" .$heure. "', ";
             		}
-            		$categories = substr($categories, 0, count($subtitles)-3) . "]";
+            		if (strlen($categories) != 13)
+	            		$categories = substr($categories, 0, count($subtitles)-3);
+	            	$categories .= "]";
+	            		
             		echo $categories ;
             	?>
             },
@@ -187,7 +190,7 @@ if ($datedebut != "" && $frequence != "" && $variables != ""){
 
 <div id="formCourbesBlock">
 
-	<form id="formCourbes" name="formCourbes" method="post" onsubmit="validerFormCourbes(0)">	
+	<form id="formCourbes" name="formCourbes" method="post" onsubmit="return validerFormCourbes(0)">	
 		<div id="timeFrequenceBloc">
 			<table>
 				<tr>
@@ -224,7 +227,10 @@ if ($datedebut != "" && $frequence != "" && $variables != ""){
 			</table>
 		</div>
 	    
-	    <div id="container" style="min-width: 600px; height: 500px; margin: 0 auto"></div>
+	    <?php 
+		    //On affiche seuelemnt si il y a des données
+		   echo '<div id="container" style="display: none; min-width: 600px; height: 500px; margin: 0 auto"></div>';
+	    ?>
 	    
 	    <!-- Titre -->
 		<h5 title="Au moins une">*Quelle donn&eacute;es voulez vous r&eacute;cup&eacute;rer ?</h5> 
