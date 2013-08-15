@@ -49,10 +49,13 @@ function validerFormCourbes(fromSelect){
 	  dateDebut.style.backgroundColor = '#FF6469';
   }
 
-  if (res == 2 && fromSelect == 0) return true;
-  else if (fromSelect == 1 && res == 2) form.submit();
-  else return false;
-
+  if (res == 2 && fromSelect == 0)
+  	form.submit();
+  else if (fromSelect == 1 && res == 2) 
+  	form.submit();
+  else{
+	  if (fromSelect == 0) return false; 
+  } 
 }
 
 /** 
