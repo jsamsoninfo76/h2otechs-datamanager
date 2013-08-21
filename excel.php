@@ -37,6 +37,8 @@ set_time_limit(65536);
 
 $verbose = (isset($_GET['verbose'])) ? true : false;
 
+$decalagepdf = (isset($_SESSION['decalagepdf'])) ? $_SESSION['decalagepdf'] : 1;
+
 /* STYLE */
 //array de configuration des bordures
 $bordersarray=array(
@@ -118,7 +120,7 @@ if (!$isMoyenne) $sheet->setCellValue('B1', 'Heure');
 
 for($numColonne=0 ; $numColonne<count($_SESSION['subtitles']) ; $numColonne++){
 	$coordonneeX    = ($isMoyenne) ? $colonne[$numColonne+$decalage] : $colonne[$numColonne+$decalage]; //+1 pour Date, +1 pour Heure
-	$coordonneeY    = "1";
+	$coordonneeY    = 1 + $decalagepdf;
 	$localisation  	= $coordonneeX . $coordonneeY; //+1 pour le décalage avec la colonne de date
 	$value 			= $_SESSION['subtitles'][$numColonne];
 
@@ -132,7 +134,7 @@ $localisationFin = "";
 $valuePrec = "";
 for($numColonne=0 ; $numColonne<count($_SESSION['categories']) ; $numColonne++){
 	$coordonneeX    = 'A';
-	$coordonneeY    = $numColonne+2;
+	$coordonneeY    = $numColonne + 2 + $decalagepdf;
 	$localisation  	= $coordonneeX . $coordonneeY; //colonne[0] pour rester sur A & $numColonnes+2 pour commencer à 2
 	$value 			= ($_SESSION['categories'][$numColonne] == "Moyenne du jour") ? $_SESSION['categories'][$numColonne] : substr($_SESSION['categories'][$numColonne], 0, 10);
 	
@@ -173,7 +175,7 @@ if (!$isMoyenne){
 	/* GENERATION DE LA DEUXIEME COLONNE D'HEURE */
 	for($numLigne=0 ; $numLigne<count($_SESSION['heures']) ; $numLigne++){
 		$coordonneeX    = "B";
-		$coordonneeY    = ($numLigne+2);
+		$coordonneeY    = ($numLigne + 2 + $decalagepdf);
 		$localisation  	= $coordonneeX . $coordonneeY;
 		$value 			= $_SESSION['heures'][$numLigne];
 		
@@ -197,7 +199,7 @@ for($numColonne=0 ; $numColonne<count($_SESSION['subtitles']) ; $numColonne++){
 	
 	for($numLigne=0 ; $numLigne<count($_SESSION['series'][$nom]) ; $numLigne++){
 		$coordonneeX	= ($isMoyenne) ? $colonne[$numColonne+$decalage] : $colonne[$numColonne+$decalage];
-		$coordonneeY	= ($numLigne+2); //+1 Pour enlever la ligne de titre et +1 vue que ça commence à 1 et non 0
+		$coordonneeY	= ($numLigne+2+$decalagepdf); //+1 Pour enlever la ligne de titre et +1 vue que ça commence à 1 et non 0
 		$localisation  	= $coordonneeX . $coordonneeY;
 		$value 			= $_SESSION['series'][$nom][$numLigne];
 		makeItBordered($sheet, $localisation);
@@ -231,7 +233,7 @@ if ($verbose) echo date('H:i:s') , " Stylisation du fichier" , EOL;
 //Mise en gras des Headers
 for($numColonne=0 ; $numColonne<count($_SESSION['subtitles'])+$decalage ; $numColonne++){
 	$coordonneeX    = $colonne[$numColonne];
-	$coordonneeY    = 1;
+	$coordonneeY    = 1+$decalagepdf;
 	$localisation  	= $coordonneeX . $coordonneeY;
 	makeItBordered($sheet, $localisation); 
 	$styleCase = $sheet->getStyle($localisation);

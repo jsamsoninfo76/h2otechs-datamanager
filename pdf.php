@@ -62,7 +62,7 @@ echo date('H:i:s') , " Hide grid lines" , EOL;
 $objPHPExcel->getActiveSheet()->setShowGridLines(false);
 
 echo date('H:i:s') , " Set orientation to landscape" , EOL;
-$objPHPExcel->getActiveSheet()->getPageSetup()->setOrientation(PHPExcel_Worksheet_PageSetup::ORIENTATION_LANDSCAPE);
+//$objPHPExcel->getActiveSheet()->getPageSetup()->setOrientation(PHPExcel_Worksheet_PageSetup::ORIENTATION_LANDSCAPE);
 
 
 echo date('H:i:s') , " Write to PDF format using {$rendererName}" , EOL;
@@ -84,7 +84,6 @@ $callStartTime = microtime(true);
 $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'PDF');
 $objWriter->setSheetIndex(0);
 $objWriter->save($path . $filename);
-//$objWriter->save(str_replace('.php', '_'.$rendererName.'.pdf', __FILE__));
 $callEndTime = microtime(true);
 $callTime = $callEndTime - $callStartTime;
 echo date('H:i:s') , " File written to " , str_replace('.php', '_'.$rendererName.'.pdf', pathinfo(__FILE__, PATHINFO_BASENAME)) , EOL;
