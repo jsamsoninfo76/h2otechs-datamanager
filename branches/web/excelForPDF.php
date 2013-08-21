@@ -25,6 +25,8 @@
  * @version    1.7.9, 2013-06-02
  */
 
+print_r($_SESSION);
+
 /** Error reporting */
 error_reporting(E_ALL);
 
@@ -50,12 +52,20 @@ $objPHPExcel->getProperties()->setCreator("H2otechs")
 // Create a first sheet, representing sales data
 echo date('H:i:s') , " Add some data" , EOL;
 $objPHPExcel->setActiveSheetIndex(0);
+
+//Header : titre
 $objPHPExcel->getActiveSheet()->setCellValue('B1', 'Tableau de données');
-$objPHPExcel->getActiveSheet()->setCellValue('D1', date('d/m/y'));
+$objPHPExcel->getActiveSheet()->mergeCells('B1:I1');
+$objPHPExcel->getActiveSheet()->getStyle('B1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+//Header : date
+$objPHPExcel->getActiveSheet()->setCellValue('J1', 'date :');
+$objPHPExcel->getActiveSheet()->mergeCells('K1:L1');
+$objPHPExcel->getActiveSheet()->setCellValue('K1', date('d/m/Y'));
 //$objPHPExcel->getActiveSheet()->setCellValue('D1', PHPExcel_Sared_Date::PHPToExcel( gmmktime(0,0,0,date('m'),date('d'),date('Y')) ));
 //$objPHPExcel->getActiveSheet()->getStyle('D1')->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_XLSX15);
 //$objPHPExcel->getActiveSheet()->setCellValue('E1', '#12566');
-
+/*
 $objPHPExcel->getActiveSheet()->setCellValue('A3', 'Product Id');
 $objPHPExcel->getActiveSheet()->setCellValue('B3', 'Description');
 $objPHPExcel->getActiveSheet()->setCellValue('C3', 'Price');
@@ -127,7 +137,7 @@ $objPayable->getFont()->setColor( new PHPExcel_Style_Color( PHPExcel_Style_Color
 $objRichText->createText(', unless specified otherwise on the invoice.');
 
 $objPHPExcel->getActiveSheet()->getCell('A18')->setValue($objRichText);
-
+*/
 // Merge cells
 echo date('H:i:s') , " Merge cells" , EOL;
 $objPHPExcel->getActiveSheet()->mergeCells('A18:E22');
@@ -145,17 +155,17 @@ $objPHPExcel->getActiveSheet()->getStyle('E4:E13')->getNumberFormat()->setFormat
 
 // Set column widths
 echo date('H:i:s') , " Set column widths" , EOL;
-$objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
-$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(12);
-$objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(12);
+//$objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+//$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(12);
+//$objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(12);
 
 // Set fonts
 echo date('H:i:s') , " Set fonts" , EOL;
-$objPHPExcel->getActiveSheet()->getStyle('B1')->getFont()->setName('Candara');
-$objPHPExcel->getActiveSheet()->getStyle('B1')->getFont()->setSize(20);
-$objPHPExcel->getActiveSheet()->getStyle('B1')->getFont()->setBold(true);
-$objPHPExcel->getActiveSheet()->getStyle('B1')->getFont()->setUnderline(PHPExcel_Style_Font::UNDERLINE_SINGLE);
-$objPHPExcel->getActiveSheet()->getStyle('B1')->getFont()->getColor()->setARGB(PHPExcel_Style_Color::COLOR_WHITE);
+/*$objPHPExcel->getActiveSheet()->getStyle('C1')->getFont()->setName('Candara');
+$objPHPExcel->getActiveSheet()->getStyle('C1')->getFont()->setSize(14);
+$objPHPExcel->getActiveSheet()->getStyle('C1')->getFont()->setBold(true);
+$objPHPExcel->getActiveSheet()->getStyle('C1')->getFont()->setUnderline(PHPExcel_Style_Font::UNDERLINE_SINGLE);
+$objPHPExcel->getActiveSheet()->getStyle('C1')->getFont()->getColor()->setARGB(PHPExcel_Style_Color::COLOR_WHITE);
 
 $objPHPExcel->getActiveSheet()->getStyle('D1')->getFont()->getColor()->setARGB(PHPExcel_Style_Color::COLOR_WHITE);
 $objPHPExcel->getActiveSheet()->getStyle('E1')->getFont()->getColor()->setARGB(PHPExcel_Style_Color::COLOR_WHITE);
@@ -172,7 +182,7 @@ $objPHPExcel->getActiveSheet()->getStyle('D13')->getAlignment()->setHorizontal(P
 $objPHPExcel->getActiveSheet()->getStyle('A18')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_JUSTIFY);
 $objPHPExcel->getActiveSheet()->getStyle('A18')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
-$objPHPExcel->getActiveSheet()->getStyle('B5')->getAlignment()->setShrinkToFit(true);
+$objPHPExcel->getActiveSheet()->getStyle('B5')->getAlignment()->setShrinkToFit(true);*/
 
 // Set thin black border outline around column
 echo date('H:i:s') , " Set thin black border outline around column" , EOL;
@@ -284,7 +294,7 @@ echo date('H:i:s') , " Add a drawing to the worksheet" , EOL;
 $objDrawing = new PHPExcel_Worksheet_Drawing();
 $objDrawing->setName('Logo');
 $objDrawing->setDescription('Logo');
-$objDrawing->setPath('img/logo.png');
+$objDrawing->setPath('img/logo2.png');
 $objDrawing->setHeight(36);
 $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 
