@@ -37,8 +37,6 @@ set_time_limit(65536);
 
 $verbose = (isset($_GET['verbose'])) ? true : false;
 
-print_r($_SESSION);
-
 /* STYLE */
 //array de configuration des bordures
 $bordersarray=array(

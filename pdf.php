@@ -43,6 +43,10 @@ require_once 'include/include.php';
 $path = "upload/";
 $filename = "test.pdf";
 
+//filename & Path
+$path = "upload/";
+$filename = $_SESSION['dateDebut'] ."_au_". $_SESSION['dateFin'] ."_". $_SESSION['yAxis_title'] ."_". "Enky" .$config['enky']. ".pdf";
+
 //	Change these values to select the Rendering library that you wish to use
 //		and its directory location on your server
 $rendererName = PHPExcel_Settings::PDF_RENDERER_TCPDF;

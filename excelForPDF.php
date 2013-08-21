@@ -40,11 +40,11 @@ $objPHPExcel = new PHPExcel();
 echo date('H:i:s') , " Set document properties" , EOL;
 $objPHPExcel->getProperties()->setCreator("H2otechs")
 							 ->setLastModifiedBy("H2otechs")
-							 ->setTitle("Exportation de données")
-							 ->setSubject("Office 2007 XLSX Test Document")
-							 ->setDescription("Test document.")
+							 ->setTitle("Exportation datamamager")
+							 ->setSubject("Office 2007 XLSX")
+							 ->setDescription("Exportation datamanager")
 							 ->setKeywords("office 2007 openxml php")
-							 ->setCategory("Test result file");
+							 ->setCategory("Tableau de données");
 
 
 // Create a first sheet, representing sales data
