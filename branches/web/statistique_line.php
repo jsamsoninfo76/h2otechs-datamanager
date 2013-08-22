@@ -76,7 +76,7 @@ if ($datedebut != "" && $frequence != "" && $variables != ""){
 	}
 	else{
 		?>
-		<font class="message_error" id="countRow">Il n\'y a aucune donn&eacute;es pour cette &eacute;chelle et date de d&eacute;but.</font>
+		<font class="message_error" id="countRow">Il n'y a aucune donn&eacute;es &aacute; partir de cette date.</font>
 		
 		<?php
 	}
@@ -85,10 +85,10 @@ if ($datedebut != "" && $frequence != "" && $variables != ""){
 ?>
 <script type="text/javascript">
 	$(function () {
-        $('#container').highcharts({
+        $('#courbcontainer').highcharts({
             chart: {
                 type: 'line',
-                marginRight: 130,
+                marginRight: 30,
                 marginBottom: 25
             },
             title: {
@@ -150,7 +150,7 @@ if ($datedebut != "" && $frequence != "" && $variables != ""){
             plotOptions: {
                 line: {
                     dataLabels: {
-                        enabled: true
+                        enabled: false
                     },
                     enableMouseTracking: true
                 }
@@ -227,10 +227,7 @@ if ($datedebut != "" && $frequence != "" && $variables != ""){
 			</table>
 		</div>
 	    
-	    <?php 
-		    //On affiche seuelemnt si il y a des données
-		   echo '<div id="container" style="display: none; min-width: 600px; height: 500px; margin: 0 auto"></div>';
-	    ?>
+	    <div id="courbcontainer" style="min-width: 1000px; height: 600px; margin: 0 auto"></div>
 	    
 	    <!-- Titre -->
 		<h5 title="Au moins une">*Quelle donn&eacute;es voulez vous r&eacute;cup&eacute;rer ?</h5> 
