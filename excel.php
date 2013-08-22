@@ -37,45 +37,23 @@ set_time_limit(65536);
 
 $verbose = (isset($_GET['verbose'])) ? true : false;
 
-$decalagepdf = (isset($_SESSION['decalagepdf'])) ? $_SESSION['decalagepdf'] : 1;
-
 /* STYLE */
-//array de configuration des bordures
-$bordersarray=array(
-'borders'=>array(
-'top'=>array(
-'style'=>PHPExcel_Style_Border::BORDER_THIN),
-'left'=>array(
-'style'=>PHPExcel_Style_Border::BORDER_THIN),
-'right'=>array(
-'style'=>PHPExcel_Style_Border::BORDER_THIN),
-'bottom'=>array(
-'style'=>PHPExcel_Style_Border::BORDER_THIN)));
-//array de configuration des polices
-//pour mettre en gras
-$gras=array('font' => array(
-'bold' => true
-));
-//on centre verticalement et horizontalement
-$center=array('alignment'=>array(
-'horizontal'=>PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-'vertical'=>PHPExcel_Style_Alignment::VERTICAL_CENTER));
-//pour aligner à gauche
-$left=array('alignment'=>array(
-'horizontal'=>PHPExcel_Style_Alignment::HORIZONTAL_LEFT));
-//pour souligner
-$souligner=array('font' => array(
-'underline' => PHPExcel_Style_Font::UNDERLINE_DOUBLE
-));
+$backgroundHeaderColor = "225975";
+$textHeaderColor = "FFFFFF";
+$textColor = "000000";
+$backgroundDateColor = "006361";
+$backgroundMoyenneColor = "FFAC42";
+$bold = array( 'font' => array( 'bold' => true) ); 
+
 
 
 /** Error reporting */
-error_reporting(E_ALL);
-ini_set('display_errors', TRUE);
-ini_set('display_startup_errors', TRUE);
+//error_reporting(E_ALL);
+//ini_set('display_errors', TRUE);
+//ini_set('display_startup_errors', TRUE);
 date_default_timezone_set('Europe/London');
 
-define('EOL',(PHP_SAPI == 'cli') ? PHP_EOL : '<br />');
+//define('EOL',(PHP_SAPI == 'cli') ? PHP_EOL : '<br />');
 
 /** Include PHPExcel */
 require_once 'include/include.php';
@@ -86,7 +64,7 @@ if ($verbose) echo date('H:i:s') , " Cr&eacute;ation du nouveau fichier" , EOL;
 $objPHPExcel = new PHPExcel();
 
 // Set document properties
-if ($verbose) echo date('H:i:s') , " Changement des propri&eacute;t&eacute;es du fichier" , EOL;
+if ($verbose) echo date('H:i:s') , " Chargement des propri&eacute;t&eacute;es du fichier" , EOL;
 $objPHPExcel->getProperties()->setCreator("H2oTechs")
 							 ->setLastModifiedBy("H2oTechs")
 							 ->setTitle("Datamanager Reporting")
@@ -95,6 +73,46 @@ $objPHPExcel->getProperties()->setCreator("H2oTechs")
 							 ->setKeywords("office PHPExcel php")
 							 ->setCategory("Test result file");
 
+$objPHPExcel->setActiveSheetIndex(0);
+$sheet=$objPHPExcel->getActiveSheet();
+$sheet->setTitle('Releve');
+
+//HEADER
+if (isset($_SESSION['decalagepdf']) && $_SESSION['decalagepdf'] != null){
+	$objPHPExcel->getDefaultStyle()
+    			->getNumberFormat()
+    			->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_TEXT);
+    
+    //Header : Logo
+	$objDrawing = new PHPExcel_Worksheet_Drawing();
+	$objDrawing->setName('Logo');
+	$objDrawing->setDescription('Logo H2otechs');
+	$objDrawing->setPath('img/logo2.png');
+	$objDrawing->setHeight(50);
+	$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+	
+	//Header : titre
+	$sheet->mergeCells('D1:H1');
+	foreach($_SESSION['unite'] as $unite){ $unite = getUniteLabel($unite);}
+	$sheet->setCellValue('D1', "Relevé des données \nde $unite");
+	
+	//Header : date
+	$sheet->setCellValue('I1', "Par\nDate\nSite");	
+	$sheet->getStyle('I1')->applyFromArray($bold);
+	$sheet->getStyle('I1')->getAlignment()->setWrapText(true);	
+	$sheet->setCellValue('J1', "H2otechs\nle " . date('d/m/Y') . "\nwww.h2otechs.fr");
+	$sheet->getStyle('J1')->getAlignment()->setWrapText(true);	
+	$sheet->mergeCells('J1:L1');
+	
+
+	$decalagepdf = $_SESSION['decalagepdf'];
+	$_SESSION['decalagepdf'] = null;
+}else{
+	$decalagepdf = 0;
+}
+
+$isPDF = ($decalagepdf > 0) ? true : false;
+$margePDF = 4;
 
 //Test sur le document en cours
 $isMoyenne = ($_SESSION['yAxis_title'] == "Moyennes") ? 1 : 0;
@@ -109,14 +127,20 @@ while($cpt<91){
   $cpt++;
 }
 
-$objPHPExcel->setActiveSheetIndex(0);
-$sheet=$objPHPExcel->getActiveSheet();
-$sheet->setTitle('Releve');
-
 /* GENERATION DES HEADERS */
 if ($verbose) echo date('H:i:s') , " G&eacute;n&eacute;ration des nom de colonne" , EOL;
-$sheet->setCellValue('A1', 'Date');
-if (!$isMoyenne) $sheet->setCellValue('B1', 'Heure');
+$coordonneeDateHeure = 1 + $decalagepdf;
+$localisation = "A" . $coordonneeDateHeure;
+$sheet->setCellValue($localisation, 'Date');
+makeItColored($sheet, $localisation, $backgroundHeaderColor);
+changeFontColor($sheet, $localisation, $textHeaderColor);
+
+$localisation = "B" . $coordonneeDateHeure;
+if (!$isMoyenne) {
+	$sheet->setCellValue($localisation, 'Heure');
+	makeItColored($sheet, $localisation, $backgroundHeaderColor);
+	changeFontColor($sheet, $localisation, $textHeaderColor);
+}
 
 for($numColonne=0 ; $numColonne<count($_SESSION['subtitles']) ; $numColonne++){
 	$coordonneeX    = ($isMoyenne) ? $colonne[$numColonne+$decalage] : $colonne[$numColonne+$decalage]; //+1 pour Date, +1 pour Heure
@@ -125,6 +149,8 @@ for($numColonne=0 ; $numColonne<count($_SESSION['subtitles']) ; $numColonne++){
 	$value 			= $_SESSION['subtitles'][$numColonne];
 
 	$sheet->setCellValue($localisation, $value);
+	makeItColored($sheet, $localisation, $backgroundHeaderColor);
+	changeFontColor($sheet, $localisation, $textHeaderColor);
 }
 
 /* GENERATION DE LA PREMIERE COLONNE DE DATE */
@@ -165,8 +191,11 @@ for($numColonne=0 ; $numColonne<count($_SESSION['categories']) ; $numColonne++){
 			$sheet->mergeCells($localisationDebut .":". $localisationFin);
 		}
 	}
-		
-	makeItBordered($sheet, $localisation);
+	
+	if ($_SESSION['categories'][$numColonne] != "Moyenne du jour")
+		changeFontColor($sheet, $localisation, $textHeaderColor);
+	makeItColored($sheet, $localisation, $backgroundDateColor);
+	//makeItBordered($sheet, $localisation);
 	$sheet->setCellValue($localisation, $value);
 }
 
@@ -183,11 +212,12 @@ if (!$isMoyenne){
 		if ($value == "Moyenne du jour"){
 			$localisationMergeCelles = "A" . $coordonneeY . ":B" . $coordonneeY;
 			$sheet->mergeCells($localisationMergeCelles);
-			makeLigneColored($sheet, $colonne, $decalage, $coordonneeY);
+			makeLigneColored($sheet, $colonne, $decalage, $coordonneeY, $backgroundMoyenneColor);
 		}
-
-		makeItBordered($sheet, $localisation);
+		
+		//makeItBordered($sheet, $localisation);
 		$sheet->setCellValue($localisation, $value);
+		$sheet->getStyle($localisation)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 	}
 }
 
@@ -202,7 +232,7 @@ for($numColonne=0 ; $numColonne<count($_SESSION['subtitles']) ; $numColonne++){
 		$coordonneeY	= ($numLigne+2+$decalagepdf); //+1 Pour enlever la ligne de titre et +1 vue que ça commence à 1 et non 0
 		$localisation  	= $coordonneeX . $coordonneeY;
 		$value 			= $_SESSION['series'][$nom][$numLigne];
-		makeItBordered($sheet, $localisation);
+		//makeItBordered($sheet, $localisation);
 		
 		//Enregistrement de la taille max des valeurs de la colonne
 		$tailleColonne = strlen($value);
@@ -210,13 +240,15 @@ for($numColonne=0 ; $numColonne<count($_SESSION['subtitles']) ; $numColonne++){
 			$_SESSION['tailleColonne'][$numColonne+$decalage] = $tailleColonne;
 		
 		$sheet->setCellValue($localisation, $value);
+		$sheet->getStyle($localisation)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 	}	
 }
 
 /* AUGMENTATION DE LA TAILLE DES COLONNES */
 if ($verbose) echo date('H:i:s') , " Adaptation de la taille des colonnes" , EOL;
-$sheet->getColumnDimension('A')->setWidth(10);
-if (!$isMoyenne) $sheet->getColumnDimension('B')->setWidth(6);
+$sheet->getColumnDimension('A')->setWidth(10 + $margePDF);
+
+if (!$isMoyenne) $sheet->getColumnDimension('B')->setWidth(6 + $margePDF);
 for($numColonne=2 ; $numColonne<count($_SESSION['tailleColonne']) ; $numColonne++){
 	$nombreChar = $_SESSION['tailleColonne'][$numColonne] + 2; // +2 en cas de '-' et 1 de marge
 	
@@ -224,7 +256,7 @@ for($numColonne=2 ; $numColonne<count($_SESSION['tailleColonne']) ; $numColonne+
 		$nombreChar = strlen($_SESSION['subtitles'][$numColonne-$decalage])+1; // Prend la taille du nom de la colonne +1 de marge
 
 	
-	$sheet->getColumnDimension($colonne[$numColonne])->setWidth($nombreChar);
+	$sheet->getColumnDimension($colonne[$numColonne])->setWidth($nombreChar + $margePDF);
 }
 
 /* Style */
@@ -235,7 +267,7 @@ for($numColonne=0 ; $numColonne<count($_SESSION['subtitles'])+$decalage ; $numCo
 	$coordonneeX    = $colonne[$numColonne];
 	$coordonneeY    = 1+$decalagepdf;
 	$localisation  	= $coordonneeX . $coordonneeY;
-	makeItBordered($sheet, $localisation); 
+	//makeItBordered($sheet, $localisation); 
 	$styleCase = $sheet->getStyle($localisation);
 	$styleFont = $styleCase->getFont();
 	$styleFont->setBold(true);
@@ -264,14 +296,15 @@ $callStartTime = microtime(true);
 $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 
 //Save
-$objWriter->save($path."/".$filename);
+$objWriter->save($path."/".$filename);
 $callEndTime = microtime(true);
 $callTime = $callEndTime - $callStartTime;
 
 // Echo done
-echo '<br/><a href="upload/' .$filename. '">Cliquez ici si le t&eacute;l&eacute;chargement ne commence pas</a>';
-echo "<META HTTP-EQUIV='Refresh' CONTENT='0;URL=downloadfile.php?filename=$filename'>";
-
+if ($decalagepdf == 0){
+	echo '<br/><a href="upload/' .$filename. '">Cliquez ici si le t&eacute;l&eacute;chargement ne commence pas</a>';
+	echo "<META HTTP-EQUIV='Refresh' CONTENT='0;URL=downloadfile.php?filename=$filename'>";
+}
 
 /*
 * Rajoute une bordure autour de la case 
@@ -294,7 +327,7 @@ function makeItBordered($sheet, $localisation){
 	$sheet->getStyle($localisation)->getBorders()->applyFromArray(
 		array(
 			'allborders' => array(
-				'style' => PHPExcel_Style_Border::BORDER_THIN,
+				'style' => PHPExcel_Style_Fill::FILL_SOLID,
 				'color' => array(
 					'rgb' => '808080'
 				)
@@ -315,16 +348,31 @@ function makeItBordered($sheet, $localisation){
  * COLOR_YELLOW	 	'FFFFFF00'
  * COLOR_DARKYELLOW	'FF808000'
  * Orange moyenne 	'ffac42'
+ * bleu : #225975
+ * turquoise : #009997
+ * orange : #FFB200
+ * gris : #CEDAE0
  */
-function makeLigneColored($sheet, $colonne, $decalage, $coordonneeY){
+function makeLigneColored($sheet, $colonne, $decalage, $coordonneeY, $color){
 	for($numColonne=0 ; $numColonne<count($_SESSION['subtitles'])+$decalage ; $numColonne++){
 		$coordonneeX = $colonne[$numColonne];
 		$localisation = $coordonneeX . $coordonneeY;
 		$sheet->getStyle($localisation)
 		  ->getFill()
 		  ->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
-		  ->getStartColor()->setRGB('ffac42');
+		  ->getStartColor()->setRGB($color);
 			
 	}	
+}
+
+function makeItColored($sheet, $localisation, $color){
+	$sheet->getStyle($localisation)
+	  ->getFill()
+	  ->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
+	  ->getStartColor()->setRGB($color);
+}
+
+function changeFontColor($sheet, $localisation, $color){
+	$sheet->getStyle($localisation)->getFont()->getColor()->setRGB($color);
 }
 ?>
