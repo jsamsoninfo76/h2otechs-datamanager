@@ -47,6 +47,9 @@ function getDataCourbe($datedebut, $frequence, $variables, $connexion){
 		}
 	}
 	
+	if ($sql_select[strlen($sql_select)-1] == ',') 
+		$sql_select = substr($sql_select, 0, strlen($sql_select)-1);
+		
 	$sql_select .= " FROM " .$variables[$biggerIndex]. " ";		
 	for($i=0 ; $i < count($variables) ; $i++){
 		if ($i != $biggerIndex){
