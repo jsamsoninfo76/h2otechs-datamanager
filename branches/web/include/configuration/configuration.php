@@ -5,7 +5,7 @@ $config = array(
 	"user" => "root",
 	"pass" => "root",
 	"port" => "8889", 
-	"db"   => "h2otechs_datamanager_enki6",
+	"db"   => "h2otechs_datamanager_enki4",
 	"enky" => "6"
 );
 /*
