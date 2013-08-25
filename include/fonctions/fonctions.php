@@ -72,10 +72,14 @@ function getPHColor($value){
  */
 function traitementDecimal($variable, $value){
 	//Traitement PH, datas entre 0 & 140 
-	if (strpos($variable, "PH") || strpos($variable, "PP") || strpos($variable, "PL")){ 
-		if (strlen($value) == 3) 		return substr($value, 0, 1) . substr($value, 1, 1) . "." . substr($value, 2, 1);
-		else if(strlen($value) == 2) 	return substr($value, 0, 1) . "." . substr($value, 1, 1);		
-		else 							return $value;
+	if (strpos($variable, "PH") || strpos($variable, "PP") || strpos($variable, "PL") || strpos($variable, "PFIL1") || strpos($variable, "PFIL2")|| strpos($variable, "PFIL3")|| strpos($variable, "PL")|| strpos($variable, "PPE")){ 
+		if ($value[0] != '-'){
+			if (strlen($value) == 3) 		return substr($value, 0, 1) . substr($value, 1, 1) . "." . substr($value, 2, 1);
+			else if(strlen($value) == 2) 	return substr($value, 0, 1) . "." . substr($value, 1, 1);		
+			else 							return $value;
+		}
+		else
+			return $value;
 	}
 	else 
 		return $value;
