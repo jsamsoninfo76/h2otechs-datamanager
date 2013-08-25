@@ -104,7 +104,6 @@ if (isset($_SESSION['decalagepdf']) && $_SESSION['decalagepdf'] != null){
 	$sheet->getStyle('J1')->getAlignment()->setWrapText(true);	
 	$sheet->mergeCells('J1:L1');
 	
-
 	$decalagepdf = $_SESSION['decalagepdf'];
 	$_SESSION['decalagepdf'] = null;
 }else{
