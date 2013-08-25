@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client: localhost
--- Généré le: Mar 06 Août 2013 à 17:46
+-- Généré le: Ven 23 Août 2013 à 14:04
 -- Version du serveur: 5.5.25
 -- Version de PHP: 5.4.4
 
@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Base de données: `h2otechs_datamanager_enky2`
+-- Base de données: `h2otechs_datamanager_enki2`
 --
 
 -- --------------------------------------------------------
