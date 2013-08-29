@@ -36,6 +36,7 @@ $_SESSION['subtitles'] = null;
 $_SESSION['categories'] = null;
 $_SESSION['series'] = null;
 $_SESSION['unite'] = null;
+$_SESSION['rowcount'] = null;
 
 if ($datedebut != "" && $frequence != "" && $variables != ""){
 	$sql_select_data = getDataCourbe($datedebut, $frequence, $variables, $connexion);	
@@ -43,7 +44,9 @@ if ($datedebut != "" && $frequence != "" && $variables != ""){
 	$query_select_data = $connexion->prepare($sql_select_data);
 	$query_select_data->execute();
 	$rowCount = $query_select_data->rowcount();
+	$_SESSION['rowcount'] = $rowCount;
 	
+	//echo "TAILLE:".$rowCount;
 	if ($rowCount > 0){
 		foreach($variables as $variable){
 			$variable = getHeader($variable);
@@ -227,7 +230,9 @@ if ($datedebut != "" && $frequence != "" && $variables != ""){
 			</table>
 		</div>
 	    
-	    <div id="courbcontainer" style="min-width: 1000px; height: 600px; margin: 0 auto"></div>
+	    <?php if ($_SESSION['rowcount'] > 0){ ?>
+	    	<div id="courbcontainer" style="min-width: 1000px; height: 600px; margin: 0 auto"></div>
+	    <?php } ?>
 	    
 	    <!-- Titre -->
 		<h5 title="Au moins une">*Quelle donn&eacute;es voulez vous r&eacute;cup&eacute;rer ?</h5> 

@@ -49,9 +49,16 @@ header>h1{
 	display: none;
 }
 
-
-
 /* ---------- TABLEAUX ---------- */
+
+/* TABLEAU CHOIX */
+#tableChoix{ 
+	margin-left: auto;
+	background: #CEDAE0;
+	width: 200px;
+	margin-right: auto;
+	margin-bottom: 10px;
+}
 
 /* TABLEAU STATISTIQUE */
 #trtitre{ width: 30%;}
@@ -59,6 +66,18 @@ header>h1{
 .tdstatistique{
 	text-align: center;
 }
+
+/* TABLEAU DE NOMENCLATURE */
+#blockNomenclature{
+	text-align: center;
+}
+#tabListData { margin-top: 15px; }
+#tabNomenclature {
+	text-align: center;
+	background-color: ;
+}
+.tabNomenclatureCells {border-bottom: 1px solid #225975 !important;  }
+.tabNomenclatureCells:hover { background-color: #CEDAE0; }
 
 /* TABLEAU DATAS */
 .message_error{ color: #FF6469; }
@@ -141,6 +160,13 @@ li.picker-switch.accordion-toggle:hover {background: #FFB200;background-image: n
 #formInterventions{
 	text-align: center;
 }
+#formReportingInterventions{
+	text-align: center;
+}
+#reportingInterventions{
+	text-align: right;
+}
+
 #intervenant{ margin-top: 15px; }
 #datetime_title{ margin-top: 15px; }
 .observationBlock{ 
@@ -169,6 +195,10 @@ li.picker-switch.accordion-toggle:hover {background: #FFB200;background-image: n
 	text-align: center;	
 }
 
+/* INFORMATIONS */
+#informatonBlock{
+	text-align: center;
+}
 /* ---------- COURBES --------- */
 
 #formCourbesBlock{

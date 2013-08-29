@@ -43,8 +43,8 @@ require_once 'include/include.php';
 
 
 //filename & Path
-$path = "upload/";
-$filename = $_SESSION['dateDebut'] ."_au_". $_SESSION['dateFin'] ."_". $_SESSION['yAxis_title'] ."_". "Enky" .$config['enky']. ".pdf";
+$path = "upload/pdf";
+$filename = $_SESSION['dateDebut'] ."_au_". $_SESSION['dateFin'] ."_". $_SESSION['yAxis_title'] ."_". "Enki" .$config['enki']. ".pdf";
 
 //	Change these values to select the Rendering library that you wish to use
 //		and its directory location on your server
@@ -78,7 +78,7 @@ $callStartTime = microtime(true);
 
 $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'PDF');
 $objWriter->setSheetIndex(0);
-$objWriter->save($path . $filename);
+$objWriter->save($path . "/" .$filename);
 $callEndTime = microtime(true);
 $callTime = $callEndTime - $callStartTime;
 if ($verbose) echo date('H:i:s') , " File written to " , str_replace('.php', '_'.$rendererName.'.pdf', pathinfo(__FILE__, PATHINFO_BASENAME)) , EOL;
@@ -93,7 +93,9 @@ if ($verbose) echo date('H:i:s') , " Peak memory usage: " , (memory_get_peak_usa
 // if ($verbose) echo done
 if ($verbose) echo date('H:i:s') , " Done writing files" , EOL;
 if ($verbose) echo 'File has been created in ' , getcwd() , EOL;
-//echo '<br/><a href="upload/' .$filename. '">Voir le document PDF</a>';
-echo "<META HTTP-EQUIV='Refresh' CONTENT='0;URL=downloadfile.php?filename=$filename'>";
-echo "<META HTTP-EQUIV='Refresh' CONTENT='0;URL=upload/" .$filename . "'>";
+echo '<br/><a href="' $path .'/'. $filename. '">Voir le document PDF</a>';
+//echo "<META HTTP-EQUIV='Refresh' CONTENT='0;URL=downloadfile.php?dir=pdf&filename=$filename'>";
+echo '<br/><a href="downloadfile.php?dir=pdf&filename=' .$filename. '">Cliquez ici si le t&eacute;l&eacute;chargement ne commence pas</a>';
+//echo "<META HTTP-EQUIV='Refresh' CONTENT='0;URL=$path/" .$filename . "'>";
+echo "<META HTTP-EQUIV='Refresh' CONTENT='0;URL=downloadfile.php?dir=pdf&filename=$filename'>";
 ?>

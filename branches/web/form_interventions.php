@@ -1,9 +1,27 @@
 <div id="formInterventions">
-	<form action="index.php?id_page=4" name="formIntervention" method="POST" onsubmit="return validerFormIntervention(this)">
+	<form action="index.php?id_page=4" name="formReportingIntervention" method="POST" onsubmit="return validerFormReportingIntervention(this)">
 		<!-- Titre -->
 		<div id='intervenant'>
 			<h5 title="Nom/Prenom">*Nom et Pr&eacute;nom de l'intervenant :</h5>
 			<div><font class='message_error' id='intervenant_error'></font></div> 
+
+			
+			<?php
+				$sql_intervenants = getIntervenants();
+				$query_intervenants = $connexion->prepare($sql_intervenants);
+				$query_intervenants->execute();
+				$rowcount = $query_intervenants->rowcount();
+				
+				if ($rowcount > 0){
+					echo '<select name="intervenantGlobal">';
+						echo "<option value='KO'>Aucune selection</option>";
+						while($data=$query_intervenants->fetch(PDO::FETCH_OBJ))
+							echo "<option value='$data->intervenant' " .(($data->intervenant == getMaxUsedIntervenant($connexion)) ?  "selected=selected" : ""). ">$data->intervenant</option>";
+					echo "</select>";
+					echo "<br/>ou<br/>";
+				}
+				
+			?>
 			<input type="text" name="intervenant">
 		</div>
 		

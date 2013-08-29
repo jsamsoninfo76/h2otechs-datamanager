@@ -8,24 +8,34 @@ http://php.net/manual/fr/function.count.php (count)
 http://php.net/manual/fr/function.strtolower.php (lowercase)
 -->
 
-<table id="tabListData" border="1" rules="rows">
-        <tr id="tabListDataHeader">
-                        <th title="Date de la moyenne">Date</th>
-                <?php
-                        $_SESSION['yAxis_title'] = "Moyennes";  
-        
-                        foreach($variables as $variable){
-                                $variable = getHeader($variable);
-                                $_SESSION['subtitles'][] = $variable;
-                                $_SESSION['unite'][] = getUnite($variable, $connexion);
-                                echo "<th title='" .getDescriptionOfLabel($variable, $connexion). " en " .getUnite($variable, $connexion). "'>&nbsp;" .getLabel($variable). "&nbsp;</th>";
-                        }
-        echo "</tr>";
-                         
-        //Création de la requête et génération du tableau
+	<table id="tabListData" border="1" rules="rows">
+        <?php
+                	
+	    //Création de la requête et génération du tableau
         $sql_select = generateMoySQL($variables, $dateDebut, $dateFin, $connexion);
         $query_select = $connexion->prepare($sql_select);
         $query_select->execute();
+        $query_select->execute();
+        $rowcount = $query_select->rowcount();
+        
+        if ($rowcount > 0){
+        	?>
+        	<div id="actions">
+				<a href="index.php?id_page=6" target="_blank"><img class="icon" title="Exporter au format Excel" src="img/excel.png"></a>
+				<a href="index.php?id_page=7" target="_blank"><img class="icon" title="Exporter au format PDF" src="img/pdf.png"></a>
+			</div>
+        	<tr id="tabListDataHeader">
+            	<th title="Date de la moyenne">Date</th>
+        	<?php
+        $_SESSION['yAxis_title'] = "Moyennes";  
+
+        foreach($variables as $variable){
+                $variable = getHeader($variable);
+                $_SESSION['subtitles'][] = $variable;
+                $_SESSION['unite'][] = getUnite($variable, $connexion);
+                echo "<th title='" .getDescriptionOfLabel($variable, $connexion). " en " .getUnite($variable, $connexion). "'>&nbsp;" .getLabel($variable). "&nbsp;</th>";
+        }
+        echo "</tr>";
         
         //echo "<br>".$sql_select."<br><br>";
         while($data=$query_select->fetch(PDO::FETCH_OBJ)){
@@ -43,5 +53,9 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
                         }
                 echo "</tr>";
                         
-        } ?>
+        }//Fin while
+	}
+	else{
+		echo "<font class='message_error'>Il n'y a aucune donn&eacute;es pour ces dates.</font>";
+	}?>
 </table>
