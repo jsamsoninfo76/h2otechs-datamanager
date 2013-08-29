@@ -6,6 +6,90 @@
  * http://www.siteduzero.com/forum/sujet/verifier-une-date-au-format-jjmmaaaa-93090 (regex)
  */
 
+
+/**
+ * Affiche ou non le 2eme element en fonction du bouton radio coché
+ */
+function makeChoice(){
+	var choix = document.getElementsByName("choix");
+     
+    for(var elem in choix)
+    {
+        if(choix[elem].checked)
+        {
+            var div = document.getElementById("blockFormIntervention");
+            if (choix[elem].value == "Tous"){
+                div.style.display = "none";
+            }
+            else
+                div.style.display = "block";
+
+        }
+    }
+}
+
+/**
+ * Validation du reporting d'interventions
+ */
+function validerReportingInterventions(form){
+  var res = 0;
+  var regexDateTime = /^[2-9][0-9][0-9][0-9]\/[0-1][0-9]\/[0-3][0-9]\s[0-2][0-9]:[0-5][0-9]:[0-5][0-9]$/;
+  var dateDebut = form.elements['dateDebutReportingIntervention'];
+  var dateFin = form.elements['dateFinReportingIntervention'];
+  var choix = form.elements['choix'];
+  var faireTest = 1;
+  
+  for(var elem in choix)
+  {
+        if(choix[elem].checked && choix[elem].value == "Tous")
+            	faireTest = 0;
+  }
+  
+  if (faireTest == 1){
+	  //Verification sur la date de début
+	  if(dateDebut.value != "") {
+		  var isDate = regexDateTime.test(dateDebut.value);
+		  if (isDate){
+		  	  res++;
+			  document.getElementById("datedebut_reporting_intervention_error").innerHTML = "";
+			  dateDebut.style.backgroundColor = '#FFFFFF';  	  
+		  }
+		  else{
+			  document.getElementById("datedebut_reporting_intervention_error").innerHTML = "Le format de la date doit être : 'AAAA/MM/JJ HH:MM:SS'.";
+			  dateDebut.style.backgroundColor = '#FF6469';
+		  }
+	  }else{
+	  	  document.getElementById("datedebut_reporting_intervention_error").innerHTML = "La date de d&eacute;but doit &ecirc;tre remplit au format : 'AAAA/MM/JJ HH:MM:SS'.";
+		  dateDebut.style.backgroundColor = '#FF6469';
+	  }
+	  
+	   //Verification sur la date de début
+	  if(dateFin.value != "") {
+		  var isDate = regexDateTime.test(dateFin.value);
+		  if (isDate){
+		  	  res++;
+			  document.getElementById("datefin_reporting_intervention_error").innerHTML = "";
+			  dateFin.style.backgroundColor = '#FFFFFF';  	  
+		  }
+		  else{
+			  document.getElementById("datefin_reporting_intervention_error").innerHTML = "Le format de la date doit être : 'AAAA/MM/JJ HH:MM:SS'.";
+			  dateFin.style.backgroundColor = '#FF6469';
+		  }
+	  }else{
+	  	  document.getElementById("datefin_reporting_intervention_error").innerHTML = "La date de d&eacute;but doit &ecirc;tre remplit au format : 'AAAA/MM/JJ HH:MM:SS'.";
+		  dateFin.style.backgroundColor = '#FF6469';
+	  }
+	
+	  if (res == 2)
+	  	return true;
+	  else
+	    return false;
+  }
+  else
+  	return true;
+}
+
+
 /**
  * Submit le formulaire si les deux champs sont remplient
  */

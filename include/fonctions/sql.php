@@ -1,6 +1,52 @@
 <?php
 
 /**
+ * Recuepere l'intervenant le plus utilisé
+ */
+function getMaxUsedIntervenant($connexion){
+	$sql_select_intervenant  = "SELECT intervenant, COUNT(*) AS recurence ";
+	$sql_select_intervenant .= "FROM interventions ";
+	$sql_select_intervenant .= "GROUP BY(intervenant) ";
+	$sql_select_intervenant .= "ORDER BY recurence DESC ";
+	$sql_select_intervenant .= "LIMIT 1";
+
+	$query = $connexion->prepare($sql_select_intervenant);
+	$query->execute();
+	$data = $query->fetch(PDO::FETCH_ASSOC);
+	return $data['intervenant'];
+}
+
+/** 
+ * Recupere tous les intervenants existant
+ */
+function getIntervenants(){
+	$sql_select_intervenants  = "SELECT DISTINCT(intervenant) ";
+	$sql_select_intervenants .= "FROM interventions ";
+	return $sql_select_intervenants;
+}
+
+/**
+ * Recuepere les informations sur les variables 
+ */
+function getNomenclature(){
+	$sql_nomenclature =  "SELECT * ";
+	$sql_nomenclature .= "FROM variables";
+	return $sql_nomenclature;
+}
+
+/** 
+ * Recupere toutes les informations
+ */
+function getInterventions($dateDebut, $dateFin){
+	$sql_select_interventions =  "SELECT * ";
+	$sql_select_interventions .= "FROM interventions ";
+	if ($dateDebut != "" && $dateFin != ""){
+		$sql_select_interventions .= "WHERE datetime BETWEEN '$dateDebut' AND '$dateFin'";
+	}
+	return $sql_select_interventions;
+}
+
+/**
  *Compare la taille des DB
  */
 function getBiggerTableIndex($variables, $connexion){
@@ -38,7 +84,7 @@ function getDataCourbe($datedebut, $frequence, $variables, $connexion){
 	$biggerIndex = getBiggerTableIndex($variables, $connexion);
 	$variables[$biggerIndex] = strtolower($variables[$biggerIndex]);
 	
-	$sql_select = "SELECT ".$variables[$biggerIndex].".datetime, DATE_FORMAT(".$variables[$biggerIndex].".datetime, '%d/%m/%Y') AS Annee, DATE_FORMAT(".$variables[$biggerIndex].".datetime, '%H')  AS Heure, ";
+	$sql_select = "SELECT ".$variables[$biggerIndex].".value AS ".$variables[$biggerIndex]."_value, ".$variables[$biggerIndex].".datetime, DATE_FORMAT(".					$variables[$biggerIndex].".datetime, '%d/%m/%Y') AS Annee, DATE_FORMAT(".$variables[$biggerIndex].".datetime, '%H')  AS Heure, ";
 	for($i=0 ; $i < count($variables) ; $i++){
 		if ($i != $biggerIndex){
 			$variables[$i] = strtolower($variables[$i]);
@@ -46,9 +92,11 @@ function getDataCourbe($datedebut, $frequence, $variables, $connexion){
 			else $sql_select .= $variables[$i]. ".value AS " .$variables[$i]."_value ,";
 		}
 	}
-	
+
 	if ($sql_select[strlen($sql_select)-1] == ',') 
 		$sql_select = substr($sql_select, 0, strlen($sql_select)-1);
+	else if ($sql_select[strlen($sql_select)-2] == ',') 
+		$sql_select = substr($sql_select, 0, strlen($sql_select)-2);
 		
 	$sql_select .= " FROM " .$variables[$biggerIndex]. " ";		
 	for($i=0 ; $i < count($variables) ; $i++){

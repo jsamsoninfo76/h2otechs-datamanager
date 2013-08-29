@@ -9,9 +9,23 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 -->
 
 <table id="tabListData" border="1" rules="rows">
-	<tr id="tabListDataHeader">
-	<th title="Date au format AAAA/MM/JJ de la prise de donn&eacute;e">Date</th>
-	<th title="Heure de la prise de donn&eacute;e">Heure</th>
+	<?php
+	//Création de la requête et génération du tableau
+	$sql_select = generateDatasAndMoySQL($variables, $dateDebut, $dateFin, $connexion);
+	$query_select = $connexion->prepare($sql_select);
+	$query_select->execute();
+	$rowcount = $query_select->rowcount();
+	
+  if ($rowcount > 0){
+  
+  	?>
+  	<div id="actions">
+		<a href="index.php?id_page=6" target="_blank"><img class="icon" title="Exporter au format Excel" src="img/excel.png"></a>
+		<a href="index.php?id_page=7" target="_blank"><img class="icon" title="Exporter au format PDF" src="img/pdf.png"></a>
+	</div>
+  	<tr id="tabListDataHeader">
+		<th title="Date au format AAAA/MM/JJ de la prise de donn&eacute;e">Date</th>
+		<th title="Heure de la prise de donn&eacute;e">Heure</th>
 	<?php
 	$_SESSION['yAxis_title'] = "DonneesEtMoyennes";
 	
@@ -23,10 +37,7 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
 	}
 	echo "</tr>";
                  
-	//Création de la requête et génération du tableau
-	$sql_select = generateDatasAndMoySQL($variables, $dateDebut, $dateFin, $connexion);
-	$query_select = $connexion->prepare($sql_select);
-	$query_select->execute();
+	
 	
 	$compteurRowSpan = 0;
 	$nbRowSpan = 0;
@@ -108,5 +119,9 @@ http://php.net/manual/fr/function.strtolower.php (lowercase)
             
             echo "</tr>";
         }            
-    } ?>
+    }//Fin while
+  }
+  else{
+    echo "<font class='message_error'>Il n'y a aucune donn&eacute;es pour ces dates.</font>";
+  }?>
 </table>

@@ -20,20 +20,9 @@ echo "<a name='download'></a>";
 //Test sur les différentes variables récupérées
 if (isset($variables) && isset($dateDebut) && isset($dateFin) && isset( $select)){
 	//Test sur les variables si c'est un tableau ou non
-	if (is_array($variables)){ ?>
-		<?php 
-		
-			//Connexion à la base de données
-			$connexion = new PDO('mysql:host='.$config['host'].';dbname='.$config['db'], $config['user'], $config['pass']);
-		?>
-							 	
+	if (is_array($variables)){ ?>							 	
 		<!-- Création du tableau et de son header-->
 		<div id="list">
-			<div id="actions">
-				<a href="index.php?id_page=6" target="_blank"><img class="icon" title="Exporter au format Excel" src="img/excel.png"></a>
-				<a href="index.php?id_page=7" target="_blank"><img class="icon" title="Exporter au format PDF" src="img/pdf.png"></a>
-			</div>
-
 			<?php
 				$_SESSION = array();
                 $_SESSION['dateDebut'] = str_replace("/", "-", substr($dateDebut ,0 ,10 ));

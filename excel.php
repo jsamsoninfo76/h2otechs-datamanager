@@ -279,8 +279,8 @@ $nom = $_SESSION['subtitles'][0];
 $nbLigne = count($_SESSION['series'][$nom])+1; //+1 Pour header
 
 //filename & Path
-$path = "upload";
-$filename = $_SESSION['dateDebut'] ."_au_". $_SESSION['dateFin'] ."_". $_SESSION['yAxis_title'] ."_". "Enky" .$config['enky']. ".xlsx";
+$path = "upload/excel";
+$filename = $_SESSION['dateDebut'] ."_au_". $_SESSION['dateFin'] ."_". $_SESSION['yAxis_title'] ."_". "Enki" .$config['enki']. ".xlsx";
 
 // Rename worksheet
 if ($verbose) echo date('H:i:s') , " Changement du titre de la feuille en: " . $filename, EOL;
@@ -301,8 +301,9 @@ $callTime = $callEndTime - $callStartTime;
 
 // Echo done
 if ($decalagepdf == 0){
-	echo '<br/><a href="upload/' .$filename. '">Cliquez ici si le t&eacute;l&eacute;chargement ne commence pas</a>';
-	echo "<META HTTP-EQUIV='Refresh' CONTENT='0;URL=downloadfile.php?filename=$filename'>";
+	//echo '<br/><a href="' .$path. '/' .$filename. '">Cliquez ici si le t&eacute;l&eacute;chargement ne commence pas</a>';
+	echo '<br/><a href="downloadfile.php?dir=excel&filename=' .$filename. '">Cliquez ici si le t&eacute;l&eacute;chargement ne commence pas</a>';
+	echo "<META HTTP-EQUIV='Refresh' CONTENT='0;URL=downloadfile.php?dir=excel&filename=$filename'>";
 }
 
 /*

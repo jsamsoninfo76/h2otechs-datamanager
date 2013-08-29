@@ -1,4 +1,21 @@
 <?php
+
+
+/**
+ * Recupere le browser
+ */
+function detect_os(){
+	$a=$_SERVER['HTTP_USER_AGENT'];
+	if (preg_match("#windows\snt\s5\.1#i",$a))return("Microsoft Windows XP");
+	if (preg_match("#mac\sos\sx#i",$a))return("Mac OS X");
+	if (preg_match("#windows\snt\s6\.1#i",$a))return("Microsoft Windows 7");
+	if (preg_match("#haiku#i",$a))return("Haiku");
+	if (preg_match("#windows\snt\s6\.0;\swow64#i",$a))return("Microsoft Windows Vista (64bits)");if (preg_match("#windows\snt\s6\.0;\swin64#i",$a))return("Microsoft Windows Vista (64bits)");if (preg_match("#windows\snt\s6\.0#i",$a))return("Microsoft Windows Vista");if (preg_match("#sunos#i",$a))return("Open Solaris");if (preg_match("#android#i",$a))return("Android");if (preg_match("#windows\s95#i",$a))return("Microsoft Windows 95");if (preg_match("#windows\snt\s5\.0#i",$a))return("Microsoft Windows 2000");if (preg_match("#windows\snt\s5\.3#i",$a))return("Microsoft Windows Server 2003");if (preg_match("#windows\snt#i",$a))return("Microsoft Windows NT");if (preg_match("#windows\s98#i",$a))return("Microsoft Windows 98");if (preg_match("#windows\sce#i",$a))return("Microsoft Windows Mobile");if (preg_match("#windows\sphone\sos[\s\/]([0-9v]{1,7}(?:\.[0-9a-z]{1,7}){0,7})#i",$a,$c))return("Microsoft Windows Phone version ".$c[1]);if (preg_match("#mac_powerpc#i",$a))return("Mac OS X");if (preg_match("#macintosh#i",$a))return("Macintosh");if (preg_match("#cygwin_nt#i",$a))return("Microsoft Windows 2000");if (preg_match("#os\/2#i",$a))return("Microsoft OS/2");if (preg_match("#symbianos[\s\/]([0-9v]{1,7}(?:\.[0-9a-z]{1,7}){0,7})#i",$a,$c))return("Symbian OS version ".$c[1]);if (preg_match("#symbian-crystal[\s\/]([0-9v]{1,7}(?:\.[0-9a-z]{1,7}){0,7})#i",$a,$c))return("Symbian OS version ".$c[1]);if (preg_match("#offbyone;\swindows\s2000#i",$a))return("Microsoft Windows XP");if (preg_match("#windows\s2000#i",$a))return("Microsoft Windows 2000");if (preg_match("#nintendo\swii#i",$a))return("Nintendo Wii");if (preg_match("#playstation\sportable#i",$a))return("PlayStation Portable");if (preg_match("#iphone\sos\s[\s\/]([0-9v]{1,7}(?:[\._][0-9a-z]{1,7}){0,7})#i",$a,$c))return("iPhone OS version ".$c[1]);return "OS non identifié";
+}
+
+/**
+ * Retourne n'utilé en fonction du label
+ */
 function getUniteLabel($unite){
 	if ($unite == "bar") return "pression";
 	if ($unite == "ph") return "ph";
@@ -77,7 +94,7 @@ function traitementDecimal($variable, $value){
 			if (strlen($value) == 3) 		return substr($value, 0, 1) . substr($value, 1, 1) . "." . substr($value, 2, 1);
 			else if(strlen($value) == 2) 	return substr($value, 0, 1) . "." . substr($value, 1, 1);		
 			else 							return $value;
-		}
+		}   
 		else
 			return $value;
 	}

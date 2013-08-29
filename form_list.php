@@ -3,7 +3,6 @@
 *
 *
 -->
-
 <form action="index.php?id_page=2" name="formList" method="POST" onsubmit="return valider(this)">
 	<div id="variables">
 		<!-- Titre -->

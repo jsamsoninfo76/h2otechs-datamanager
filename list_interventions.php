@@ -18,8 +18,9 @@
 						
 			//Recuperation des variables
 			if (isset($_POST['dateIntervention'])) $dateintervention= $_POST['dateIntervention'];
-			if (isset($_POST['intervenant'])) $intervenant			= $_POST['intervenant'];
-			if (isset($_POST['observation'])) $observation			= $_POST['observation'];
+			if (isset($_POST['intervenant'])) 		$intervenant	= $_POST['intervenant'];
+			if (isset($_POST['intervenantGlobal']) && $_POST['intervenantGlobal'] != "KO") $intervenant = $_POST['intervenantGlobal'];
+			if (isset($_POST['observation'])) 		$observation	= $_POST['observation'];
 			if (isset($_POST['id_intervention'])) $id_intervention  = $_POST['id_intervention'];
 			
 			//Test sur les variables
@@ -59,6 +60,7 @@
 	
 	<!-- Creation du formulaire de l'intervention -->
 	<form name='formInterventions' method="post" action="index.php?id_page=4">
+		<div id="reportingInterventions"><a href="index.php?id_page=8"><img class="icon" src="img/intervention.png" title="R&eacute;cuperer toutes les interventions"></a></div>
 		<div id='intervention_title'><h5>Date et Intervenant :</h5></div>
 		<a href='index.php?id_page=4&action=back&datetime=<?php echo getNextOrPrecDatetime($datetime, "back", $connexion);?>'><img src="img/left-arrow.png">&nbsp;&nbsp;</a>
 		
