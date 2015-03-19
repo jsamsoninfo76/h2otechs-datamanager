@@ -1,0 +1,1 @@
+Ce Data Manager viendra récupérer un dossier extrait d'un automate pour ensuite les traiter pour les enregistrers dans une base de donnée.
